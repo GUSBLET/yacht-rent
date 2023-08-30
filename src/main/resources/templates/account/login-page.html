@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content(singInViewModel, singUpViewModel)">
+        <h2>Login</h2>
+        <form th:action="@{/account/sing-in}" th:object="${singInViewModel}" th:method="post">
+            <label th:for="login">Login or email:</label>
+            <input type="text" th:field="*{login}" required/><br/>
+            <label th:for="password">Password:</label>
+            <input type="password" th:field="*{password}"/><br/>
+            <div>
+                <input type="checkbox" th:field="*{rememberMe}"/>
+                <label th:for="rememberMe">Remember Me</label>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+        <br/>
+        <form th:action="@{/account/sing-up}" th:object="${singUpViewModel}" th:method="post">
+            <label th:for="login">Login:</label>
+            <input type="text" th:field="*{login}" required/><br/>
+            <label th:for="email">Email:</label>
+            <input type="password" th:field="*{email}"/><br/>
+            <label th:for="password">Password:</label>
+            <input type="text" th:field="*{password}" required/><br/>
+            <label th:for="passwordConfirm">Confirm password:</label>
+            <input type="password" th:field="*{passwordConfirm}"/><br/>
+            <button type="submit">Sing-up</button>
+        </form>
+
+    </div>
+</body>
+</html>

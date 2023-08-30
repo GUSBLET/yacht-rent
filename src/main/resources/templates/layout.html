@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${title}"></title>
 </head>
 <body>
+    <th:block th:switch="${content}">
+        <div th:case="'account/login-page'" th:insert="~{${content}}"
+             th:with="singInViewModel = ${singInViewModel}, singUpViewModel =  ${singUpViewModel}"></div>
 
+    </th:block>
 </body>
 </html>
