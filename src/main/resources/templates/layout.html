@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${title}"></title>
+    <script defer src="/js/count-price.js"></script>
+    <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
+    <th:block th:switch="${content}">
+        <div th:case="'account/login-page'" th:insert="~{${content}}"
+             th:with="signInViewModel = ${signInViewModel}, signUpViewModel =  ${signUpViewModel}"></div>
+        <div th:case="'order/create-order-page'" th:insert="~{${content}}"
+             th:with="createOrderViewModel = ${createOrderViewModel}"></div>
+    </th:block>
+
 
 </body>
+
 </html>

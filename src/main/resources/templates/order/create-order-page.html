@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div th:fragment="content(createOrederViewModel)">
+    <form th:action="@{/order/create-order}" th:object="${createOrederViewModel}" th:method="post">
+      <div>
+        <label th:for="customerName">Full Name:</label>
+        <input th:type="text" id="customerName" name="customerName" >
+      </div>
+
+      <div>
+        <label th:for="customerPhoneNumber">Phone Number:</label>
+        <input type="text" id="customerPhoneNumber" name="customerPhoneNumber">
+      </div>
+
+      <div>
+        <label th:for="customerEmail">Email (Gmail.com only):</label>
+        <input type="email" id="customerEmail" name="customerEmail">
+      </div>
+
+      <div>
+        <label th:for="price">Price:</label>
+        <input th:type="text" id="price" name="price" readonly>
+        <button type="button" onclick="countPrice()">count</button>
+      </div>
+
+      <div>
+        <label th:for="dateOfStart">Date of Start Rent:</label>
+        <input th:type="date" id="dateOfStart" name="dateOfStart">
+      </div>
+
+      <div>
+        <label th:for="dateOfFinish">Date of Finish Rent:</label>
+        <input th:type="date" id="dateOfFinish" name="dateOfFinish">
+      </div>
+
+      <div>
+        <label th:for="hourOfStart">Hour of Start Rent:</label>
+        <input th:type="time" id="hourOfStart" name="hourOfStart" step="3600">
+      </div>
+
+      <div>
+        <label th:for="hourOfFinish">Hour of Finish Rent:</label>
+        <input th:type="time" th:id="hourOfFinish" th:name="hourOfFinish" step="3600">
+      </div>
+
+      <div>
+        <button th:type="submit">Submit Order</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
