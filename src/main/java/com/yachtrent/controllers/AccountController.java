@@ -1,7 +1,8 @@
 package com.yachtrent.controllers;
 
-import com.yachtrent.domain.view.models.SingInViewModel;
-import com.yachtrent.domain.view.models.SingUpViewModel;
+
+import com.yachtrent.domain.view.models.account.SignInViewModel;
+import com.yachtrent.domain.view.models.account.SignUpViewModel;
 import com.yachtrent.interfaces.IAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,37 +27,41 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping("sing-in")
-    public String singIn(@Valid @ModelAttribute("singInViewModel")
-                         SingInViewModel singInViewModel,
-                         BindingResult result,
-                         Model model){
-        if(result.hasErrors()){
-            model.addAttribute("title", "Login");
-            model.addAttribute("content", "account/login-page");
-            model.addAttribute("singInViewModel", singInViewModel);
-            model.addAttribute("singUpViewModel", new SingUpViewModel());
-            return "layout";
-        }
-        model.addAttribute("title", "Success");
-        model.addAttribute("text", "Success");
-        return "account/success";
-    }
+//    @PostMapping("sing-in")
+//    public String singIn(@Valid @ModelAttribute("signInViewModel")
+//                             SignInViewModel signInViewModel,
+//                         BindingResult result,
+//                         Model model,
+//                         HttpServletRequest request,
+//                         HttpServletResponse response){
+//        if(result.hasErrors()){
+//            model.addAttribute("title", "Login");
+//            model.addAttribute("content", "account/login-page");
+//            model.addAttribute("signInViewModel", signInViewModel);
+//            model.addAttribute("signUpViewModel", new SignUpViewModel());
+//            return "layout";
+//        }
+//
+//
+//        model.addAttribute("title", "Success");
+//        model.addAttribute("text", "Success");
+//        return "account/success";
+//    }
 
     @Async
     @PostMapping("sing-up")
-    public CompletableFuture<String> singUp(@Valid @ModelAttribute("singUpViewModel")
-                         SingUpViewModel singUpViewModel,
+    public CompletableFuture<String> singUp(@Valid @ModelAttribute("signUpViewModel")
+                                                SignUpViewModel signUpViewModel,
                                             BindingResult result,
                                             Model model){
         if(result.hasErrors()){
             model.addAttribute("title", "Login");
             model.addAttribute("content", "account/login-page");
-            model.addAttribute("singInViewModel", new SingInViewModel());
-            model.addAttribute("singUpViewModel", singUpViewModel);
+            model.addAttribute("signInViewModel", new SignInViewModel());
+            model.addAttribute("signUpViewModel", signUpViewModel);
             return CompletableFuture.completedFuture("layout");
         }
-        accountService.singUpAsync(singUpViewModel);
+        accountService.singUpAsync(signUpViewModel);
 
         model.addAttribute("title", "Success");
         model.addAttribute("text", "Success, confirm mail");
@@ -67,8 +72,17 @@ public class AccountController {
     public String loginPage(Model model){
         model.addAttribute("title", "Login");
         model.addAttribute("content", "account/login-page");
-        model.addAttribute("singInViewModel", new SingInViewModel());
-        model.addAttribute("singUpViewModel", new SingUpViewModel());
+        model.addAttribute("signInViewModel", new SignInViewModel());
+        model.addAttribute("signUpViewModel", new SignUpViewModel());
+        return "layout";
+    }
+
+    @GetMapping("admin")
+    public String admin(Model model){
+        model.addAttribute("title", "Login");
+        model.addAttribute("content", "account/login-page");
+        model.addAttribute("signInViewModel", new SignInViewModel());
+        model.addAttribute("signUpViewModel", new SignUpViewModel());
         return "layout";
     }
 

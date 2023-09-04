@@ -5,9 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-    <div th:fragment="content(singInViewModel, singUpViewModel)">
+    <div th:fragment="content(signInViewModel, signUpViewModel)">
         <h2>Login</h2>
-        <form th:action="@{/account/sing-in}" th:object="${singInViewModel}" th:method="post">
+        <form th:action="@{/account/sing-in}" th:object="${signInViewModel}" th:method="post">
             <label th:for="login">Login or email:</label>
             <input type="text" th:field="*{login}" required/><br/>
             <label th:for="password">Password:</label>
@@ -20,7 +20,7 @@
             <button type="submit">Login</button>
         </form>
         <br/>
-        <form th:action="@{/account/sing-up}" th:object="${singUpViewModel}" th:method="post">
+        <form th:action="@{/account/sing-up}" th:object="${signUpViewModel}" th:method="post">
             <label th:for="login">Login:</label>
             <input type="text" th:field="*{login}" required/><br/>
             <label th:for="email">Email:</label>

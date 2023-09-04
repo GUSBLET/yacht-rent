@@ -1,16 +1,16 @@
-package com.yachtrent.domain.view.models;
+package com.yachtrent.domain.view.models.account;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class SingUpViewModel {
+public class SignUpViewModel {
     @NotBlank(message = "Enter email")
-    public String email;
+    private String email;
     @NotBlank(message = "Enter login")
-    public String login;
+    private String login;
     @NotBlank(message = "Enter password")
-    public String password;
+    private String password;
     @NotBlank(message = "Confirm password")
-    public String passwordConfirm;
+    private String passwordConfirm;
 }

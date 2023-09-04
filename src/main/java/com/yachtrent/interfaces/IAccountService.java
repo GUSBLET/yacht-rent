@@ -1,13 +1,13 @@
 package com.yachtrent.interfaces;
 
-import com.yachtrent.domain.view.models.SingInViewModel;
-import com.yachtrent.domain.view.models.SingUpViewModel;
+import com.yachtrent.domain.view.models.account.SignInViewModel;
+import com.yachtrent.domain.view.models.account.SignUpViewModel;
 import org.springframework.validation.BindingResult;
 
 import java.util.concurrent.CompletableFuture;
 
 public interface IAccountService {
-    public CompletableFuture<BindingResult> singUpAsync(SingUpViewModel model);
-    public CompletableFuture<BindingResult> singInAsync(SingInViewModel model);
+    public CompletableFuture<BindingResult> singUpAsync(SignUpViewModel model);
+    public CompletableFuture<BindingResult> singInAsync(SignInViewModel model);
 
 }
