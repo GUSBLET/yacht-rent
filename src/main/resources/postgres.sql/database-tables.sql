@@ -136,3 +136,5 @@ CREATE TABLE yacht_parameter_yacht_table
     yacht_parameter_id bigint references yacht_parameter_table (id) not null
 );
 
+
+
