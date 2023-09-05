@@ -1,4 +1,4 @@
-package com.yachtrent.services.account;
+package com.yachtrent.domain.order;
 
 import org.springframework.stereotype.Service;
 
@@ -9,8 +9,6 @@ import java.util.Date;
 
 @Service
 public class PriceCounterService {
-
-
 
     public float countFullPrice(Date startOfRent, Date finishOfRent){
         // Limit in time for one order.

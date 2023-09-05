@@ -1,4 +1,4 @@
-package com.yachtrent.domain.view.models.account;
+package com.yachtrent.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

@@ -1,11 +1,10 @@
-package com.yachtrent.controllers;
+package com.yachtrent.domain.account;
 
 
-import com.yachtrent.domain.view.models.account.SignInViewModel;
-import com.yachtrent.domain.view.models.account.SignUpViewModel;
-import com.yachtrent.interfaces.IAccountService;
+import com.yachtrent.domain.dto.SignInViewModel;
+import com.yachtrent.domain.dto.SignUpViewModel;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,14 +18,13 @@ import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequestMapping("/account/")
+@RequiredArgsConstructor
 public class AccountController {
-    @Autowired
     private final IAccountService accountService;
 
-    public AccountController(IAccountService accountService) {
-        this.accountService = accountService;
-    }
-
+//    public AccountController(IAccountService accountService) {
+//        this.accountService = accountService;
+//    }
 //    @PostMapping("sing-in")
 //    public String singIn(@Valid @ModelAttribute("signInViewModel")
 //                             SignInViewModel signInViewModel,
@@ -51,7 +49,7 @@ public class AccountController {
     @Async
     @PostMapping("sing-up")
     public CompletableFuture<String> singUp(@Valid @ModelAttribute("signUpViewModel")
-                                                SignUpViewModel signUpViewModel,
+                                            SignUpViewModel signUpViewModel,
                                             BindingResult result,
                                             Model model){
         if(result.hasErrors()){

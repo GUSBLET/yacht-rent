@@ -1,5 +1,6 @@
-package com.yachtrent.domain.entities;
+package com.yachtrent.domain.role;
 
+import com.yachtrent.domain.account.Account;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,22 +10,22 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "main" ,name = "role_table")
-@ToString(exclude = {"userList"})
+@Table(name = "role")
+@ToString(exclude = {"accountList"})
 public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String role;
 
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
-    private List<Account> userList;
+    private List<Account> accountList;
+
     @Override
     public String getAuthority() {
             return role;

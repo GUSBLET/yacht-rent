@@ -1,39 +1,36 @@
-package com.yachtrent.controllers;
+package com.yachtrent.domain.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yachtrent.domain.DTO.PriceCalculationRequestDTO;
-import com.yachtrent.domain.view.models.account.SignInViewModel;
-import com.yachtrent.domain.view.models.account.SignUpViewModel;
-import com.yachtrent.domain.view.models.order.CreateOrderViewModel;
-import com.yachtrent.services.account.OrderService;
-import com.yachtrent.services.account.PriceCounterService;
+import com.yachtrent.domain.dto.CreateOrderViewModel;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.Access;
 import java.text.ParseException;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequestMapping("/order/")
+@RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    private  final PriceCounterService priceCounterService;
+    private final PriceCounterService priceCounterService;
 
-    public OrderController(OrderService orderService,
-                           PriceCounterService priceCounterService){
-        this.priceCounterService = priceCounterService;
-        this.orderService = orderService;
-    }
+//    public OrderController(OrderService orderService,
+//                           PriceCounterService priceCounterService) {
+//        this.priceCounterService = priceCounterService;
+//        this.orderService = orderService;
+//    }
 
     @GetMapping("create-order-page")
-    public String pageCreateOrder(Model model){
+    public String pageCreateOrder(Model model) {
         model.addAttribute("title", "New order");
         model.addAttribute("content", "order/create-order-page");
         model.addAttribute("createOrderViewModel", new CreateOrderViewModel());
@@ -44,8 +41,8 @@ public class OrderController {
     public String createOrder(@Valid @ModelAttribute("createOrderViewModel")
                               CreateOrderViewModel createOrderViewModel,
                               BindingResult result,
-                              Model model){
-        if(result.hasErrors()){
+                              Model model) {
+        if (result.hasErrors()) {
             model.addAttribute("title", "New order");
             model.addAttribute("content", "order/create-order-page");
             model.addAttribute("createOrderViewModel", new CreateOrderViewModel());
@@ -53,8 +50,7 @@ public class OrderController {
         }
         try {
             orderService.createNewOrder(createOrderViewModel);
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
@@ -67,7 +63,7 @@ public class OrderController {
     public ResponseEntity<Object> countPrice(String dateOfStart, String dateOfFinish,
                                              String hourOfStart, String hourOfFinish)
             throws ParseException, JsonProcessingException {
-        if(Objects.equals(dateOfFinish, "") || Objects.equals(dateOfStart, "") ||
+        if (Objects.equals(dateOfFinish, "") || Objects.equals(dateOfStart, "") ||
                 Objects.equals(hourOfStart, "") || Objects.equals(hourOfFinish, ""))
             return ResponseEntity.ofNullable("Enter all parameters of rent");
 
@@ -77,9 +73,8 @@ public class OrderController {
                 priceCounterService.convertToParametersToDate(dateOfFinish,
                         hourOfFinish));
 
-        if(result == -1.0)
+        if (result == -1.0)
             return ResponseEntity.ofNullable("Order cannot be more than 48 hours.");
-         return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);
     }
-
 }

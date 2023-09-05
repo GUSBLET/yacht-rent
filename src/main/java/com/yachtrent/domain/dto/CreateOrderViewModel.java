@@ -1,11 +1,9 @@
-package com.yachtrent.domain.view.models.order;
+package com.yachtrent.domain.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.util.Date;
 
 
 @Data

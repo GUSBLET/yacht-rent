@@ -1,9 +1,10 @@
-package com.yachtrent.use_cases;
+package com.yachtrent.domain.account.use_cases;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class CheckingAccountDetailsUseCase {
+
     public boolean passwordMask(String password){
         boolean onlyEn = true;
         boolean number = false;

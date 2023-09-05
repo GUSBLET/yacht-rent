@@ -1,8 +1,9 @@
-package com.yachtrent.domain.entities;
+package com.yachtrent.domain.account;
 
 
+import com.yachtrent.domain.role.Role;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,13 +12,18 @@ import java.util.Set;
 
 
 @Entity
-@Table(schema = "main", name = "account_table")
-@Data
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "account")
+@ToString
 public class Account implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "login", columnDefinition = "VARCHAR(25) NOT NULL")
     private String login;
 
@@ -27,10 +33,9 @@ public class Account implements UserDetails {
     @Column(name = "password", columnDefinition = "VARCHAR(300) NOT NULL")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            schema = "main",
-            name = "account_role_table",
+            name = "account_role",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
@@ -38,7 +43,7 @@ public class Account implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles;
     }
 
     @Override
@@ -48,21 +53,21 @@ public class Account implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

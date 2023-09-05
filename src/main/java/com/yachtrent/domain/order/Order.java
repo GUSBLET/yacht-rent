@@ -1,32 +1,33 @@
-package com.yachtrent.domain.entities;
+package com.yachtrent.domain.order;
 
 
+import com.yachtrent.domain.time.Timetable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 
 @Entity
-@AllArgsConstructor
+@Getter
+@Builder
 @NoArgsConstructor
-@Table(schema = "main", name = "order_table")
-@Data
+@AllArgsConstructor
+@Table(name = "\"order\"")
+@ToString
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "custumer_name", nullable = false, length = 50)
+    @Column(name = "customer_name", nullable = false, length = 50)
     private String customerName;
 
-    @Column(name = "custumer_phone_number", unique = true, nullable = false, length = 20)
+    @Column(name = "customer_phone_number", unique = true, nullable = false, length = 20)
     private String customerPhoneNumber;
 
-    @Column(name = "custumer_email", nullable = false, length = 50)
+    @Column(name = "customer_email", nullable = false, length = 50)
     private String customerEmail;
 
     @Column(name = "price")
@@ -37,8 +38,7 @@ public class Order {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            schema = "main",
-            name = "timetable_order_table",
+            name = "timetable_order",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "timetable_id")
     )

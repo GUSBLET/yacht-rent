@@ -1,16 +1,21 @@
-package com.yachtrent.domain.entities;
+package com.yachtrent.domain.time;
 
 
+import com.yachtrent.domain.order.Order;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
-@Table(schema = "main", name = "timetable_table")
 @Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "timetable")
+@ToString
 public class Timetable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
