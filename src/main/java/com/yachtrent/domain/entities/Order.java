@@ -32,6 +32,9 @@ public class Order {
     @Column(name = "price")
     private Float price;
 
+    @Column(name = "order_confirmed")
+    private boolean orderСonfirmed;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             schema = "main",
