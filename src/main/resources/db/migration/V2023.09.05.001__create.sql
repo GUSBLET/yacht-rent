@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS role (
 
 CREATE TABLE IF NOT EXISTS account_role (
     account_id BIGINT NOT NULL,
-    role_id BIGINT NOT NULL,
+    role_id BIGINT  NOT NULL,
     PRIMARY KEY (account_id, role_id),
     FOREIGN KEY (account_id) REFERENCES account(id),
     FOREIGN KEY (role_id) REFERENCES role(id)
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS "order" (
 
 CREATE TABLE IF NOT EXISTS timetable (
     id BIGSERIAL PRIMARY KEY,
-    start_of_rent DATE NOT NULL,
-    finish_of_rent DATE NOT NULL
+    start_of_rent timestamp(6) NOT NULL,
+    finish_of_rent timestamp(6) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS timetable_order (

@@ -31,7 +31,9 @@ public class OrderService {
         Date startTime = priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart());
         Date finishTime = priceCounterService.convertToParametersToDate(model.getDateOfFinish(), model.getHourOfFinish());
 
-        if (timetableRepository.findByTimeRange(startTime, finishTime).isEmpty()) {
+
+//         timetableRepository.findByTimeRange(startTime, finishTime).isEmpty()
+        if (true) {
             float price = priceCounterService.countFullPrice(startTime, finishTime);
 
             if (price == -1) {
@@ -39,19 +41,20 @@ public class OrderService {
                         .body("Limit error. Your rent should be less than 48 hours");
             }
 
-            Timetable newTimetable = Timetable.builder()
-                    .startOfRent(startTime)
-                    .finishOfRent(finishTime)
-                    .build();
+            Timetable newTimetable = timetableRepository.save(
+                    Timetable.builder()
+                            .startOfRent(startTime)
+                            .finishOfRent(finishTime)
+                            .build()
+            );
 
-            timetableRepository.save(newTimetable);
-
-            Order newOrder = Order.builder()
-                    .customerName(model.getCustomerName())
-                    .customerEmail(model.getCustomerEmail())
-                    .customerPhoneNumber(model.getCustomerPhoneNumber())
-                    .price(price)
-                    .build();
+            Order newOrder =
+                    Order.builder()
+                            .customerName(model.getCustomerName())
+                            .customerEmail(model.getCustomerEmail())
+                            .customerPhoneNumber(model.getCustomerPhoneNumber())
+                            .price(price)
+                            .build();
 
             newOrder.getTimetables().add(newTimetable);
             orderRepository.save(newOrder);

@@ -14,17 +14,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "role")
-@ToString(exclude = {"account"})
+@ToString(exclude = {"accountList"})
 public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String role;
 
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
-    private List<Account> account;
+    private List<Account> accountList;
 
     @Override
     public String getAuthority() {

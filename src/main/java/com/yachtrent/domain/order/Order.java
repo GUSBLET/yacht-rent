@@ -21,13 +21,13 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "custumer_name", nullable = false, length = 50)
+    @Column(name = "customer_name", nullable = false, length = 50)
     private String customerName;
 
-    @Column(name = "custumer_phone_number", unique = true, nullable = false, length = 20)
+    @Column(name = "customer_phone_number", unique = true, nullable = false, length = 20)
     private String customerPhoneNumber;
 
-    @Column(name = "custumer_email", nullable = false, length = 50)
+    @Column(name = "customer_email", nullable = false, length = 50)
     private String customerEmail;
 
     @Column(name = "price")

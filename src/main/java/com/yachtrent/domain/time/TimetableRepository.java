@@ -7,5 +7,5 @@ import java.util.Date;
 
 @Repository
 public interface TimetableRepository extends JpaRepository<Timetable, Long> {
-    CharSequence findByTimeRange(Date startTime, Date finishTime);
+//    CharSequence findByTimeRange(Date startTime, Date finishTime);
 }

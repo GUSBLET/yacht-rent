@@ -23,6 +23,7 @@ public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "login", columnDefinition = "VARCHAR(25) NOT NULL")
     private String login;
 
@@ -32,7 +33,7 @@ public class Account implements UserDetails {
     @Column(name = "password", columnDefinition = "VARCHAR(300) NOT NULL")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "account_role",
             joinColumns = @JoinColumn(name = "account_id"),
