@@ -23,11 +23,6 @@ public class OrderController {
     private final OrderService orderService;
     private final PriceCounterService priceCounterService;
 
-//    public OrderController(OrderService orderService,
-//                           PriceCounterService priceCounterService) {
-//        this.priceCounterService = priceCounterService;
-//        this.orderService = orderService;
-//    }
 
     @GetMapping("create-order-page")
     public String pageCreateOrder(Model model) {
