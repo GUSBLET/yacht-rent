@@ -2,6 +2,9 @@ package com.yachtrent.main.yacht;
 
 
 import com.yachtrent.main.harbor.Harbor;
+import com.yachtrent.main.order.Order;
+import com.yachtrent.main.rent.time.RentTimetable;
+import com.yachtrent.main.yacht.parameter.YachtParameter;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
 import com.yachtrent.main.yacht.type.YachtType;
 import jakarta.persistence.*;
@@ -74,7 +77,7 @@ public class Yacht {
             joinColumns = @JoinColumn(name = "yacht_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id")
     )
-    private Set<Harbor> orders = new HashSet<>();
+    private Set<Order> orders = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -82,7 +85,7 @@ public class Yacht {
             joinColumns = @JoinColumn(name = "yacht_id"),
             inverseJoinColumns = @JoinColumn(name = "yacht_parameter_id")
     )
-    private Set<Harbor> parameters = new HashSet<>();
+    private Set<YachtParameter> parameters = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -90,5 +93,5 @@ public class Yacht {
             joinColumns = @JoinColumn(name = "yacht_id"),
             inverseJoinColumns = @JoinColumn(name = "rent_timetable_id")
     )
-    private Set<Harbor> rentTimetabels = new HashSet<>();
+    private Set<RentTimetable> rentTimetabels = new HashSet<>();
 }

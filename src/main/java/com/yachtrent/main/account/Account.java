@@ -48,7 +48,7 @@ public class Account implements UserDetails {
     private boolean accountRegistered;
 
     @Column(name = "account_confirmed", columnDefinition = "boolean")
-    private  boolean account_confirmed;
+    private  boolean accountConfirmed;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

@@ -15,5 +15,5 @@ public interface RentTimetableRepository extends JpaRepository<RentTimetable, Lo
             FROM RentTimetable t
             WHERE :startOfRent >= t.startOfRent AND :startOfRent <= t.finishOfRent
                   AND :finishOfRent >= :startOfRent AND :finishOfRent <= t.finishOfRent""")
-    Optional<RentTimetable> findByTimeRange(Date startTime, Date finishTime);
+    Optional<RentTimetable> findByTimeRange(Date startOfRent, Date finishOfRent);
 }
