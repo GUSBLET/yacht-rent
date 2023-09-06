@@ -7,7 +7,7 @@ CREATE TABLE yacht_photo_table
 CREATE TABLE yacht_type_table
 (
     id   bigserial primary key,
-    type Varchar(30)
+    type Varchar(30) unique
 );
 
 
@@ -22,7 +22,7 @@ CREATE TABLE rent_timetable_table
 CREATE TABLE harbor_table
 (
     id        bigserial primary key,
-    name      Varchar(50),
+    name      Varchar(50) unique not null,
     address   Varchar(150),
     longitude real,
     latitude  real
@@ -31,13 +31,13 @@ CREATE TABLE harbor_table
 CREATE TABLE yacht_table
 (
     id             bigserial primary key,
-    name           Varchar(30),
+    name           Varchar(30) not null unique,
     age            smallint,
     price_per_hour real,
     length         real,
     width          real,
     crew           smallint,
-    captain        smallint,
+    captain        varchar(50) not null,
     description    varchar(1000),
     photos_id      bigint references yacht_photo_table (id)
 );
@@ -76,7 +76,7 @@ CREATE TABLE account_table
 create table role_table
 (
     id   bigserial primary key,
-    role VARCHAR(20) NOT NULL
+    role VARCHAR(20) NOT NULL unique
 );
 
 CREATE TABLE role_account_table
@@ -85,8 +85,6 @@ CREATE TABLE role_account_table
     account_id bigint references account_table (id) not null,
     role_id    bigint references role_table (id)    not null
 );
-
-
 
 
 
@@ -100,11 +98,8 @@ CREATE TABLE rent_timetable_order_table
 CREATE TABLE yacht_parameter_table
 (
     id   bigserial primary key,
-    name Varchar(100)
+    name Varchar(100) unique
 );
-
-
-
 
 
 

@@ -1,8 +1,8 @@
-package com.yachtrent.domain.account;
+package com.yachtrent.main.account;
 
 
-import com.yachtrent.domain.dto.SignInViewModel;
-import com.yachtrent.domain.dto.SignUpViewModel;
+import com.yachtrent.main.dto.SignInViewModel;
+import com.yachtrent.main.dto.SignUpViewModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -59,7 +59,7 @@ public class AccountController {
             model.addAttribute("signUpViewModel", signUpViewModel);
             return CompletableFuture.completedFuture("layout");
         }
-        accountService.singUpAsync(signUpViewModel);
+        CompletableFuture<BindingResult> bindingResultCompletableFuture = accountService.singUpAsync(signUpViewModel);
 
         model.addAttribute("title", "Success");
         model.addAttribute("text", "Success, confirm mail");

@@ -1,4 +1,4 @@
-package com.yachtrent.domain.order;
+package com.yachtrent.main.order;
 
 import org.springframework.stereotype.Service;
 

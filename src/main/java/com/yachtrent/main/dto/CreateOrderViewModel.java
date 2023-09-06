@@ -1,4 +1,4 @@
-package com.yachtrent.domain.dto;
+package com.yachtrent.main.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

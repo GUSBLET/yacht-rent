@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS account (
+CREATE TABLE IF NOT EXISTS account_table (
     id BIGSERIAL PRIMARY KEY,
     login VARCHAR(25) NOT NULL,
     email TEXT NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS account (
     role VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS role (
+CREATE TABLE IF NOT EXISTS role_table (
     id BIGSERIAL PRIMARY KEY,
     role VARCHAR(30) CHECK (role IN ('ANONYMOUS', 'USER', 'ADMIN', 'MODERATOR'))
 );
@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS account_role (
     account_id BIGINT NOT NULL,
     role_id BIGINT  NOT NULL,
     PRIMARY KEY (account_id, role_id),
-    FOREIGN KEY (account_id) REFERENCES account(id),
-    FOREIGN KEY (role_id) REFERENCES role(id)
+    FOREIGN KEY (account_id) REFERENCES account_table(id),
+    FOREIGN KEY (role_id) REFERENCES role_table(id)
 );
 
 CREATE TABLE IF NOT EXISTS "order" (

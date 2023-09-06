@@ -1,7 +1,7 @@
-package com.yachtrent.domain.order;
+package com.yachtrent.main.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yachtrent.domain.dto.CreateOrderViewModel;
+import com.yachtrent.main.dto.CreateOrderViewModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

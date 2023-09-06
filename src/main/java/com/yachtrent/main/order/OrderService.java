@@ -1,8 +1,8 @@
-package com.yachtrent.domain.order;
+package com.yachtrent.main.order;
 
-import com.yachtrent.domain.dto.CreateOrderViewModel;
-import com.yachtrent.domain.time.Timetable;
-import com.yachtrent.domain.time.TimetableRepository;
+import com.yachtrent.main.dto.CreateOrderViewModel;
+import com.yachtrent.main.rent.time.RentTimetable;
+import com.yachtrent.main.rent.time.RentTimetableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +16,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final TimetableRepository timetableRepository;
+    private final RentTimetableRepository rentTimetableRepository;
     private final PriceCounterService priceCounterService;
 
-//    public OrderService(OrderRepository orderRepository,
-//                        TimetableRepository timetableRepository,
-//                        PriceCounterService priceCounterService){
-//        this.orderRepository = orderRepository;
-//        this.timetableRepository = timetableRepository;
-//        this.priceCounterService = priceCounterService;
-//    }
 
     public ResponseEntity<String> createNewOrder(CreateOrderViewModel model) throws ParseException {
         Date startTime = priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart());
@@ -41,8 +34,8 @@ public class OrderService {
                         .body("Limit error. Your rent should be less than 48 hours");
             }
 
-            Timetable newTimetable = timetableRepository.save(
-                    Timetable.builder()
+            RentTimetable newRentTimetable = rentTimetableRepository.save(
+                    RentTimetable.builder()
                             .startOfRent(startTime)
                             .finishOfRent(finishTime)
                             .build()
@@ -50,13 +43,10 @@ public class OrderService {
 
             Order newOrder =
                     Order.builder()
-                            .customerName(model.getCustomerName())
-                            .customerEmail(model.getCustomerEmail())
-                            .customerPhoneNumber(model.getCustomerPhoneNumber())
                             .price(price)
                             .build();
 
-            newOrder.getTimetables().add(newTimetable);
+            newOrder.getRentTimetables().add(newRentTimetable);
             orderRepository.save(newOrder);
 
             return ResponseEntity.status(HttpStatus.OK).body("Success added");

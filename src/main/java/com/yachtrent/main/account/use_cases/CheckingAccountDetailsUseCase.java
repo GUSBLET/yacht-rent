@@ -1,4 +1,4 @@
-package com.yachtrent.domain.account.use_cases;
+package com.yachtrent.main.account.use_cases;
 
 import org.springframework.stereotype.Service;
 
