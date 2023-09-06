@@ -1,6 +1,6 @@
-package com.yachtrent.domain.role;
+package com.yachtrent.main.role;
 
-import com.yachtrent.domain.account.Account;
+import com.yachtrent.main.account.Account;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

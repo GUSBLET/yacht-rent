@@ -1,4 +1,4 @@
-package com.yachtrent.domain.role;
+package com.yachtrent.main.role;
 
 public enum Authority {
     ANONYMOUS,
