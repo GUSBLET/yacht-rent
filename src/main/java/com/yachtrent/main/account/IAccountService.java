@@ -1,7 +1,7 @@
 package com.yachtrent.main.account;
 
-import com.yachtrent.main.dto.SignInViewModel;
-import com.yachtrent.main.dto.SignUpViewModel;
+import com.yachtrent.main.dto.account.SignInViewModel;
+import com.yachtrent.main.dto.account.SignUpViewModel;
 import org.springframework.validation.BindingResult;
 
 import java.util.concurrent.CompletableFuture;

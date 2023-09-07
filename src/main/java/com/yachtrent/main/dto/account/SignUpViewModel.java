@@ -1,4 +1,4 @@
-package com.yachtrent.main.dto;
+package com.yachtrent.main.dto.account;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -7,8 +7,6 @@ import lombok.Data;
 public class SignUpViewModel {
     @NotBlank(message = "Enter email")
     private String email;
-    @NotBlank(message = "Enter login")
-    private String login;
     @NotBlank(message = "Enter password")
     private String password;
     @NotBlank(message = "Confirm password")
