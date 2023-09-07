@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "yacht_photo_table")
+@Table(schema = "main", name = "yacht_photo_table")
 @ToString
 public class YachtPhoto {
 

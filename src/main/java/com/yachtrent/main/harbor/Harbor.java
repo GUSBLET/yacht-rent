@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "harbor_table")
+@Table(schema = "main", name = "harbor_table")
 @ToString
 public class Harbor {
 

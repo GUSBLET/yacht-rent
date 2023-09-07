@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "yacht_type_table")
+@Table(schema = "main", name = "yacht_type_table")
 @ToString
 public class YachtType {
 

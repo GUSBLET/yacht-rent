@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "account_table")
+@Table(schema = "main", name = "account_table")
 @ToString
 public class Account implements UserDetails {
 

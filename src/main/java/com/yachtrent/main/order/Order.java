@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order_table")
+@Table(schema = "main", name = "order_table")
 @ToString
 public class Order {
     @Id

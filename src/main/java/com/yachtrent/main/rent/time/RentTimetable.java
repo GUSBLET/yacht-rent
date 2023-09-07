@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rent_timetable_table")
+@Table(schema = "main", name = "rent_timetable_table")
 @ToString
 public class RentTimetable {
     @Id
