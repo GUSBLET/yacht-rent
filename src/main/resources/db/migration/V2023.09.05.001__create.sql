@@ -53,6 +53,7 @@ CREATE TABLE main.order_table
 
 CREATE TABLE main.order_yacht_table
 (
+
     yacht_id bigint NOT NULL,
     order_id bigint NOT NULL,
     primary key (yacht_id, order_id),
