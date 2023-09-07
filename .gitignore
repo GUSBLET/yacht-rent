@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application-goose.properties
+src/main/resources/applicatio-prod.properties
