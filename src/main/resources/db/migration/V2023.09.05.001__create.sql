@@ -90,8 +90,6 @@ CREATE TABLE main.role_account_table
     foreign key (role_id) references main.role_table(id)
 );
 
-
-
 CREATE TABLE main.rent_timetable_order_table
 (
     timetable_id bigint NOT NULL,
