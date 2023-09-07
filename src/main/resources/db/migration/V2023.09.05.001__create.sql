@@ -53,8 +53,9 @@ CREATE TABLE main.order_table
 
 CREATE TABLE main.order_yacht_table
 (
-    yacht_id bigint primary key references main.yacht_table (id) not null,
-    order_id bigint primary key references main.order_table (id) not null
+    id       bigserial primary key,
+    yacht_id bigint references main.yacht_table (id) not null,
+    order_id bigint references main.order_table (id) not null
 );
 
 
@@ -80,16 +81,18 @@ create table main.role_table
 
 CREATE TABLE main.role_account_table
 (
-    account_id bigint primary key references main.account_table (id) not null,
-    role_id    bigint primary key references main.role_table (id)    not null
+    id         bigserial primary key,
+    account_id bigint references main.account_table (id) not null,
+    role_id    bigint references main.role_table (id)    not null
 );
 
 
 
 CREATE TABLE main.rent_timetable_order_table
 (
-    order_id     bigint primary key references main.order_table (id)          not null,
-    timetable_id bigint primary key references main.rent_timetable_table (id) not null
+    id           bigserial primary key,
+    order_id     bigint references main.order_table (id)          not null,
+    timetable_id bigint references main.rent_timetable_table (id) not null
 );
 
 CREATE TABLE main.yacht_parameter_table
@@ -102,24 +105,28 @@ CREATE TABLE main.yacht_parameter_table
 
 CREATE TABLE main.rent_timetable_yacht_table
 (
-    yacht_id          bigint primary key references main.yacht_table (id)          not null,
-    rent_timetable_id bigint primary key references main.rent_timetable_table (id) not null
+    id                bigserial primary key,
+    yacht_id          bigint references main.yacht_table (id)          not null,
+    rent_timetable_id bigint references main.rent_timetable_table (id) not null
 );
 
 CREATE TABLE main.yacht_type_yacht_table
 (
-    yacht_id      bigint primary key references main.yacht_table (id)      not null,
-    yacht_type_id bigint primary key references main.yacht_type_table (id) not null
+    id            bigserial primary key,
+    yacht_id      bigint references main.yacht_table (id)      not null,
+    yacht_type_id bigint references main.yacht_type_table (id) not null
 );
 
 CREATE TABLE main.yacht_harbor_table
 (
-    yacht_id  bigint primary key references main.yacht_table (id)  not null,
-    harbor_id bigint primary key references main.harbor_table (id) not null
+    id        bigserial primary key,
+    yacht_id  bigint references main.yacht_table (id)  not null,
+    harbor_id bigint references main.harbor_table (id) not null
 );
 
 CREATE TABLE main.yacht_parameter_yacht_table
 (
-    yacht_id           bigint primary key references main.yacht_table (id)           not null,
-    yacht_parameter_id bigint primary key references main.yacht_parameter_table (id) not null
+    id                 bigserial primary key,
+    yacht_id           bigint references main.yacht_table (id)           not null,
+    yacht_parameter_id bigint references main.yacht_parameter_table (id) not null
 );
