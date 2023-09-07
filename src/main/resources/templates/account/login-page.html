@@ -20,15 +20,13 @@
             <button type="submit">Login</button>
         </form>
         <br/>
-        <form th:action="@{/account/sing-up}" th:object="${signUpViewModel}" th:method="post">
-            <label th:for="login">Login:</label>
-            <input type="text" th:field="*{login}" required/><br/>
+        <form th:action="@{/account/sign-up}" th:object="${signUpViewModel}" th:method="post">
             <label th:for="email">Email:</label>
-            <input type="password" th:field="*{email}"/><br/>
+            <input type="email" th:field="*{email}"/><br/>
             <label th:for="password">Password:</label>
             <input type="text" th:field="*{password}" required/><br/>
             <label th:for="passwordConfirm">Confirm password:</label>
-            <input type="password" th:field="*{passwordConfirm}"/><br/>
+            <input type="text" th:field="*{passwordConfirm}"/><br/>
             <button type="submit">Sing-up</button>
         </form>
 

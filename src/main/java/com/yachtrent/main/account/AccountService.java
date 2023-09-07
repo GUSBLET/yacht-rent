@@ -2,8 +2,11 @@ package com.yachtrent.main.account;
 
 import com.google.common.hash.Hashing;
 import com.yachtrent.main.account.use_cases.CheckingAccountDetailsUseCase;
-import com.yachtrent.main.dto.SignInViewModel;
-import com.yachtrent.main.dto.SignUpViewModel;
+import com.yachtrent.main.dto.account.SignInViewModel;
+import com.yachtrent.main.dto.account.SignUpViewModel;
+import com.yachtrent.main.role.Authority;
+import com.yachtrent.main.role.Role;
+import com.yachtrent.main.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,14 +17,18 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService implements IAccountService, UserDetailsService {
     private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
     private final CheckingAccountDetailsUseCase checkingAccountDetailsUseCase;
+
 
     @Override
     @Async
@@ -31,11 +38,24 @@ public class AccountService implements IAccountService, UserDetailsService {
         if(response.isEmpty()){
             if(checkingAccountDetailsUseCase.emailMask(model.getPassword())
                     && checkingAccountDetailsUseCase.passwordCompare(model.getPassword(), model.getPasswordConfirm())){
+
+                Role role = roleRepository.save(
+                        Role.builder()
+                                .role(Authority.USER.toString())
+                                .build());
+
                 Account account = Account.builder()
                         .email(model.getEmail())
                         .password(Hashing.sha256().hashString(model.getPassword(), StandardCharsets.UTF_8).toString())
+                        .roles(new HashSet<>())
+                        .name("")
+                        .lastName("")
+                        .phoneNumber("")
+                        .accountConfirmed(false)
+                        .accountRegistered(true)
                         .build();
 
+                account.getRoles().add(role);
                 accountRepository.save(account);
                 result.reject("200", "success");
             }

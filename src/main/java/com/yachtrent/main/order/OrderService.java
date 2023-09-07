@@ -1,6 +1,6 @@
 package com.yachtrent.main.order;
 
-import com.yachtrent.main.dto.CreateOrderViewModel;
+import com.yachtrent.main.dto.order.CreateOrderViewModel;
 import com.yachtrent.main.rent.time.RentTimetable;
 import com.yachtrent.main.rent.time.RentTimetableRepository;
 import lombok.RequiredArgsConstructor;

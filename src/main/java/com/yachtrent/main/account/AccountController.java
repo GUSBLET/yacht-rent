@@ -1,8 +1,8 @@
 package com.yachtrent.main.account;
 
 
-import com.yachtrent.main.dto.SignInViewModel;
-import com.yachtrent.main.dto.SignUpViewModel;
+import com.yachtrent.main.dto.account.SignInViewModel;
+import com.yachtrent.main.dto.account.SignUpViewModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -47,8 +47,8 @@ public class AccountController {
 //    }
 
     @Async
-    @PostMapping("sing-up")
-    public CompletableFuture<String> singUp(@Valid @ModelAttribute("signUpViewModel")
+    @PostMapping("sign-up")
+    public CompletableFuture<String> signUp(@Valid @ModelAttribute("signUpViewModel")
                                             SignUpViewModel signUpViewModel,
                                             BindingResult result,
                                             Model model){

@@ -1,4 +1,4 @@
-package com.yachtrent.main.dto;
+package com.yachtrent.main.dto.account;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
