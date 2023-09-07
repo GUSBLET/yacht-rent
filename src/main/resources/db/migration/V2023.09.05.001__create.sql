@@ -107,8 +107,6 @@ CREATE TABLE main.yacht_parameter_table
     name Varchar(100) unique
 );
 
-
-
 CREATE TABLE main.rent_timetable_yacht_table
 (
     yacht_id bigint NOT NULL,
