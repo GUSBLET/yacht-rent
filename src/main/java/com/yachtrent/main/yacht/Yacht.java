@@ -32,19 +32,19 @@ public class Yacht {
     private String  name;
 
     @Column(name = "age", columnDefinition = "smallint")
-    private String  age;
+    private short  age;
 
-    @Column(name = "smallint", columnDefinition = "smallint")
-    private String  crew;
+    @Column(name = "crew", columnDefinition = "smallint")
+    private short  crew;
 
     @Column(name = "price_per_hour", columnDefinition = "real")
-    private String  price_per_hour;
+    private float  price_per_hour;
 
     @Column(name = "length", columnDefinition = "real")
-    private String  length;
+    private float  length;
 
     @Column(name = "width", columnDefinition = "real")
-    private String  width;
+    private float  width;
 
     @Column(name = "captain", columnDefinition = "varchar(50) not null")
     private String  captain;
@@ -52,7 +52,7 @@ public class Yacht {
     @Column(name = "description", columnDefinition = "varchar(1000)")
     private String  description;
 
-    @OneToMany
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
     private List<YachtPhoto> photos;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -67,7 +67,7 @@ public class Yacht {
     @JoinTable(
             name = "yacht_harbor_table",
             joinColumns = @JoinColumn(name = "yacht_id"),
-            inverseJoinColumns = @JoinColumn(name = "yacht_harbor_id")
+            inverseJoinColumns = @JoinColumn(name = "harbor_id")
     )
     private Set<Harbor> harbors = new HashSet<>();
 

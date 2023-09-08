@@ -27,10 +27,10 @@ public class Harbor {
     private String  address;
 
     @Column(name = "latitude", columnDefinition = "real")
-    private String  latitude;
+    private float  latitude;
 
     @Column(name = "longitude", columnDefinition = "real")
-    private String  longitude;
+    private float  longitude;
 
     @ManyToMany(mappedBy = "harbors", cascade = CascadeType.PERSIST)
     private Set<Yacht> yachts = new HashSet<>();

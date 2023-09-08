@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -37,7 +38,7 @@ public class OrderService {
             RentTimetable newRentTimetable = rentTimetableRepository.save(
                     RentTimetable.builder()
                             .startOfRent(startTime)
-                            .finishOfRent(finishTime)
+                            .finishOfRent((Timestamp) finishTime)
                             .build()
             );
 

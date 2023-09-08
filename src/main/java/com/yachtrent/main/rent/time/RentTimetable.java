@@ -6,6 +6,7 @@ import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,10 +23,10 @@ public class RentTimetable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_of_rent", columnDefinition = "date not null")
+    @Column(name = "start_of_rent", columnDefinition = "date")
     private Date startOfRent;
 
-    @Column(name = "finish_of_rent", columnDefinition = "date not null")
+    @Column(name = "finish_of_rent", columnDefinition = "date")
     private Date finishOfRent;
 
     @ManyToMany(mappedBy = "rentTimetables", cascade = CascadeType.PERSIST)

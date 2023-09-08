@@ -20,4 +20,8 @@ public class YachtPhoto {
 
     @Column(name = "photo", columnDefinition = "bytea")
     private byte[] photo;
+
+    @ManyToOne
+    @JoinColumn(name = "yacht_id")
+    private Yacht yacht;
 }

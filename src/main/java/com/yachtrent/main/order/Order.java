@@ -1,6 +1,7 @@
 package com.yachtrent.main.order;
 
 
+import com.yachtrent.main.account.Account;
 import com.yachtrent.main.rent.time.RentTimetable;
 import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
@@ -22,7 +23,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(name = "price", columnDefinition = "real")
     private Float price;
 
@@ -31,7 +31,7 @@ public class Order {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "rent-timetable_order_table",
+            name = "rent_timetable_order_table",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "timetable_id")
     )
@@ -40,4 +40,7 @@ public class Order {
     @ManyToMany(mappedBy = "orders", cascade = CascadeType.PERSIST)
     private Set<Yacht> yachts = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 }
