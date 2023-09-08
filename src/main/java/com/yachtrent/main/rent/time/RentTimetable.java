@@ -6,7 +6,6 @@ import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

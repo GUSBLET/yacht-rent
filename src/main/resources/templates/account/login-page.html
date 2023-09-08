@@ -6,19 +6,35 @@
 </head>
 <body>
     <div th:fragment="content(signInViewModel, signUpViewModel)">
+
         <h2>Login</h2>
-        <form th:action="@{/account/sing-in}" th:object="${signInViewModel}" th:method="post">
-            <label th:for="login">Login or email:</label>
+        <form th:action="@{/authenticate}" method="post">
+            <label>Login or email:</label>
+            <input type="text" name="username" id="username" /><br/>
+            <label>Password:</label>
+            <input type="password" name="password" id="password"/><br/>
+          <!--  <div>
+                <input type="checkbox" th:field="*{rememberMe}"/>
+                <label th:for="rememberMe">Remember Me</label>
+            </div>-->
+
+            <button type="submit">Login</button>
+        </form>
+
+    <!--    <form th:action="@{/account/sing-in}" th:object="${signInViewModel}" th:method="post">
+            <label>Login or email:</label>
             <input type="text" th:field="*{login}" required/><br/>
-            <label th:for="password">Password:</label>
+
+            <label>Password:</label>
             <input type="password" th:field="*{password}"/><br/>
             <div>
                 <input type="checkbox" th:field="*{rememberMe}"/>
                 <label th:for="rememberMe">Remember Me</label>
             </div>
 
-            <button type="submit">Login</button>
-        </form>
+            <button th:action="@{/authenticate}" type="submit">Login</button>
+        </form>-->
+
         <br/>
         <form th:action="@{/account/sign-up}" th:object="${signUpViewModel}" th:method="post">
             <label th:for="email">Email:</label>
