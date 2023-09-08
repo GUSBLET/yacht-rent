@@ -4,6 +4,10 @@ package com.yachtrent.main.account;
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.role.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,39 +24,41 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(schema = "main", name = "account_table")
-@ToString
+@ToString(exclude = {"orders"})
 public class Account implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", columnDefinition = "VARCHAR(50) NOT NULL unique")
+    @NotBlank(message = "Enter your email")
+    @Column(name = "email", unique = true)
+    @Email(message = "Incorrect mail entry")
     private String email;
 
-    @Column(name = "password", columnDefinition = "VARCHAR(300) NOT NULL")
+    @NotBlank(message = "Enter your password")
     private String password;
 
-    @Column(name = "name", columnDefinition = "VARCHAR(30) NOT NULL")
+    @NotBlank(message = "Enter your name")
+    @Max(value = 30, message = "The name must not exceed 30 characters")
     private String name;
 
-    @Column(name = "last_name", columnDefinition = "VARCHAR(30) NOT NULL")
+    @NotBlank(message = "Enter your lastName")
+    @Max(value = 30, message = "The lastName must not exceed 30 characters")
     private String lastName;
 
-    @Column(name = "phone_number", columnDefinition = "VARCHAR(30) NOT NULL unique")
+    @NotBlank(message = "Enter your phone number")
+    @Max(value = 10, message = "Mobile number cannot exceed more than 10 digits")
+    @Pattern(regexp = "\\+380\\d{1,10}", message = "Invalid phone number format")
     private String phoneNumber;
 
-    @Column(name = "avatar", columnDefinition = "bytea")
     private byte[] avatar;
-
-    @Column(name = "account_registered", columnDefinition = "boolean")
     private boolean accountRegistered;
-
-    @Column(name = "account_confirmed", columnDefinition = "boolean")
-    private  boolean accountConfirmed;
+    private boolean accountConfirmed;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
+            schema = "main",
             name = "role_account_table",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
@@ -61,7 +67,6 @@ public class Account implements UserDetails {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
     private List<Order> orders;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -19,15 +19,15 @@ import java.util.Set;
 @Table(schema = "main", name = "order_table")
 @ToString
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "price", columnDefinition = "real")
     private Float price;
 
     @Column(name = "order_confirmed", columnDefinition = "boolean")
-    private boolean orderСonfirmed;
+    private boolean confirmedOrder;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

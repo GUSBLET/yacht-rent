@@ -47,10 +47,10 @@ public class AccountService implements IAccountService, UserDetailsService {
                 Account account = Account.builder()
                         .email(model.getEmail())
                         .password(Hashing.sha256().hashString(model.getPassword(), StandardCharsets.UTF_8).toString())
-                        .roles(new HashSet<>())
-                        .name("")
-                        .lastName("")
-                        .phoneNumber("")
+//                        .roles(new HashSet<>())
+//                        .name("")
+//                        .lastName("")
+//                        .phoneNumber("")
                         .accountConfirmed(false)
                         .accountRegistered(true)
                         .build();
@@ -77,6 +77,6 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) accountRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("s"));
+        return accountRepository.findByName(username).orElseThrow();
     }
 }
