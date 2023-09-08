@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "main", name = "role")
+@Table(schema = "main", name = "role_table")
 @ToString(exclude = {"accountList"})
 public class Role implements GrantedAuthority {
 

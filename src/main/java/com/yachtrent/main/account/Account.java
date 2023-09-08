@@ -36,10 +36,10 @@ public class Account implements UserDetails {
     @Column(name = "name", columnDefinition = "VARCHAR(30) NOT NULL")
     private String name;
 
-    @Column(name = "last-name", columnDefinition = "VARCHAR(30) NOT NULL")
+    @Column(name = "last_name", columnDefinition = "VARCHAR(30) NOT NULL")
     private String lastName;
 
-    @Column(name = "phone-number", columnDefinition = "VARCHAR(30) NOT NULL unique")
+    @Column(name = "phone_number", columnDefinition = "VARCHAR(30) NOT NULL unique")
     private String phoneNumber;
 
     @Column(name = "avatar", columnDefinition = "bytea")
@@ -53,13 +53,13 @@ public class Account implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "account_role",
+            name = "role_account_table",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
     private List<Order> orders;
 
 
