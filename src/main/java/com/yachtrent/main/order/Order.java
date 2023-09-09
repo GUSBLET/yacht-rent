@@ -2,11 +2,11 @@ package com.yachtrent.main.order;
 
 
 import com.yachtrent.main.account.Account;
-import com.yachtrent.main.rent.time.RentTimetable;
 import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,13 +29,11 @@ public class Order {
     @Column(name = "order_confirmed", columnDefinition = "boolean")
     private boolean confirmedOrder;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "rent_timetable_order_table",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "timetable_id")
-    )
-    private Set<RentTimetable> rentTimetables = new HashSet<>();
+    @Column(name = "start_of_rent", columnDefinition = "date")
+    private Date startOfRent;
+
+    @Column(name = "finish_of_rent", columnDefinition = "date")
+    private Date finishOfRent;
 
     @ManyToMany(mappedBy = "orders", cascade = CascadeType.PERSIST)
     private Set<Yacht> yachts = new HashSet<>();

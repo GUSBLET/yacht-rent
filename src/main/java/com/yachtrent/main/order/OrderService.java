@@ -1,8 +1,6 @@
 package com.yachtrent.main.order;
 
 import com.yachtrent.main.dto.order.CreateOrderViewModel;
-import com.yachtrent.main.rent.time.RentTimetable;
-import com.yachtrent.main.rent.time.RentTimetableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final RentTimetableRepository rentTimetableRepository;
     private final PriceCounterService priceCounterService;
 
 
@@ -35,19 +32,13 @@ public class OrderService {
                         .body("Limit error. Your rent should be less than 48 hours");
             }
 
-            RentTimetable newRentTimetable = rentTimetableRepository.save(
-                    RentTimetable.builder()
-                            .startOfRent(startTime)
-                            .finishOfRent((Timestamp) finishTime)
-                            .build()
-            );
 
             Order newOrder =
                     Order.builder()
                             .price(price)
                             .build();
 
-            newOrder.getRentTimetables().add(newRentTimetable);
+
             orderRepository.save(newOrder);
 
             return ResponseEntity.status(HttpStatus.OK).body("Success added");
