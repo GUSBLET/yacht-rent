@@ -1,10 +1,12 @@
 package com.yachtrent.main.yacht.type;
 
 import com.yachtrent.main.yacht.Yacht;
+import com.yachtrent.main.yacht.photo.YachtPhoto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +25,6 @@ public class YachtType {
     @Column(name = "type", columnDefinition = "Varchar(30) unique ")
     private String type;
 
-    @ManyToMany(mappedBy = "yachtTypes", cascade = CascadeType.PERSIST)
-    private Set<Yacht> yachts = new HashSet<>();
+    @OneToMany(mappedBy = "yachtType", cascade = CascadeType.PERSIST)
+    private List<Yacht> yachts;
 }

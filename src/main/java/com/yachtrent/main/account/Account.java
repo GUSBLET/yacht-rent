@@ -3,6 +3,8 @@ package com.yachtrent.main.account;
 
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.role.Role;
+import com.yachtrent.main.yacht.Yacht;
+import com.yachtrent.main.yacht.review.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -13,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,6 +70,12 @@ public class Account implements UserDetails {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
+    private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
+    private Set<Yacht> yachts = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

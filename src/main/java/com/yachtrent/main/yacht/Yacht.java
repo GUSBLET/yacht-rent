@@ -1,10 +1,12 @@
 package com.yachtrent.main.yacht;
 
 
+import com.yachtrent.main.account.Account;
 import com.yachtrent.main.harbor.Harbor;
 import com.yachtrent.main.order.Order;
-import com.yachtrent.main.rent.time.RentTimetable;
-import com.yachtrent.main.yacht.parameter.YachtParameter;
+import com.yachtrent.main.yacht.review.Review;
+import com.yachtrent.main.yacht.creator.Creator;
+import com.yachtrent.main.yacht.facility.Facility;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
 import com.yachtrent.main.yacht.type.YachtType;
 import jakarta.persistence.*;
@@ -46,22 +48,14 @@ public class Yacht {
     @Column(name = "width", columnDefinition = "real")
     private float  width;
 
-    @Column(name = "captain", columnDefinition = "varchar(50) not null")
-    private String  captain;
+    @Column(name = "capacity", columnDefinition = "smallint")
+    private short  captain;
 
     @Column(name = "description", columnDefinition = "varchar(1000)")
     private String  description;
 
     @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
     private List<YachtPhoto> photos;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "yacht_type_yacht_table",
-            joinColumns = @JoinColumn(name = "yacht_id"),
-            inverseJoinColumns = @JoinColumn(name = "yacht_type_id")
-    )
-    private Set<YachtType> yachtTypes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -79,19 +73,21 @@ public class Yacht {
     )
     private Set<Order> orders = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "yacht_parameter_yacht_table",
-            joinColumns = @JoinColumn(name = "yacht_id"),
-            inverseJoinColumns = @JoinColumn(name = "yacht_parameter_id")
-    )
-    private Set<YachtParameter> parameters = new HashSet<>();
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
+    private Set<Facility> facilities = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "rent_timetable_yacht_table",
-            joinColumns = @JoinColumn(name = "yacht_id"),
-            inverseJoinColumns = @JoinColumn(name = "rent_timetable_id")
-    )
-    private Set<RentTimetable> rentTimetabels = new HashSet<>();
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
+    private Set<Review> reviews = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "type_yacht_id")
+    private YachtType yachtType;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private Creator creator;
 }
