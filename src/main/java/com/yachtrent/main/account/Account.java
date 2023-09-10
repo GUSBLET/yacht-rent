@@ -27,7 +27,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(schema = "main", name = "account_table")
-@ToString(exclude = {"orders"})
+@ToString(exclude = {"orders", "reviews", "yachts"})
 public class Account implements UserDetails {
 
     @Id
