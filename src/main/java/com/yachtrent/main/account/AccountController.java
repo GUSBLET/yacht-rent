@@ -1,99 +1,70 @@
 package com.yachtrent.main.account;
 
 
-import com.yachtrent.main.dto.account.SignInViewModel;
-import com.yachtrent.main.dto.account.SignUpViewModel;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-
-import java.util.concurrent.CompletableFuture;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/account/")
-@RequiredArgsConstructor
+@RequestMapping("/account")
 public class AccountController {
-    private final IAccountService accountService;
 
-//    public AccountController(IAccountService accountService) {
-//        this.accountService = accountService;
-//    }
-//    @PostMapping("sing-in")
-//    public String singIn(@Valid @ModelAttribute("signInViewModel")
-//                             SignInViewModel signInViewModel,
-//                         BindingResult result,
-//                         Model model,
-//                         HttpServletRequest request,
-//                         HttpServletResponse response){
-//        if(result.hasErrors()){
-//            model.addAttribute("title", "Login");
-//            model.addAttribute("content", "account/login-page");
-//            model.addAttribute("signInViewModel", signInViewModel);
-//            model.addAttribute("signUpViewModel", new SignUpViewModel());
-//            return "layout";
-//        }
-//
-//
-//        model.addAttribute("title", "Success");
-//        model.addAttribute("text", "Success");
-//        return "account/success";
-//    }
+    record SignUp (
 
-//    @Async
-//    @PostMapping("sign-up")
-//    public CompletableFuture<String> signUp(@Valid @RequestBody SignUpViewModel signUpViewModel,
-//                                            BindingResult result,
-//                                            Model model
-//    ) {
-//        if (result.hasErrors()) {
-//            log.error(result.getAllErrors().toString());
-//            return CompletableFuture.completedFuture("account/login-page");
-//        }
-//
-//        model.addAttribute("title", "Login")
-//                .addAttribute("content", "account/login-page")
-//                .addAttribute("signInViewModel", new SignInViewModel())
-//                .addAttribute("signUpViewModel", signUpViewModel);
-//
-//        CompletableFuture<BindingResult> bindingResultCompletableFuture =
-//                accountService.singUpAsync(signUpViewModel);
-//
-//        model.addAttribute("title", "Success")
-//                .addAttribute("text", "Success, confirm mail");
-//        return CompletableFuture.completedFuture("account/success");
-//    }
+            @NotBlank(message = "Enter your email")
+            @Email(message = "Incorrect mail entry")
+            String email,
 
-    @GetMapping("login-page")
+            @NotBlank(message = "Enter your password")
+            String password,
+
+            @NotBlank(message = "Confirm password")
+            String passwordConfirm
+    ) { }
+
+    @GetMapping("/login-page")
     public String loginPage(Model model) {
         model.addAttribute("title", "Login")
                 .addAttribute("content", "account/login-page")
-                .addAttribute("signInViewModel", new SignInViewModel())
-                .addAttribute("signUpViewModel", new SignUpViewModel());
-        return "layout";
+                .addAttribute("signUpViewModel",  new SignUp(null, null, null));
+        return "account/login-page";
     }
 
-    @GetMapping("admin")
-    public String admin(Model model) {
-        model.addAttribute("title", "Login");
-        model.addAttribute("content", "account/login-page");
-        model.addAttribute("signInViewModel", new SignInViewModel());
-        model.addAttribute("signUpViewModel", new SignUpViewModel());
-        return "layout";
-    }
-
-
-    @GetMapping("success")
-    public String getSuccessPage(@AuthenticationPrincipal Account account, Model model) {
+    @GetMapping("/success")
+    public String getSuccessPage(@AuthenticationPrincipal Account account,
+                                 @RequestParam(name = "rememberMe", required = false) boolean rememberMe, Model model) {
         model.addAttribute("title", "Success")
                 .addAttribute("text", account);
+
+        account.setAccountRegistered(rememberMe);
         return "account/success";
     }
 
+    @GetMapping("/admin")
+    public String admin(SignUp signUp, Model model) {
+        model.addAttribute("title", "Login");
+        model.addAttribute("content", "account/login-page");
+        model.addAttribute("signInViewModel", signUp);
+        return "layout";
+    }
+
 }
+
+//    @PostMapping("/sign-up")
+//    public String signUp(@Valid @ModelAttribute("signInViewModel") SignIn signIn,
+//                         BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            log.error(bindingResult.getAllErrors().toString());
+//            return "account/login-page";
+//        }
+//        if (accountService.loadUserByUsername(signIn.email) == null) {
+//            log.error("Failed authorization");
+//            return "account/login-page";
+//        }
+//        return "redirect:/account/success";
+//    }

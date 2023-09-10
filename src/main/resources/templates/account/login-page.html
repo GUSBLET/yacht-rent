@@ -5,47 +5,95 @@
     <title>Title</title>
 </head>
 <body>
-    <div th:fragment="content(signInViewModel, signUpViewModel)">
-
-        <h2>Login</h2>
-        <form th:action="@{/authenticate}" method="post">
-            <label>Login or email:</label>
-            <input type="text" name="username" id="username" /><br/>
-            <label>Password:</label>
-            <input type="password" name="password" id="password"/><br/>
-          <!--  <div>
-                <input type="checkbox" th:field="*{rememberMe}"/>
-                <label th:for="rememberMe">Remember Me</label>
-            </div>-->
-
-            <button type="submit">Login</button>
-        </form>
-
-    <!--    <form th:action="@{/account/sing-in}" th:object="${signInViewModel}" th:method="post">
-            <label>Login or email:</label>
-            <input type="text" th:field="*{login}" required/><br/>
-
-            <label>Password:</label>
-            <input type="password" th:field="*{password}"/><br/>
-            <div>
-                <input type="checkbox" th:field="*{rememberMe}"/>
-                <label th:for="rememberMe">Remember Me</label>
-            </div>
-
-            <button th:action="@{/authenticate}" type="submit">Login</button>
-        </form>-->
-
-        <br/>
-        <form th:action="@{/account/sign-up}" th:object="${signUpViewModel}" th:method="post">
-            <label th:for="email">Email:</label>
-            <input type="email" th:field="*{email}"/><br/>
-            <label th:for="password">Password:</label>
-            <input type="text" th:field="*{password}" required/><br/>
-            <label th:for="passwordConfirm">Confirm password:</label>
-            <input type="text" th:field="*{passwordConfirm}"/><br/>
-            <button type="submit">Sing-up</button>
-        </form>
-
+<div th:fragment="content(signInViewModel, signUpViewModel)">
+    <h2>Login</h2>
+    <div th:if="${param.logout}">
+        <div style="color:green" class="alert alert-info">You have been logged out</div>
     </div>
+    <div th:if="${param.error}">
+        <div style="color:red" class="alert alert-danger">Check whether your email or password is correct</div>
+    </div>
+    <form th:action="@{/authenticate}" method="post">
+        <div>
+            <label>Email:</label>
+            <input type="text" name="email" id="login_email" />
+            <span id="emailError" style="color: red;"></span>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" id="password" />
+            <span id="passwordError" style="color: red;"></span>
+        </div>
+        <div>
+            <input type="checkbox" name="rememberMe" th:checked="${rememberMe}"/>
+            <label th:for="rememberMe">Remember Me</label>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const emailInput = document.querySelector("#login_email");
+        const passwordInput = document.querySelector("#password");
+        const emailError = document.querySelector("#emailError");
+        const passwordError = document.querySelector("#passwordError");
+
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
+
+            if (!emailInput.value.trim()) {
+                isValid = false;
+                emailError.textContent = "Email cannot be empty.";
+                event.preventDefault();
+            } else if (!isValidEmail(emailInput.value)) {
+                isValid = false;
+                emailError.textContent = "Invalid email format.";
+                event.preventDefault();
+            } else {
+                emailError.textContent = "";
+            }
+
+            if (!passwordInput.value.trim()) {
+                isValid = false;
+                passwordError.textContent = "Password cannot be empty.";
+                event.preventDefault();
+            } else if (passwordInput.value.length < 5) {
+                isValid = false;
+                passwordError.textContent = "Password must be at least 5 characters long.";
+                event.preventDefault();
+            } else {
+                passwordError.textContent = "";
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+
+        function isValidEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            return emailPattern.test(email);
+        }
+    });
+</script>
+</div>
 </body>
 </html>
+
+
+<!--        ПРОВЕРКА ВАЛИДАЦИИ НА passwordConfirm-->
+<!--        <div>-->
+<!--            <label th:text="#{label.user.confirmPass}">confirm</label>-->
+<!--            <input type="password" th:field="*{matchingPassword}"/>-->
+<!--        </div>-->
+
+<!--    <form th:action="@{/account/sign-up}" th:object="${signUpViewModel}" th:method="post">-->
+<!--        <label th:for="email">Email:</label>-->
+<!--        <input type="email" th:field="*{email}"/><br/>-->
+<!--        <label th:for="password">Password:</label>-->
+<!--        <input type="text" th:field="*{password}" required/><br/>-->
+<!--        <label th:for="passwordConfirm">Confirm password:</label>-->
+<!--        <input type="text" th:field="*{passwordConfirm}"/><br/>-->
+<!--        <button type="submit">Sing-up</button>-->
+<!--    </form>-->
