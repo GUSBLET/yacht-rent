@@ -1,5 +1,7 @@
-package com.yachtrent.main.order;
+package com.yachtrent.main.order.services;
 
+import com.yachtrent.main.yacht.YachtRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -7,15 +9,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+
 @Service
 public class PriceCounterService {
+    private final YachtRepository yachtRepository;
 
-    public float countFullPrice(Date startOfRent, Date finishOfRent){
+    public PriceCounterService(YachtRepository yachtRepository){
+        this.yachtRepository = yachtRepository;
+    }
+
+    public float countFullPrice(Date startOfRent, Date finishOfRent, String yachtName){
         // Limit in time for one order.
         final int limitOfHours = 48;
-
-        // Price pro hour in grivna.
-        final float priceProHour = 3000;
+        float priceProHour = yachtRepository.findByName(yachtName).get().getPrice_per_hour();
 
         float time = countDifferentInTime(startOfRent, finishOfRent);
         if(time == -1)

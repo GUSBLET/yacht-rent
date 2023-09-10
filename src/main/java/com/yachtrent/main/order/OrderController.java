@@ -2,6 +2,8 @@ package com.yachtrent.main.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yachtrent.main.dto.order.CreateOrderViewModel;
+import com.yachtrent.main.order.services.OrderService;
+import com.yachtrent.main.order.services.PriceCounterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +68,7 @@ public class OrderController {
                 priceCounterService.convertToParametersToDate(
                         dateOfStart, hourOfStart),
                 priceCounterService.convertToParametersToDate(dateOfFinish,
-                        hourOfFinish));
+                        hourOfFinish), "");
 
         if (result == -1.0)
             return ResponseEntity.ofNullable("Order cannot be more than 48 hours.");

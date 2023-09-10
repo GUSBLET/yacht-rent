@@ -1,12 +1,13 @@
-package com.yachtrent.main.order;
+package com.yachtrent.main.order.services;
 
 import com.yachtrent.main.dto.order.CreateOrderViewModel;
+import com.yachtrent.main.order.Order;
+import com.yachtrent.main.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -18,6 +19,7 @@ public class OrderService {
     private final PriceCounterService priceCounterService;
 
 
+
     public ResponseEntity<String> createNewOrder(CreateOrderViewModel model) throws ParseException {
         Date startTime = priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart());
         Date finishTime = priceCounterService.convertToParametersToDate(model.getDateOfFinish(), model.getHourOfFinish());
@@ -25,7 +27,7 @@ public class OrderService {
 
 //         timetableRepository.findByTimeRange(startTime, finishTime).isEmpty()
         if (true) {
-            float price = priceCounterService.countFullPrice(startTime, finishTime);
+            float price = priceCounterService.countFullPrice(startTime, finishTime, "");
 
             if (price == -1) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
