@@ -1,6 +1,6 @@
 package com.yachtrent.main.mail.service.dto;
 
 public record MailMessage(
-        String reciverEmail,
+        String receiverEmail,
         String text,
         String subject) { }

@@ -42,10 +42,12 @@ public class AccountService implements IAccountService, UserDetailsService {
             if (checkingAccountDetailsUseCase.emailMask(model.getPassword())
                     && checkingAccountDetailsUseCase.passwordCompare(model.getPassword(), model.getPasswordConfirm())) {
 
-                Role role = roleRepository.save(
-                        Role.builder()
-                                .role(Authority.USER.toString())
-                                .build());
+                Optional<Role> role = roleRepository.findByRole(model.getRole().toString());
+                if(role.isEmpty())
+                        role = Optional.of(roleRepository.save(
+                                Role.builder()
+                                        .role(model.getRole().toString())
+                                        .build()));
 
                 Account account = Account.builder()
                         .email(model.getEmail())
@@ -58,7 +60,7 @@ public class AccountService implements IAccountService, UserDetailsService {
                         .accountRegistered(true)
                         .build();
 
-                account.getRoles().add(role);
+                account.getRoles().add(role.get());
                 accountRepository.save(account);
                 result.reject("200", "success");
             } else {

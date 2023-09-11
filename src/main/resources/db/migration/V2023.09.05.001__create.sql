@@ -5,7 +5,7 @@ CREATE TABLE main.account_table
     last_name          VARCHAR(30)  NOT NULL,
     email              VARCHAR(100) NOT NULL unique,
     password           VARCHAR(300) NOT NULL,
-    phone_number       varchar(30)  not null unique,
+    phone_number       varchar(30)  not null,
     avatar             bytea,
     account_registered boolean,
     account_confirmed  boolean,
