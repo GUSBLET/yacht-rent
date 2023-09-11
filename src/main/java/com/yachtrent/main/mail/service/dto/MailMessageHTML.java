@@ -3,7 +3,7 @@ package com.yachtrent.main.mail.service.dto;
 import java.io.File;
 
 public record MailMessageHTML(
-        String reciverEmail,
+        String receiverEmail,
         File htmlFile,
         String subject) {
 }

@@ -42,7 +42,7 @@ public class MailService {
             // Create massage.
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailMassage.reciverEmail()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailMassage.receiverEmail()));
             message.setSubject(mailMassage.subject());
             message.setText(mailMassage.text());
 
@@ -70,7 +70,7 @@ public class MailService {
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.reciverEmail()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.receiverEmail()));
             message.setSubject(parametters.subject());
             message.setContent(multipart);
 
@@ -102,7 +102,7 @@ public class MailService {
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.reciverEmail()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.receiverEmail()));
             message.setSubject(parametters.subject());
             message.setText(parametters.text());
             message.setContent(multipart);
