@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     record SignUp (
-
             @NotBlank(message = "Enter your email")
             @Email(message = "Incorrect mail entry")
             String email,
