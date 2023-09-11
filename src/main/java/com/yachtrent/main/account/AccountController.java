@@ -1,6 +1,8 @@
 package com.yachtrent.main.account;
 
 
+import com.yachtrent.main.mail.service.MailService;
+import com.yachtrent.main.mail.service.dto.MailMessage;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/account")
 public class AccountController {
+
+    private MailService mailService;
+
+    public AccountController(MailService mailService){
+        this.mailService = mailService;
+    }
 
     record SignUp (
             @NotBlank(message = "Enter your email")
@@ -31,6 +39,7 @@ public class AccountController {
         model.addAttribute("title", "Login")
                 .addAttribute("content", "account/login-page")
                 .addAttribute("signUpViewModel",  new SignUp(null, null, null));
+        mailService.sendMail(new MailMessage("vityabomj2@gmail.com", "ss", "s"));
         return "account/login-page";
     }
 
