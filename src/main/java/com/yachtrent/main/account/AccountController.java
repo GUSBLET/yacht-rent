@@ -34,16 +34,6 @@ public class AccountController {
         return "account/login-page";
     }
 
-    @GetMapping("/success")
-    public String getSuccessPage(@AuthenticationPrincipal Account account,
-                                 @RequestParam(name = "rememberMe", required = false) boolean rememberMe, Model model) {
-        model.addAttribute("title", "Success")
-                .addAttribute("text", account);
-
-        account.setAccountRegistered(rememberMe);
-        return "account/success";
-    }
-
     @GetMapping("/admin")
     public String admin(SignUp signUp, Model model) {
         model.addAttribute("title", "Login");

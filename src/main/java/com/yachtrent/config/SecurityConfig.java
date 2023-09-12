@@ -28,8 +28,7 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .loginPage("/account/login-page")
                         .loginProcessingUrl("/authenticate")
-                        .defaultSuccessUrl("/account/success")
-
+                        .defaultSuccessUrl("/cabinet/success")
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/account/login-page?logout"))
                 .build();
