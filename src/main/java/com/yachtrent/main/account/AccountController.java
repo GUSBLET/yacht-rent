@@ -79,7 +79,7 @@ public class AccountController {
             log.error(bindingResult.getAllErrors().toString());
             return "account/login-page";
         }
-        if (accountService.singUpAsync(signUpViewModel) == null) {
+        if (accountService.signUpAsync(signUpViewModel) == null) {
             log.error("Failed authorization");
             return "account/login-page";
         }
