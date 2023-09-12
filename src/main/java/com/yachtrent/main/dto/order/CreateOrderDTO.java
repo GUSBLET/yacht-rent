@@ -1,16 +1,20 @@
 package com.yachtrent.main.dto.order;
 
+import com.yachtrent.main.yacht.Yacht;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-
 @Data
-public class CreateOrderViewModel {
+public class CreateOrderDTO {
     @NotBlank(message = "Enter your full name")
-    @Size(max = 50)
+    @Size(max = 30)
     private String customerName;
+
+    @NotBlank(message = "Enter your last name")
+    @Size(max = 30)
+    private String customerLastName;
 
     @NotBlank(message = "Enter your phone number")
     @Size(max = 20)
@@ -33,4 +37,6 @@ public class CreateOrderViewModel {
 
     @NotBlank(message = "Enter your hour of finish rent")
     private String hourOfFinish;
+
+    private Yacht yacht = new Yacht();
 }

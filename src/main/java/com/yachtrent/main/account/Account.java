@@ -36,7 +36,6 @@ public class Account implements UserDetails {
 
     private String email;
 
-    @NotBlank(message = "Enter your password")
     private String password;
 
     private String name;
