@@ -25,6 +25,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    //TODO надо убарть
     record SignUp (
             @NotBlank(message = "Enter your email")
             @Email(message = "Incorrect mail entry")
@@ -43,16 +44,6 @@ public class AccountController {
                 .addAttribute("content", "account/login-page")
                 .addAttribute("signUpViewModel",  new SignUp(null, null, null));
         return "account/login-page";
-    }
-
-    @GetMapping("/success")
-    public String getSuccessPage(@AuthenticationPrincipal Account account,
-                                 @RequestParam(name = "rememberMe", required = false) boolean rememberMe, Model model) {
-        model.addAttribute("title", "Success")
-                .addAttribute("text", account);
-
-        account.setAccountRegistered(rememberMe);
-        return "account/success";
     }
 
     @GetMapping("/admin")
@@ -87,4 +78,3 @@ public class AccountController {
     }
 
 }
-

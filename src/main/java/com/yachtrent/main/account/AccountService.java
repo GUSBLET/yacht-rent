@@ -45,11 +45,12 @@ public class AccountService implements IAccountService, UserDetailsService {
                     && checkingAccountDetailsUseCase.passwordCompare(model.getPassword(), model.getPasswordConfirm())) {
 
                 Optional<Role> role = roleRepository.findByRole(model.getRole().toString());
-                if(role.isEmpty())
+
+         /*       if(role.isEmpty())
                         role = Optional.of(roleRepository.save(
                                 Role.builder()
                                         .role(model.getRole().toString())
-                                        .build()));
+                                        .build()));*/
 
                 Account account = Account.builder()
                         .email(model.getEmail())

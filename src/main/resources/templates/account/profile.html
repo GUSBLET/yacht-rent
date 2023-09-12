@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin-top: 20px;
+            color: #bcd0f7;
+            background: #1A233A;
+        }
+
+        .profile-container {
+            display: flex;
+        }
+
+        .user-profile {
+            margin: 0 20px;
+            padding-bottom: 20px;
+            text-align: left;
+        }
+
+        .user-profile .user-avatar img {
+            width: 90px;
+            height: 90px;
+            border-radius: 100px;
+            margin-bottom: 10px;
+        }
+
+        .user-profile .user-name {
+            margin: 0 0 0.5rem 0;
+        }
+
+        .user-profile .user-email {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: 400;
+        }
+
+        .about {
+            margin: 20px 0 0 0;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        .card {
+            background: #272E48;
+            border-radius: 5px;
+            border: 0;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border: 1px solid #596280;
+            border-radius: 2px;
+            font-size: .825rem;
+            background: #1A233A;
+            color: #bcd0f7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="row gutters">
+    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+        <div class="card h-100">
+            <div class="card-body">
+                <form th:action="@{/cabinet/success}" method="get" th:object="${account}">
+
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                <input type="file" id="avatar" name="avatar" accept="image/*">
+                            </div>
+
+                            <h5 class="user-name" th:text="${account.id}"></h5>
+                            <h5 class="user-name" th:text="${account.name}"></h5>
+                            <h5 class="user-name" th:text="${account.lastName}"></h5>
+                            <h6 class="user-email" th:text="${account.email}"></h6>
+                            <h6 class="user-email" th:text="${account.phoneNumber}"></h6>
+                        </div>
+                    </div>
+                </form>
+
+                <div th:if="${orders.empty}">
+                    <h2>Sorry, you have no notes</h2>
+                </div>
+                <div th:unless="${orders.empty}">
+                    <table class="table mt-5">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Price</th>
+                            <th>StartOfRent</th>
+                            <th>FinishOfRent</th>
+                            <th>ConfirmedOrder</th>
+                            <th colspan="3">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order: ${orders}">
+                            <td th:text="${order.price}"></td>
+                            <td th:text="${order.startOfRent}"></td>
+                            <td th:text="${order.finishOfRent}"></td>
+                            <td th:text="${order.confirmedOrder}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
+
+
+<!--<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">-->
+<!--    <div class="card h-100">-->
+<!--        <div class="card-body">-->
+<!--            <div class="row gutters">-->
+<!--                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">-->
+<!--                    <h6 class="mb-3 text-primary">Personal Details</h6>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="fullName">Full Name</label>-->
+<!--                        <input type="text" class="form-control" id="fullName" placeholder="Enter full name">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="eMail">Email</label>-->
+<!--                        <input type="email" class="form-control" id="eMail" placeholder="Enter email ID">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="phone">Phone</label>-->
+<!--                        <input type="text" class="form-control" id="phone" placeholder="Enter phone number">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="website">Website URL</label>-->
+<!--                        <input type="url" class="form-control" id="website" placeholder="Website url">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row gutters">-->
+<!--                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">-->
+<!--                    <h6 class="mb-3 text-primary">Address</h6>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="Street">Street</label>-->
+<!--                        <input type="name" class="form-control" id="Street" placeholder="Enter Street">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="ciTy">City</label>-->
+<!--                        <input type="name" class="form-control" id="ciTy" placeholder="Enter City">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="sTate">State</label>-->
+<!--                        <input type="text" class="form-control" id="sTate" placeholder="Enter State">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="zIp">Zip Code</label>-->
+<!--                        <input type="text" class="form-control" id="zIp" placeholder="Zip Code">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row gutters">-->
+<!--                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">-->
+<!--                    <div class="text-right">-->
+<!--                        <button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>-->
+<!--                        <button type="button" id="submit" name="submit" class="btn btn-primary">Update</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

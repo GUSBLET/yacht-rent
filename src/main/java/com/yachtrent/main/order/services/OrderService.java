@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,11 +29,12 @@ public class OrderService {
     private final PriceCounterService priceCounterService;
 
 
-
     public ResponseEntity<OrderResultDTO> createNewOrder(CreateOrderDTO model) throws ParseException {
         Date startTime = priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart());
         Date finishTime = priceCounterService.convertToParametersToDate(model.getDateOfFinish(), model.getHourOfFinish());
 
+
+        //TODO доделать
         if (true) {
             float price = priceCounterService.countFullPrice(startTime, finishTime, model.getYacht().getId());
 
@@ -42,7 +44,7 @@ public class OrderService {
             }
 
             Account result = accountService.signUpAnonymous(model).getBody();
-            if(result == null)
+            if (result == null)
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(new OrderResultDTO("International error", null));
 
@@ -67,17 +69,24 @@ public class OrderService {
     }
 
     // Pause.
-    public ResponseEntity<String> confirmOrder(Order model){
+    public ResponseEntity<String> confirmOrder(Order model) {
         model.setConfirmedOrder(true);
         return null;
     }
 
     // Pause.
-    public ResponseEntity<List<ControllingOrderTable>> createControllingOrderTable(long id){
+   /*
+   * не совсем понимаю что ты тут хочешь возвращать но вот корявий пример кода
+   *
+   *   return accountRepository.findById(id)
+               .map(account -> null)
+               .orElseGet(() -> new IllegalArgumentException("account not found"));
+   * */
+    public ResponseEntity<List<ControllingOrderTable>> createControllingOrderTable(long id) {
+
         Optional<Account> account = accountRepository.findById(id);
         if(account.isEmpty())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
 
         return null;
     }
