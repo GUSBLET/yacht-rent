@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div th:fragment="content(signUpViewModel)">
+    <form th:action="@{/account/sign-up}" th:object="${signUpViewModel}" th:method="post">
+      <label th:for="email">Email:</label>
+      <input type="email" th:field="*{email}"/><br/>
+      <label th:for="password">Password:</label>
+      <input type="text" th:field="*{password}" required/><br/>
+      <label th:for="passwordConfirm">Confirm password:</label>
+      <input type="text" th:field="*{passwordConfirm}"/><br/>
+      <select th:field="*{role}" id="pet-select">
+        <option value="">--Please choose an option--</option>
+        <option value="USER">User</option>
+        <option value="YACHT_OWNER">Yacht owner</option>
+      </select>
+
+      <button type="submit">Sing-up</button>
+    </form>
+</div>
+</body>
+</html>

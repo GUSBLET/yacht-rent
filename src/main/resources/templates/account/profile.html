@@ -81,29 +81,32 @@
                             <h6 class="user-email" th:text="${account.phoneNumber}"></h6>
                         </div>
                     </div>
+                </form>
 
-                    <div th:if="${notes.empty}">
-                        <h2>Sorry, you have no notes</h2>
-                    </div>
-                    <div th:unless="${notes.empty}">
+                <div th:if="${orders.empty}">
+                    <h2>Sorry, you have no notes</h2>
+                </div>
+                <div th:unless="${orders.empty}">
                     <table class="table mt-5">
                         <thead class="table-light">
                         <tr>
-                            <th>Title</th>
-                            <th>Content</th>
-                            <th>Access</th>
+                            <th>Price</th>
+                            <th>StartOfRent</th>
+                            <th>FinishOfRent</th>
+                            <th>ConfirmedOrder</th>
                             <th colspan="3">Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="note: ${notes}">
-                            <td th:text="${note.title}"></td>
-                            <td th:text="${note.content}"></td>
-                            <td th:text="${note.access}"></td>
+                        <tr th:each="order: ${orders}">
+                            <td th:text="${order.price}"></td>
+                            <td th:text="${order.startOfRent}"></td>
+                            <td th:text="${order.finishOfRent}"></td>
+                            <td th:text="${order.confirmedOrder}"></td>
                         </tr>
                         </tbody>
                     </table>
-                </form>
+                </div>
             </div>
         </div>
     </div>

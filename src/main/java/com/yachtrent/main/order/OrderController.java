@@ -1,7 +1,7 @@
 package com.yachtrent.main.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yachtrent.main.dto.order.CreateOrderViewModel;
+import com.yachtrent.main.dto.order.CreateOrderDTO;
 import com.yachtrent.main.order.services.OrderService;
 import com.yachtrent.main.order.services.PriceCounterService;
 import jakarta.validation.Valid;
@@ -30,23 +30,26 @@ public class OrderController {
     public String pageCreateOrder(Model model) {
         model.addAttribute("title", "New order");
         model.addAttribute("content", "order/create-order-page");
-        model.addAttribute("createOrderViewModel", new CreateOrderViewModel());
+        CreateOrderDTO s = new CreateOrderDTO();
+        s.getYacht().setId(1L);
+        model.addAttribute("createOrderDTO", s);
         return "layout";
     }
 
     @PostMapping("create-order")
     public String createOrder(@Valid @ModelAttribute("createOrderViewModel")
-                              CreateOrderViewModel createOrderViewModel,
+                                  CreateOrderDTO createOrderDTO,
                               BindingResult result,
                               Model model) {
+
         if (result.hasErrors()) {
             model.addAttribute("title", "New order");
             model.addAttribute("content", "order/create-order-page");
-            model.addAttribute("createOrderViewModel", new CreateOrderViewModel());
+            model.addAttribute("createOrderViewModel", new CreateOrderDTO());
             return "layout";
         }
         try {
-            orderService.createNewOrder(createOrderViewModel);
+            orderService.createNewOrder(createOrderDTO);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +61,8 @@ public class OrderController {
 
     @GetMapping("count-price")
     public ResponseEntity<Object> countPrice(String dateOfStart, String dateOfFinish,
-                                             String hourOfStart, String hourOfFinish)
+                                             String hourOfStart, String hourOfFinish,
+                                             long yachtId)
             throws ParseException, JsonProcessingException {
         if (Objects.equals(dateOfFinish, "") || Objects.equals(dateOfStart, "") ||
                 Objects.equals(hourOfStart, "") || Objects.equals(hourOfFinish, ""))
@@ -68,7 +72,7 @@ public class OrderController {
                 priceCounterService.convertToParametersToDate(
                         dateOfStart, hourOfStart),
                 priceCounterService.convertToParametersToDate(dateOfFinish,
-                        hourOfFinish), "");
+                        hourOfFinish), yachtId);
 
         if (result == -1.0)
             return ResponseEntity.ofNullable("Order cannot be more than 48 hours.");

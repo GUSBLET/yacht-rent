@@ -8,6 +8,7 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -20,6 +21,19 @@ import java.util.Properties;
 @Service
 public class MailService {
 
+
+    @Value("${spring.mail.username}")
+    private  String email;
+
+    @Value("${spring.mail.password}")
+    private  String password;
+
+    @Value("${spring.mail.host}")
+    private  String host;
+
+    @Value("${spring.mail.port}")
+    private  String port;
+
     // Send mail message with text.
     public boolean sendMail(MailMessage mailMassage) {
         Session session = getSession();
@@ -27,9 +41,8 @@ public class MailService {
         try {
             // Create massage.
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(getProperties("config.properties")
-                    .getProperty("spring.mail.username")));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailMassage.reciverEmail()));
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailMassage.receiverEmail()));
             message.setSubject(mailMassage.subject());
             message.setText(mailMassage.text());
 
@@ -56,9 +69,8 @@ public class MailService {
             multipart.addBodyPart(mimeBodyPart);
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(getProperties("config.properties")
-                    .getProperty("spring.mail.username")));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.reciverEmail()));
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.receiverEmail()));
             message.setSubject(parametters.subject());
             message.setContent(multipart);
 
@@ -89,9 +101,8 @@ public class MailService {
             }
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(getProperties("config.properties")
-                    .getProperty("spring.mail.username")));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.reciverEmail()));
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(parametters.receiverEmail()));
             message.setSubject(parametters.subject());
             message.setText(parametters.text());
             message.setContent(multipart);
@@ -108,36 +119,15 @@ public class MailService {
         return true;
     }
 
-    private Properties getProperties(String configFile) {
-        Properties properties = new Properties();
 
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream(configFile)) {
-            if (input == null) {
-                System.err.println("Unable to find config.properties");
-                return null; // Handle the error as needed
-            }
-
-            properties.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null; // Handle the error as needed
-        }
-        return properties;
-    }
 
     private Session getSession() {
-        // Get properties from configuration file.
-        Properties properties = getProperties("config.properties");
-
         // Create properties for smtp client.
         Properties mailProperties = new Properties();
-        mailProperties.put("mail.smtp.host", properties.getProperty("spring.mail.host"));
-        mailProperties.put("mail.smtp.port", properties.getProperty("spring.mail.port")); // SMTP port (587 for TLS, 465 for SSL, 25 for non-secure)
+        mailProperties.put("mail.smtp.host", host);
+        mailProperties.put("mail.smtp.port", port); // SMTP port (587 for TLS, 465 for SSL, 25 for non-secure)
         mailProperties.put("mail.smtp.auth", true);
         mailProperties.put("mail.smtp.starttls.enable", true); // Use TLS;
-
-        String email = properties.getProperty("spring.mail.username");
-        String password = properties.getProperty("spring.mail.password");
 
         // Create session by properties.
         return Session.getInstance(mailProperties, new Authenticator() {

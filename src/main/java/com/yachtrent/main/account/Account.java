@@ -6,10 +6,6 @@ import com.yachtrent.main.role.Role;
 import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.review.Review;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,25 +30,14 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Enter your email")
-    @Column(name = "email", unique = true)
-    @Email(message = "Incorrect mail entry")
     private String email;
 
-    @NotBlank(message = "Enter your password")
     private String password;
 
-    @NotBlank(message = "Enter your name")
-    @Max(value = 30, message = "The name must not exceed 30 characters")
     private String name;
 
-    @NotBlank(message = "Enter your lastName")
-    @Max(value = 30, message = "The lastName must not exceed 30 characters")
     private String lastName;
 
-    @NotBlank(message = "Enter your phone number")
-    @Max(value = 10, message = "Mobile number cannot exceed more than 10 digits")
-    @Pattern(regexp = "\\+380\\d{1,10}", message = "Invalid phone number format")
     private String phoneNumber;
 
     private byte[] avatar;
@@ -66,7 +51,7 @@ public class Account implements UserDetails {
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
     private List<Order> orders;

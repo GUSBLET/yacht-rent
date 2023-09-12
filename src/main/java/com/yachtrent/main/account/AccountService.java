@@ -2,13 +2,15 @@ package com.yachtrent.main.account;
 
 import com.google.common.hash.Hashing;
 import com.yachtrent.main.account.use_cases.CheckingAccountDetailsUseCase;
-import com.yachtrent.main.dto.account.SignInViewModel;
 import com.yachtrent.main.dto.account.SignUpViewModel;
+import com.yachtrent.main.dto.order.CreateOrderDTO;
 import com.yachtrent.main.role.Authority;
 import com.yachtrent.main.role.Role;
 import com.yachtrent.main.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,17 +37,20 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     @Async
-    public CompletableFuture<BindingResult> singUpAsync(SignUpViewModel model) {
+    public CompletableFuture<BindingResult> signUpAsync(SignUpViewModel model) {
         BindingResult result = new BeanPropertyBindingResult(model, "singUpViewModel");
         Optional<Account> response = accountRepository.findByEmail(model.getEmail());
         if (response.isEmpty()) {
             if (checkingAccountDetailsUseCase.emailMask(model.getPassword())
                     && checkingAccountDetailsUseCase.passwordCompare(model.getPassword(), model.getPasswordConfirm())) {
 
-                Role role = roleRepository.save(
-                        Role.builder()
-                                .role(Authority.USER.toString())
-                                .build());
+                Optional<Role> role = roleRepository.findByRole(model.getRole().toString());
+
+         /*       if(role.isEmpty())
+                        role = Optional.of(roleRepository.save(
+                                Role.builder()
+                                        .role(model.getRole().toString())
+                                        .build()));*/
 
                 Account account = Account.builder()
                         .email(model.getEmail())
@@ -58,7 +63,7 @@ public class AccountService implements IAccountService, UserDetailsService {
                         .accountRegistered(true)
                         .build();
 
-                account.getRoles().add(role);
+                account.getRoles().add(role.get());
                 accountRepository.save(account);
                 result.reject("200", "success");
             } else {
@@ -71,9 +76,31 @@ public class AccountService implements IAccountService, UserDetailsService {
         return CompletableFuture.completedFuture(result);
     }
 
+    // Method create new account if user does not exist and anonymous creates new order.
     @Override
-    public CompletableFuture<BindingResult> singInAsync(SignInViewModel model) {
-        return null;
+    public ResponseEntity<Account> signUpAnonymous(CreateOrderDTO model) {
+
+        Optional<Role> role = roleRepository.findByRole(Authority.ANONYMOUS.toString());
+        if(role.isEmpty())
+            role = Optional.of(roleRepository.save(
+                    Role.builder()
+                            .role(Authority.ANONYMOUS.toString())
+                            .build()));
+
+        Account account = Account.builder()
+                .email(model.getCustomerEmail())
+                .password("")
+                .roles(new HashSet<>())
+                .name(model.getCustomerName())
+                .lastName(model.getCustomerLastName())
+                .phoneNumber(model.getCustomerPhoneNumber())
+                .accountConfirmed(false)
+                .accountRegistered(false)
+                .build();
+
+        account.getRoles().add(role.get());
+        accountRepository.save(account);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
     @Override

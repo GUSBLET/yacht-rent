@@ -5,11 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-  <div th:fragment="content(createOrederViewModel)">
-    <form th:action="@{/order/create-order}" th:object="${createOrederViewModel}" th:method="post">
+  <div th:fragment="content(createOrderDTO)">
+    <form th:action="@{/order/create-order}" th:object="${createOrderDTO}" th:method="post">
       <div>
-        <label th:for="customerName">Full Name:</label>
-        <input th:type="text" id="customerName" name="customerName" >
+        <label th:for="customerName">Name:</label>
+        <input th:type="text" th:field="*{customerName}" id="customerName" name="customerName" >
+      </div>
+
+      <div>
+        <label th:for="customerLastName">Name:</label>
+        <input th:type="text" th:field="*{customerLastName}" id="customerLastName" name="customerLastName" >
+      </div>
+
+      <div>
+        <label>ID:</label>
+        <input type="text" id="yachtId" th:field="*{yacht.id}" readonly>
       </div>
 
       <div>

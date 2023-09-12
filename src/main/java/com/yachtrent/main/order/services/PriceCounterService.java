@@ -1,5 +1,6 @@
 package com.yachtrent.main.order.services;
 
+import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.YachtRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 
 @Service
@@ -18,11 +20,12 @@ public class PriceCounterService {
         this.yachtRepository = yachtRepository;
     }
 
-    public float countFullPrice(Date startOfRent, Date finishOfRent, String yachtName){
+    public float countFullPrice(Date startOfRent, Date finishOfRent, long yachtId){
         // Limit in time for one order.
         final int limitOfHours = 48;
-        float priceProHour = yachtRepository.findByName(yachtName).get().getPrice_per_hour();
 
+        Optional<Yacht> yacht = Optional.of(yachtRepository.findById(yachtId).get());
+        float pricePerHour = yacht.isPresent() ? yacht.get().getPrice_per_hour() : -1;
         float time = countDifferentInTime(startOfRent, finishOfRent);
         if(time == -1)
             return -1;
@@ -30,7 +33,7 @@ public class PriceCounterService {
         if(time > limitOfHours)
             return -1;
 
-        return time * priceProHour;
+        return time * pricePerHour;
     }
 
     public Date convertToParametersToDate(String date, String time) throws ParseException {

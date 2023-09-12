@@ -1,12 +1,17 @@
 package com.yachtrent.main.account;
 
 
+import com.yachtrent.main.dto.account.SignUpViewModel;
+import com.yachtrent.main.mail.service.MailService;
+import com.yachtrent.main.mail.service.dto.MailMessage;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -14,6 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/account")
 public class AccountController {
 
+    private IAccountService accountService;
+
+    public AccountController(IAccountService accountService){
+        this.accountService = accountService;
+    }
+
+    //TODO надо убарть
     record SignUp (
             @NotBlank(message = "Enter your email")
             @Email(message = "Incorrect mail entry")
@@ -42,18 +54,27 @@ public class AccountController {
         return "layout";
     }
 
-}
 
-//    @PostMapping("/sign-up")
-//    public String signUp(@Valid @ModelAttribute("signInViewModel") SignIn signIn,
-//                         BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            log.error(bindingResult.getAllErrors().toString());
-//            return "account/login-page";
-//        }
-//        if (accountService.loadUserByUsername(signIn.email) == null) {
-//            log.error("Failed authorization");
-//            return "account/login-page";
-//        }
-//        return "redirect:/account/success";
-//    }
+    @GetMapping("registration-page")
+    public  String registrationPage(Model model){
+        model.addAttribute("title", "Registration");
+        model.addAttribute("content", "account/registration-page");
+        model.addAttribute("signUpViewModel", new SignUpViewModel());
+        return "layout";
+    }
+
+    @PostMapping("sign-up")
+    public String signUp(@Valid @ModelAttribute("signUpViewModel") SignUpViewModel signUpViewModel,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            log.error(bindingResult.getAllErrors().toString());
+            return "account/login-page";
+        }
+        if (accountService.signUpAsync(signUpViewModel) == null) {
+            log.error("Failed authorization");
+            return "account/login-page";
+        }
+        return "redirect:/account/success";
+    }
+
+}

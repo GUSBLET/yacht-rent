@@ -1,6 +1,7 @@
 package com.yachtrent.profile;
 
 import com.yachtrent.main.account.Account;
+import com.yachtrent.main.order.Order;
 import com.yachtrent.main.order.OrderRepository;
 import com.yachtrent.main.order.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.LinkedList;
 
 @Slf4j
 @Controller
@@ -25,7 +31,17 @@ public class ProfileController {
                                  @RequestParam(name = "rememberMe", required = false) boolean rememberMe,
                                  Model model
     ) {
-        model.addAttribute("account", account);
+        LinkedList<Order> orderList = new LinkedList<>();
+//        orderList.add(
+//                Order.builder()
+//                        .price(1000F)
+//                        .startOfRent(new Date())
+//                        .finishOfRent(new Date(System.currentTimeMillis() + 2 * 24 * 60 * 60 * 1000L))
+//                        .confirmedOrder(true)
+//                        .build());
+
+        model.addAttribute("account", account)
+                .addAttribute("orders", orderList);
         account.setAccountRegistered(rememberMe);
         return "account/profile";
     }
