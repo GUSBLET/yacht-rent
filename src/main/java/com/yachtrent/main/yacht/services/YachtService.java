@@ -6,6 +6,9 @@ import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.YachtRepository;
 import com.yachtrent.main.yacht.creator.services.CreatorService;
 import com.yachtrent.main.yacht.dto.CreatingYachtDTO;
+import com.yachtrent.main.yacht.dto.RemoveYachtDTO;
+import com.yachtrent.main.yacht.facility.FacilityRepository;
+import com.yachtrent.main.yacht.facility.services.FacilityService;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
 import com.yachtrent.main.yacht.photo.YachtPhotoRepository;
 import com.yachtrent.main.yacht.photo.service.YachtPhotoService;
@@ -30,6 +33,7 @@ public class YachtService {
     private final AccountService accountService;
     private final CreatorService creatorService;
     private final YachtPhotoService yachtPhotoService;
+    private final FacilityService facilityService;
 
     public ResponseEntity<String> addYacht(CreatingYachtDTO creatingYachtDTO) {
         if (yachtRepository.findByName(creatingYachtDTO.getName()).isEmpty()){
@@ -56,5 +60,11 @@ public class YachtService {
         }
 
         return ResponseEntity.badRequest().body("Yacht with next name has already existed");
+    }
+
+    public void removeYacht(RemoveYachtDTO removeYachtDTO){
+        yachtPhotoService.removeAllPhotosByYachtId(removeYachtDTO.getId());
+        facilityService.removeAllFacilitiesByYachtId(removeYachtDTO.getId());
+        yachtRepository.deleteById(removeYachtDTO.getId());
     }
 }

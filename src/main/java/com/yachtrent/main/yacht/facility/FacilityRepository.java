@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface FacilityRepository extends JpaRepository<Facility, Long> {
     @Query("SELECT f FROM Facility f LEFT JOIN f.yacht y WHERE y.id = :id")
     List<Facility> findAllByYachtId(@Param("id") Long id);
+
+    @Query("DELETE FROM Facility f WHERE f.yacht.id = :yachtId")
+    void deleteAllByYachtId(@Param("yachtId") Long yachtId);
+
 }

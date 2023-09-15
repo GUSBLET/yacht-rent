@@ -44,7 +44,7 @@ public class Account implements UserDetails {
     private boolean accountRegistered;
     private boolean accountConfirmed;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             schema = "main",
             name = "role_account_table",

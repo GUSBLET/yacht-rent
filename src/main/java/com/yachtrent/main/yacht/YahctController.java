@@ -3,6 +3,7 @@ package com.yachtrent.main.yacht;
 import com.yachtrent.main.account.Account;
 import com.yachtrent.main.yacht.creator.Creator;
 import com.yachtrent.main.yacht.dto.CreatingYachtDTO;
+import com.yachtrent.main.yacht.dto.RemoveYachtDTO;
 import com.yachtrent.main.yacht.services.YachtService;
 import com.yachtrent.main.yacht.type.Types;
 import jakarta.validation.Valid;
@@ -57,6 +58,15 @@ public class YahctController {
             yachtService.addYacht(yourObject);
 
         return "layout";
+    }
+
+    @GetMapping("remove-yacht")
+    public String removeYacht(@Valid @ModelAttribute("removeYachtDTO")
+                              RemoveYachtDTO removeYachtDTO,
+                              Model model){
+        removeYachtDTO = RemoveYachtDTO.builder().id(1L).build();
+        yachtService.removeYacht(removeYachtDTO);
+        return  "layout";
     }
 
     @GetMapping("adding-yacht-page")
