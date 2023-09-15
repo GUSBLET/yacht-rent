@@ -25,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final AccountRepository accountRepository;
+
     private final IAccountService accountService;
     private final PriceCounterService priceCounterService;
 
@@ -52,8 +52,8 @@ public class OrderService {
                             .price(price)
                             .status(OrderStatus.NOT_CONFIRMED.toString())
                             .account(result)
-                            .finishOfRent(finishTime)
-                            .startOfRent(startTime)
+                            .finishOfRent(finishTime.toInstant())
+                            .startOfRent(startTime.toInstant())
                             .build();
 
 
@@ -83,9 +83,9 @@ public class OrderService {
    * */
     public ResponseEntity<List<ControllingOrderTable>> createControllingOrderTable(long id) {
 
-        Optional<Account> account = accountRepository.findById(id);
-        if(account.isEmpty())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        Optional<Account> account = accountRepository.findById(id);
+//        if(account.isEmpty())
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         return null;
     }

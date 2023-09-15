@@ -1,12 +1,14 @@
 package com.yachtrent.main.yacht;
 
 import com.yachtrent.main.account.Account;
+import com.yachtrent.main.yacht.creator.Creator;
 import com.yachtrent.main.yacht.dto.CreatingYachtDTO;
 import com.yachtrent.main.yacht.services.YachtService;
 import com.yachtrent.main.yacht.type.Types;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,7 +51,7 @@ public class YahctController {
                 "A beautiful yacht for rent",
                 1L,
                 Types.SHIP,
-                null,
+                Creator.builder().сompanyName("ANONYMOUS").build(),
                 creatingYachtDTO.getPhotos());
 
             yachtService.addYacht(yourObject);

@@ -82,8 +82,8 @@ CREATE TABLE main.order_table
     price          real,
     status         varchar(20) not null,
     account_id     bigint references main.account_table (id),
-    start_of_rent  date,
-    finish_of_rent date
+    start_of_rent  timestamp,
+    finish_of_rent timestamp
 );
 
 create table main.role_table

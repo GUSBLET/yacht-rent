@@ -6,6 +6,7 @@ import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,10 +32,10 @@ public class Order {
     private String status;
 
     @Column(name = "start_of_rent", columnDefinition = "date")
-    private Date startOfRent;
+    private Instant startOfRent;
 
     @Column(name = "finish_of_rent", columnDefinition = "date")
-    private Date finishOfRent;
+    private Instant finishOfRent;
 
     @ManyToMany(mappedBy = "orders", cascade = CascadeType.PERSIST)
     private Set<Yacht> yachts = new HashSet<>();
