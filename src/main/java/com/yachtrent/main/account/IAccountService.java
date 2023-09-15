@@ -1,7 +1,7 @@
 package com.yachtrent.main.account;
 
-import com.yachtrent.main.dto.account.SignUpViewModel;
-import com.yachtrent.main.dto.order.CreateOrderDTO;
+import com.yachtrent.main.account.dto.SignUpViewModel;
+import com.yachtrent.main.order.dto.CreateOrderDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 

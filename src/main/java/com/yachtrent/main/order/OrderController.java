@@ -1,7 +1,7 @@
 package com.yachtrent.main.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yachtrent.main.dto.order.CreateOrderDTO;
+import com.yachtrent.main.order.dto.CreateOrderDTO;
 import com.yachtrent.main.order.services.OrderService;
 import com.yachtrent.main.order.services.PriceCounterService;
 import jakarta.validation.Valid;

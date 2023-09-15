@@ -50,7 +50,7 @@ public class Yacht {
     private float  width;
 
     @Column(name = "capacity", columnDefinition = "smallint")
-    private short  captain;
+    private short  capacity;
 
     @Column(name = "description", columnDefinition = "varchar(1000)")
     private String  description;
@@ -58,7 +58,7 @@ public class Yacht {
     @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
     private List<YachtPhoto> photos;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "yacht_harbor_table",
             joinColumns = @JoinColumn(name = "yacht_id"),
@@ -66,7 +66,7 @@ public class Yacht {
     )
     private Set<Harbor> harbors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "order_yacht_table",
             joinColumns = @JoinColumn(name = "yacht_id"),

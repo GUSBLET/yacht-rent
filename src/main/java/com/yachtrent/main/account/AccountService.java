@@ -2,8 +2,8 @@ package com.yachtrent.main.account;
 
 import com.google.common.hash.Hashing;
 import com.yachtrent.main.account.use_cases.CheckingAccountDetailsUseCase;
-import com.yachtrent.main.dto.account.SignUpViewModel;
-import com.yachtrent.main.dto.order.CreateOrderDTO;
+import com.yachtrent.main.account.dto.SignUpViewModel;
+import com.yachtrent.main.order.dto.CreateOrderDTO;
 import com.yachtrent.main.role.Authority;
 import com.yachtrent.main.role.Role;
 import com.yachtrent.main.role.RoleRepository;
@@ -35,6 +35,12 @@ public class AccountService implements IAccountService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
 
+    public Account getAccount(long id){
+        return accountRepository.findById(id).orElseThrow(() ->{
+            return null;
+        });
+    }
+
     @Override
     @Async
     public CompletableFuture<BindingResult> signUpAsync(SignUpViewModel model) {
@@ -44,13 +50,9 @@ public class AccountService implements IAccountService, UserDetailsService {
             if (checkingAccountDetailsUseCase.emailMask(model.getPassword())
                     && checkingAccountDetailsUseCase.passwordCompare(model.getPassword(), model.getPasswordConfirm())) {
 
-                Optional<Role> role = roleRepository.findByRole(model.getRole().toString());
-
-         /*       if(role.isEmpty())
-                        role = Optional.of(roleRepository.save(
-                                Role.builder()
-                                        .role(model.getRole().toString())
-                                        .build()));*/
+                Optional<Role> role = Optional.of(roleRepository.findByRole(model.getRole().toString()).orElseGet(() -> {
+                    return roleRepository.findByRole(Authority.ANONYMOUS.toString()).get();
+                }));
 
                 Account account = Account.builder()
                         .email(model.getEmail())
@@ -81,11 +83,6 @@ public class AccountService implements IAccountService, UserDetailsService {
     public ResponseEntity<Account> signUpAnonymous(CreateOrderDTO model) {
 
         Optional<Role> role = roleRepository.findByRole(Authority.ANONYMOUS.toString());
-        if(role.isEmpty())
-            role = Optional.of(roleRepository.save(
-                    Role.builder()
-                            .role(Authority.ANONYMOUS.toString())
-                            .build()));
 
         Account account = Account.builder()
                 .email(model.getCustomerEmail())

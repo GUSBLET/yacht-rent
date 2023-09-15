@@ -27,4 +27,8 @@ public class YachtType {
 
     @OneToMany(mappedBy = "yachtType", cascade = CascadeType.PERSIST)
     private List<Yacht> yachts;
+
+    public YachtType(String type) {
+        this.type = type;
+    }
 }

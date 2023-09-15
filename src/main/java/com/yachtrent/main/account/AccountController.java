@@ -1,14 +1,11 @@
 package com.yachtrent.main.account;
 
 
-import com.yachtrent.main.dto.account.SignUpViewModel;
-import com.yachtrent.main.mail.service.MailService;
-import com.yachtrent.main.mail.service.dto.MailMessage;
+import com.yachtrent.main.account.dto.SignUpViewModel;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,32 +22,19 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    //TODO надо убарть
-    record SignUp (
-            @NotBlank(message = "Enter your email")
-            @Email(message = "Incorrect mail entry")
-            String email,
-
-            @NotBlank(message = "Enter your password")
-            String password,
-
-            @NotBlank(message = "Confirm password")
-            String passwordConfirm
-    ) { }
-
     @GetMapping("/login-page")
     public String loginPage(Model model) {
         model.addAttribute("title", "Login")
                 .addAttribute("content", "account/login-page")
-                .addAttribute("signUpViewModel",  new SignUp(null, null, null));
+                .addAttribute("signUpViewModel",  new SignUpViewModel());
         return "account/login-page";
     }
 
     @GetMapping("/admin")
-    public String admin(SignUp signUp, Model model) {
+    public String admin(SignUpViewModel signUpViewModel, Model model) {
         model.addAttribute("title", "Login");
         model.addAttribute("content", "account/login-page");
-        model.addAttribute("signInViewModel", signUp);
+        model.addAttribute("signInViewModel", signUpViewModel);
         return "layout";
     }
 

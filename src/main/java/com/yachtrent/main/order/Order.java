@@ -27,8 +27,8 @@ public class Order {
 
     private Float price;
 
-    @Column(name = "order_confirmed", columnDefinition = "boolean")
-    private boolean confirmedOrder;
+    @Column(name = "status", columnDefinition = "varchar(20) not nll")
+    private String status;
 
     @Column(name = "start_of_rent", columnDefinition = "date")
     private Date startOfRent;

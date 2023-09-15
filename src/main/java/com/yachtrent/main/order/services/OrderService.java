@@ -3,9 +3,10 @@ package com.yachtrent.main.order.services;
 import com.yachtrent.main.account.Account;
 import com.yachtrent.main.account.AccountRepository;
 import com.yachtrent.main.account.IAccountService;
-import com.yachtrent.main.dto.order.ControllingOrderTable;
-import com.yachtrent.main.dto.order.CreateOrderDTO;
-import com.yachtrent.main.dto.order.OrderResultDTO;
+import com.yachtrent.main.order.OrderStatus;
+import com.yachtrent.main.order.dto.ControllingOrderTable;
+import com.yachtrent.main.order.dto.CreateOrderDTO;
+import com.yachtrent.main.order.dto.OrderResultDTO;
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.RoleStatus;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -33,9 +34,7 @@ public class OrderService {
         Date startTime = priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart());
         Date finishTime = priceCounterService.convertToParametersToDate(model.getDateOfFinish(), model.getHourOfFinish());
 
-
-        //TODO доделать
-        if (true) {
+        if (orderRepository.findByTimeRange(startTime, finishTime).isEmpty()) {
             float price = priceCounterService.countFullPrice(startTime, finishTime, model.getYacht().getId());
 
             if (price == -1) {
@@ -51,7 +50,7 @@ public class OrderService {
             Order newOrder =
                     Order.builder()
                             .price(price)
-                            .confirmedOrder(false)
+                            .status(OrderStatus.NOT_CONFIRMED.toString())
                             .account(result)
                             .finishOfRent(finishTime)
                             .startOfRent(startTime)
@@ -70,7 +69,7 @@ public class OrderService {
 
     // Pause.
     public ResponseEntity<String> confirmOrder(Order model) {
-        model.setConfirmedOrder(true);
+        model.setStatus(OrderStatus.CONFIRMED.toString());
         return null;
     }
 
