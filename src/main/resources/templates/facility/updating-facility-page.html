@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div th:fragment="content(updatingFacilityDTOList)">
+    <th:block th:if="*{updatingFacilityDTOList.isEmpty()}">
+      <h1>Empty</h1>
+    </th:block>
+    <th:block th:unless="*{updatingFacilityDTOList.isEmpty()}">
+      <tr th:each="facilityDTO : ${updatingFacilityDTOList}">
+        <td th:text="${facilityDTO.name}" />
+      </tr>
+    </th:block>
+  </div>
+</body>
+</html>

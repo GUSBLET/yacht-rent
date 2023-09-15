@@ -1,4 +1,4 @@
-package com.yachtrent.main.dto.order;
+package com.yachtrent.main.order.dto;
 
 import com.yachtrent.main.yacht.Yacht;
 import jakarta.validation.constraints.Email;

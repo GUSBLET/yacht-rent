@@ -23,6 +23,7 @@ CREATE TABLE main.harbor_table
     id        bigserial primary key,
     name      Varchar(50) unique not null,
     address   Varchar(150),
+    city      varchar(30),
     longitude real,
     latitude  real
 );
@@ -77,12 +78,12 @@ CREATE TABLE main.yacht_photo_table
 
 CREATE TABLE main.order_table
 (
-    id              bigserial primary key,
-    price           real,
-    order_confirmed boolean,
-    account_id      bigint references main.account_table (id),
-    start_of_rent   date,
-    finish_of_rent  date
+    id             bigserial primary key,
+    price          real,
+    status         varchar(20) not null,
+    account_id     bigint references main.account_table (id),
+    start_of_rent  date,
+    finish_of_rent date
 );
 
 create table main.role_table

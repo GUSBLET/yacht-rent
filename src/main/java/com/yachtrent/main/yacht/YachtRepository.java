@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 //TODO переделать
 public interface YachtRepository extends JpaRepository<Yacht, Long> {
@@ -15,4 +16,6 @@ public interface YachtRepository extends JpaRepository<Yacht, Long> {
             "JOIN FETCH y.yachtType " +
             "JOIN FETCH y.creator where y.account.id = :accountId")
     List<Yacht> findAllYachtsWithRelationshipsByAccountId(@Param("accountId") long id);
+
+    Optional<Yacht> findByName(String name);
 }

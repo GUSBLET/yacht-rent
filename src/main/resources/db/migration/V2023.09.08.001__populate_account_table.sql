@@ -3,8 +3,18 @@ values
 ('ANONYMOUS'),
 ('USER'),
 ('ADMIN'),
+('YACHT_OWNER'),
 ('MODERATOR');
 
+
+insert into main.yacht_type_table(type)
+values
+    ('SMALL_BOAT'),
+    ('BOAT'),
+    ('SHIP');
+
+INSERT INTO main.creator_table (company_name, phone, mail)
+VALUES ('ANONYMOUS', 'phone_number', 'email@example.com');
 
 -- login admin, password admin
 insert into main.account_table(name,last_name, email ,password, phone_number, account_registered, account_confirmed)

@@ -13,6 +13,10 @@
              th:with="signInViewModel = ${signInViewModel}, signUpViewModel =  ${signUpViewModel}"></div>
         <div th:case="'order/create-order-page'" th:insert="~{${content}}"
              th:with="createOrderDTO = ${createOrderDTO}"></div>
+        <div th:case="'yacht/adding-yacht-page'" th:insert="~{${content}}"
+             th:with="creatingYachtDTO = ${creatingYachtDTO}"></div>
+        <div th:case="'facility/updating-facility-page'" th:insert="~{${content}}"
+             th:with="updatingFacilityDTOList = ${updatingFacilityDTOList}"></div>
         <div th:case="'account/registration-page'" th:insert="~{${content}}"
              th:with="signUpViewModel =  ${signUpViewModel}"></div>
     </th:block>

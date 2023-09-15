@@ -30,6 +30,8 @@ public class Harbor {
     @Max(value = 150, message = "The address must not exceed 150 characters")
     private String  address;
 
+    private String city;
+
     private float  longitude;
     private float  latitude;
 
