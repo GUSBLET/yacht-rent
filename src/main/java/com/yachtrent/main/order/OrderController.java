@@ -38,7 +38,7 @@ public class OrderController {
 
     @PostMapping("create-order")
     public String createOrder(@Valid @ModelAttribute("createOrderViewModel")
-                                  CreateOrderDTO createOrderDTO,
+                              CreateOrderDTO createOrderDTO,
                               BindingResult result,
                               Model model) {
 

@@ -60,5 +60,4 @@ public class AccountController {
         }
         return "redirect:/account/success";
     }
-
 }
