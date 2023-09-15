@@ -26,4 +26,8 @@ public class FacilityService {
         return ResponseEntity.ok().body("OK");
     }
 
+    public void removeAllFacilitiesByYachtId(long id){
+        facilityRepository.deleteAllByYachtId(id);
+    }
+
 }

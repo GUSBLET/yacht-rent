@@ -18,4 +18,8 @@ public class YachtPhotoService {
             yachtPhotoRepository.save(yachtPhoto);
         }
     }
+
+    public void removeAllPhotosByYachtId(long id){
+        yachtPhotoRepository.deleteAllByYachtId(id);
+    }
 }

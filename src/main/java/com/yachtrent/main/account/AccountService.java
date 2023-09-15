@@ -81,23 +81,30 @@ public class AccountService implements IAccountService, UserDetailsService {
     // Method create new account if user does not exist and anonymous creates new order.
     @Override
     public ResponseEntity<Account> signUpAnonymous(CreateOrderDTO model) {
+        Optional<Account> account = accountRepository.findByEmail(model.getCustomerEmail());
+        if(account.isEmpty()){
+            Optional<Role> role = roleRepository.findByRole(Authority.ANONYMOUS.toString());
 
-        Optional<Role> role = roleRepository.findByRole(Authority.ANONYMOUS.toString());
+            Account newAccount = Account.builder()
+                    .email(model.getCustomerEmail())
+                    .password("")
+                    .roles(new HashSet<>())
+                    .name(model.getCustomerName())
+                    .lastName(model.getCustomerLastName())
+                    .phoneNumber(model.getCustomerPhoneNumber())
+                    .accountConfirmed(false)
+                    .accountRegistered(false)
+                    .build();
 
-        Account account = Account.builder()
-                .email(model.getCustomerEmail())
-                .password("")
-                .roles(new HashSet<>())
-                .name(model.getCustomerName())
-                .lastName(model.getCustomerLastName())
-                .phoneNumber(model.getCustomerPhoneNumber())
-                .accountConfirmed(false)
-                .accountRegistered(false)
-                .build();
-
-        account.getRoles().add(role.get());
-        accountRepository.save(account);
-        return ResponseEntity.status(HttpStatus.OK).body(account);
+            newAccount.getRoles().add(role.get());
+            accountRepository.save(newAccount);
+            return ResponseEntity.status(HttpStatus.OK).body(newAccount);
+        }
+        account.get().setLastName(model.getCustomerLastName());
+        account.get().setName(model.getCustomerName());
+        account.get().setPhoneNumber(model.getCustomerPhoneNumber());
+        accountRepository.updateAccount(account.get().getId(), account.get());
+        return ResponseEntity.status(HttpStatus.OK).body(account.get());
     }
 
     @Override

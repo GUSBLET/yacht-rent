@@ -1,25 +1,24 @@
 package com.yachtrent.main.yacht.services;
 
-import com.yachtrent.main.account.Account;
 import com.yachtrent.main.account.AccountService;
+import com.yachtrent.main.order.Order;
+import com.yachtrent.main.order.OrderStatus;
+import com.yachtrent.main.order.services.OrderService;
 import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.YachtRepository;
 import com.yachtrent.main.yacht.creator.services.CreatorService;
 import com.yachtrent.main.yacht.dto.CreatingYachtDTO;
+import com.yachtrent.main.yacht.dto.RemoveYachtDTO;
+import com.yachtrent.main.yacht.facility.services.FacilityService;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
-import com.yachtrent.main.yacht.photo.YachtPhotoRepository;
 import com.yachtrent.main.yacht.photo.service.YachtPhotoService;
-import com.yachtrent.main.yacht.type.YachtType;
 import com.yachtrent.main.yacht.type.services.YachtTypeService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +28,9 @@ public class YachtService {
     private final YachtTypeService yachtTypeService;
     private final AccountService accountService;
     private final CreatorService creatorService;
+    private final OrderService orderService;
     private final YachtPhotoService yachtPhotoService;
+    private final FacilityService facilityService;
 
     public ResponseEntity<String> addYacht(CreatingYachtDTO creatingYachtDTO) {
         if (yachtRepository.findByName(creatingYachtDTO.getName()).isEmpty()){
@@ -56,5 +57,29 @@ public class YachtService {
         }
 
         return ResponseEntity.badRequest().body("Yacht with next name has already existed");
+    }
+
+    public ResponseEntity<String > removeYacht(RemoveYachtDTO removeYachtDTO){
+        yachtPhotoService.removeAllPhotosByYachtId(removeYachtDTO.getId());
+        facilityService.removeAllFacilitiesByYachtId(removeYachtDTO.getId());
+
+        Optional<Yacht> yacht = yachtRepository.findById(removeYachtDTO.getId());
+        if(yacht.isPresent()){
+            if (yacht.get().getOrders() == null || checkOrderIsNotActive(yacht.get().getOrders())){
+                yachtRepository.deleteById(removeYachtDTO.getId());
+                return ResponseEntity.ok().body("Removed");    
+            }
+            return ResponseEntity.badRequest().body("You have active orders, remove them");
+        }
+
+        return ResponseEntity.internalServerError().body("yacht does ot exist");
+    }
+
+    private boolean checkOrderIsNotActive(Set<Order> orders){
+        for (Order order: orders) {
+            if(Objects.equals(order.getStatus(), OrderStatus.CONFIRMED.toString()))
+                return false;
+        }
+        return true;
     }
 }

@@ -31,10 +31,10 @@ public class Order {
     @Column(name = "status", columnDefinition = "varchar(20) not nll")
     private String status;
 
-    @Column(name = "start_of_rent", columnDefinition = "date")
+    @Column(name = "start_of_rent", columnDefinition = "timestamp")
     private Instant startOfRent;
 
-    @Column(name = "finish_of_rent", columnDefinition = "date")
+    @Column(name = "finish_of_rent", columnDefinition = "timestamp")
     private Instant finishOfRent;
 
     @ManyToMany(mappedBy = "orders", cascade = CascadeType.PERSIST)

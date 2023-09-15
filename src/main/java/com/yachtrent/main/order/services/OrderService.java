@@ -9,13 +9,16 @@ import com.yachtrent.main.order.dto.CreateOrderDTO;
 import com.yachtrent.main.order.dto.OrderResultDTO;
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.order.OrderRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.RoleStatus;
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +34,10 @@ public class OrderService {
 
 
     public ResponseEntity<OrderResultDTO> createNewOrder(CreateOrderDTO model) throws ParseException {
-        Date startTime = priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart());
-        Date finishTime = priceCounterService.convertToParametersToDate(model.getDateOfFinish(), model.getHourOfFinish());
+        Date startTime = Date.from(priceCounterService.convertToParametersToDate(model.getDateOfStart(), model.getHourOfStart()).toInstant());
+        Date finishTime = Date.from(priceCounterService.convertToParametersToDate(model.getDateOfFinish(), model.getHourOfFinish()).toInstant());
 
-        if (orderRepository.findByTimeRange(startTime, finishTime).isEmpty()) {
+        if (orderRepository.findByTimeRange(startTime.toInstant(), finishTime.toInstant()).isEmpty()) {
             float price = priceCounterService.countFullPrice(startTime, finishTime, model.getYacht().getId());
 
             if (price == -1) {

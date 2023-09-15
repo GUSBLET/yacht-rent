@@ -58,7 +58,7 @@ public class Yacht {
     @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
     private List<YachtPhoto> photos;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "yacht_harbor_table",
             joinColumns = @JoinColumn(name = "yacht_id"),
@@ -66,7 +66,7 @@ public class Yacht {
     )
     private Set<Harbor> harbors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "order_yacht_table",
             joinColumns = @JoinColumn(name = "yacht_id"),
