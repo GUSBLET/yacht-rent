@@ -1,6 +1,7 @@
 package com.yachtrent.main.account;
 
 
+import com.yachtrent.main.account.token.Token;
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.role.Role;
 import com.yachtrent.main.yacht.Yacht;
@@ -23,7 +24,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(schema = "main", name = "account_table")
-@ToString(exclude = {"orders", "reviews", "yachts"})
+@ToString(exclude = {"orders", "reviews", "yachts", "tokens"})
 public class Account implements UserDetails {
 
     @Id
@@ -61,6 +62,9 @@ public class Account implements UserDetails {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
     private Set<Yacht> yachts = new HashSet<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

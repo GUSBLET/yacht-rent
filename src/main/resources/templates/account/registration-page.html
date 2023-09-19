@@ -11,6 +11,10 @@
         <div style="color:green" class="alert alert-danger">To complete authorization, check your email</div>
     </div>
 
+    <div th:if="${verify}">
+        <div style="color:green" class="alert alert-danger">The link is no longer valid</div>
+    </div>
+
     <div th:if="${error}">
         <div style="color:red" class="alert alert-danger">This email already exists</div>
     </div>

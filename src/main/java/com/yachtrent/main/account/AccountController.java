@@ -2,17 +2,22 @@ package com.yachtrent.main.account;
 
 
 import com.yachtrent.main.account.dto.SignUpViewModel;
+import com.yachtrent.main.account.token.Token;
+import com.yachtrent.main.account.token.TokenRepository;
+import com.yachtrent.main.account.token.TokenService;
 import com.yachtrent.main.mail.service.MailService;
 import com.yachtrent.main.mail.service.dto.MailMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Parameter;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -22,6 +27,8 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final MailService mailService;
+    private final TokenService tokenService;
+    private final TokenRepository tokenRepository;
 
     @GetMapping("/login-page")
     public String loginPage(Model model) {
@@ -39,7 +46,7 @@ public class AccountController {
         return "layout";
     }
 
-    @GetMapping("registration-page")
+    @GetMapping("/registration-page")
     public String registrationPage(Model model) {
         model.addAttribute("title", "Registration")
                 .addAttribute("content", "account/registration-page")
@@ -47,7 +54,7 @@ public class AccountController {
         return "layout";
     }
 
-    @PostMapping("sign-up")
+    @PostMapping("/sign-up")
     public String signUp(@Valid @ModelAttribute("signUpViewModel") SignUpViewModel signUpViewModel,
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -62,20 +69,32 @@ public class AccountController {
 
         Account account = accountService.signUpNewUser(signUpViewModel);
         model.addAttribute("success", true);
-        String url = "http://localhost:8080/account/login-page/" + account.getId();
+
+        Token token = tokenService.generateAndSaveToken(account);
+        String url = "http://localhost:8080/account/verify/" + token.getToken();
+
         mailService.sendMail(new MailMessage(signUpViewModel.getEmail(),
                 url,
-                "confirm your email"));
+                "confirm your email")
+        );
+
         return "account/registration-page";
     }
 
-    @GetMapping("/login-page/{key}")
-    public String confirmMail(@PathVariable("key") Long key) {
-        Account account = accountRepository.findById(key).get();
-        if (account != null) {
-            account.setAccountRegistered(true);
-            return "account/login-page";
+    @GetMapping("/verify/{token}")
+    public String confirmMail(@PathVariable("token") String token, Model model) {
+        Token confirmationToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException(token + " not exist"));
+
+        if (!tokenService.verifyToken(confirmationToken)) {
+            model.addAttribute("verify", true);
+            return "account/registration-page";
         }
-        return "account/registration-page";
+
+        confirmationToken.setConfirmationAt(LocalDateTime.now());
+        Account account = accountRepository.findById(confirmationToken.getAccount().getId()).orElseThrow();
+        account.setAccountConfirmed(true);
+        accountRepository.updateAccount(account.getId(), account);
+        return "account/login-page";
     }
 }
