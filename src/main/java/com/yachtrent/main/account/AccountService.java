@@ -1,8 +1,8 @@
 package com.yachtrent.main.account;
 
 import com.google.common.hash.Hashing;
-import com.yachtrent.main.account.use_cases.CheckingAccountDetailsUseCase;
 import com.yachtrent.main.account.dto.SignUpViewModel;
+import com.yachtrent.main.account.use_cases.CheckingAccountDetailsUseCase;
 import com.yachtrent.main.order.dto.CreateOrderDTO;
 import com.yachtrent.main.role.Authority;
 import com.yachtrent.main.role.Role;
@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -34,9 +35,9 @@ public class AccountService implements IAccountService, UserDetailsService {
     private final CheckingAccountDetailsUseCase checkingAccountDetailsUseCase;
     private final PasswordEncoder passwordEncoder;
 
-
-    public Account getAccount(long id){
-        return accountRepository.findById(id).orElseThrow(() ->{
+    //TODO когда ты вызываешь orElseThrow у тебя возвращаеться не объект а ошибка надо переделать метод
+    public Account getAccount(long id) {
+        return accountRepository.findById(id).orElseThrow(() -> {
             return null;
         });
     }
@@ -82,7 +83,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     @Override
     public ResponseEntity<Account> signUpAnonymous(CreateOrderDTO model) {
         Optional<Account> account = accountRepository.findByEmail(model.getCustomerEmail());
-        if(account.isEmpty()){
+        if (account.isEmpty()) {
             Optional<Role> role = roleRepository.findByRole(Authority.ANONYMOUS.toString());
 
             Account newAccount = Account.builder()
@@ -113,4 +114,36 @@ public class AccountService implements IAccountService, UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("No such email exists"));
     }
 
+    public Account signUpNewUser(SignUpViewModel newUser) {
+        return  accountRepository.save(Account.builder()
+                        .email(newUser.getEmail())
+                        .password(passwordEncoder.encode(newUser.getPassword()))
+                        .roles(Set.of(roleRepository.findByRole(newUser.getRole().toString()).orElseGet(null)))
+                        .accountConfirmed(false)
+                        .accountRegistered(true)
+                        .build()
+        );
+    }
+
+    public void deleteUser(String email) {
+        try {
+            if(userExists(email)) {
+                accountRepository.deleteByEmail(email);
+                log.debug("user under email: {} successfully deleted from the database", email);
+            }
+        } catch (UsernameNotFoundException e) {
+            log.error("User not found");
+        }
+        catch (IllegalArgumentException e) {
+            log.error("Email not found");
+        }
+    }
+
+    public void changePassword(String oldPassword, String newPassword) {
+          //TODO изменение пароля
+    }
+
+    public boolean userExists(String email) {
+        return accountRepository.findByEmail(email).isPresent();
+    }
 }

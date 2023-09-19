@@ -1,12 +1,12 @@
 package com.yachtrent.main.account.dto;
 
+import com.yachtrent.main.account.validator.PasswordMatch;
 import com.yachtrent.main.role.Authority;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
+@PasswordMatch(password = "password", passwordConfirm = "passwordConfirm")
 public class SignUpViewModel {
 
     @NotBlank(message = "Enter your email")
@@ -14,6 +14,7 @@ public class SignUpViewModel {
     private String email;
 
     @NotBlank(message = "Enter your password")
+    @Size(min = 5, message = "Password must be at least 5 characters long.")
     private String password;
 
     @NotBlank(message = "Confirm password")
