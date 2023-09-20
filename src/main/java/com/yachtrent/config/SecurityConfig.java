@@ -16,13 +16,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("admin")
-                        .anyRequest()
-                        .permitAll()
-                )
                 .formLogin(formLogin -> formLogin
                         .usernameParameter("email")
                         .passwordParameter("password")
@@ -31,6 +25,11 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/cabinet/success")
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/account/login-page?logout"))
+                .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers(new AntPathRequestMatcher("/account/verify/")).permitAll()
+                                .anyRequest().permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("admin")
+                )
                 .build();
     }
 

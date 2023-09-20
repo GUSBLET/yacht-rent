@@ -1,0 +1,9 @@
+ALTER TABLE main.role_account_table
+ADD CONSTRAINT fk_role_account_account_id
+  FOREIGN KEY (account_id)
+  REFERENCES main.account_table (id)
+  ON DELETE CASCADE,
+ADD CONSTRAINT fk_role_account_role_id
+  FOREIGN KEY (role_id)
+  REFERENCES main.role_table (id)
+  ON DELETE CASCADE;

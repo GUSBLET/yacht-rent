@@ -24,4 +24,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     );
 
     Optional<Account> findByName(String name);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Account a where a.email = :email")
+    void deleteByEmail(@Param("email") String email);
 }
