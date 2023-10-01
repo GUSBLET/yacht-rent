@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-//TODO переделать
 public interface YachtRepository extends JpaRepository<Yacht, Long> {
     @Query("SELECT  y FROM Yacht y JOIN FETCH y.harbors JOIN FETCH y.orders " +
             "JOIN FETCH y.facilities " +
@@ -18,4 +17,12 @@ public interface YachtRepository extends JpaRepository<Yacht, Long> {
     List<Yacht> findAllYachtsWithRelationshipsByAccountId(@Param("accountId") long id);
 
     Optional<Yacht> findByName(String name);
+
+    @Query("SELECT DISTINCT y FROM Yacht y LEFT JOIN FETCH y.orders WHERE y.id = :id")
+    Optional<Yacht> findYachtWithOrdersById(@Param("id") Long id);
+
+
+
+
+
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div th:fragment="profileContent()">
+      <button type="button"  onclick="getCallModalWindow('/yacht/adding-yacht-modal-form')">Add yacht</button>
+      <button type="button"  onclick="getCallModalWindowWithIdRequest('/yacht/remove-yacht-modal-form', 2)">Remove yacht</button>
+  </div>
+</body>
+</html>

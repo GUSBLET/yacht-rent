@@ -16,6 +16,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
         return http
                 .formLogin(formLogin -> formLogin
                         .usernameParameter("email")
@@ -30,7 +32,7 @@ public class SecurityConfig {
                                 .anyRequest().permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("admin")
                 )
-                .build();
+                .csrf((csrf) -> csrf.disable()).build();
     }
 
     @Bean

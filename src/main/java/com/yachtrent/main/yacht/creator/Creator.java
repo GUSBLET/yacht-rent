@@ -19,7 +19,7 @@ public class Creator {
     private Long id;
 
     @Column(name = "company_name", columnDefinition = "Varchar(100) not null unique")
-    private String сompanyName;
+    private String companyName;
 
     @Column(name = "phone", columnDefinition = "Varchar(30) not null unique")
     private String phone;
@@ -29,4 +29,5 @@ public class Creator {
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.PERSIST)
     private List<Yacht> yachts;
+
 }

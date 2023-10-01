@@ -1,7 +1,7 @@
 package com.yachtrent.main.harbor.dto;
 
 import com.yachtrent.main.harbor.Harbor;
-import com.yachtrent.main.mapper.Mapper;
+import com.yachtrent.main.techniacal.mapper.Mapper;
 import lombok.*;
 
 

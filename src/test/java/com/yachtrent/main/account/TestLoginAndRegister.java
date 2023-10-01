@@ -1,6 +1,6 @@
 package com.yachtrent.main.account;
 
-import com.yachtrent.main.dto.account.SignUpViewModel;
+import com.yachtrent.main.account.dto.SignUpViewModel;
 import com.yachtrent.main.role.Authority;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /*
-* Аннотация @WebMvcTest отделяет конкретный контроллер от настоящего сервера
-* и пердостовляет фиктвный сервер(если говорить проще то имитирует реальный сервер)
+* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ @WebMvcTest пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+* пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
 *
-* ссылка на док:
+* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ:
 * https://docs.spring.io/spring-framework/reference/testing/webtestclient.html
 * */
 @WebMvcTest(AccountController.class)
-//анотация делает инджект(создает экземпляр) без фильров (они мешают делает тест)
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)
 @AutoConfigureMockMvc(addFilters = false)
 class TestLoginAndRegister {
 
@@ -32,13 +32,10 @@ class TestLoginAndRegister {
     private MockMvc mockMvc;
 
     /*
-    * Аннотация @MockBean имитирует поведение связних объектов
+    * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ @MockBean пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     * */
     @MockBean
     private IAccountService accountService;
-
-    @MockBean
-    private AccountController.SignUp signUp;
 
     @MockBean
     private SignUpViewModel signUpViewModel;
@@ -51,7 +48,7 @@ class TestLoginAndRegister {
                         model().attribute("title", "Login"),
                         model().attribute("content", "account/login-page"),
                         model().attribute("signUpViewModel",
-                                new AccountController.SignUp(null,null,null)),
+                                new SignUpViewModel()),
                         view().name("account/login-page"))
                 .andDo(log());
     }

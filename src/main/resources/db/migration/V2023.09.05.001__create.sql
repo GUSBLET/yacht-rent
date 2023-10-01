@@ -55,8 +55,10 @@ CREATE TABLE main.yacht_table
 CREATE TABLE main.review_table
 (
     id              bigserial primary key,
-    number_of_stars smallint,
-    description     Varchar(1000) not null unique,
+    description     Varchar(1000) not null,
+    review_rating   varchar(20)   not null,
+    title           Varchar(100)  not null,
+    posting_date    date,
     yacht_id        bigint references main.yacht_table (id),
     account_id      bigint references main.account_table (id)
 );
@@ -64,7 +66,7 @@ CREATE TABLE main.review_table
 CREATE TABLE main.facility_table
 (
     id       bigserial primary key,
-    name     Varchar(100) unique,
+    name     Varchar(100) not null,
     count    smallint,
     yacht_id bigint references main.yacht_table (id)
 );
@@ -92,7 +94,7 @@ create table main.role_table
     role VARCHAR(20) NOT NULL unique
 );
 
-CREATE TABLE main.order_yacht_table
+CREATE TABLE main.yacht_order_table
 (
     yacht_id bigint NOT NULL,
     order_id bigint NOT NULL,

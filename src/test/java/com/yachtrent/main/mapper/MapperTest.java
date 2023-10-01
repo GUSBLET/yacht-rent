@@ -1,6 +1,7 @@
 package com.yachtrent.main.mapper;
 
 import com.yachtrent.main.account.Account;
+import com.yachtrent.main.techniacal.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

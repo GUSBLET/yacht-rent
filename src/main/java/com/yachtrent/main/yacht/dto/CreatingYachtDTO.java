@@ -1,53 +1,56 @@
 package com.yachtrent.main.yacht.dto;
 
 import com.yachtrent.main.account.Account;
-import com.yachtrent.main.harbor.Harbor;
-import com.yachtrent.main.mapper.Mapper;
+import com.yachtrent.main.techniacal.mapper.Mapper;
 import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.creator.Creator;
-import com.yachtrent.main.yacht.facility.Facility;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
 import com.yachtrent.main.yacht.type.Types;
 import com.yachtrent.main.yacht.type.YachtType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.query.spi.Limit;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.tags.EditorAwareTag;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatingYachtDTO implements Mapper<CreatingYachtDTO, Yacht> {
 
+    @NotBlank(message = "Enter yacht name")
     private String name;
 
+    @Positive(message = "Enter age of yacht")
     private short age;
 
+    @Positive(message = "Enter count of crew in the yacht")
     private short crew;
 
+    @Positive(message = "Enter max capacity of passenger capacity on the yacht")
     private short capacity;
 
+    @Positive(message = "Enter price per hour, that you for rent")
     private float pricePerHour;
 
+    @Positive(message = "Enter length of yacht")
     private float length;
 
+    @Positive(message = "Enter width of yacht")
     private float width;
 
     private String description;
 
     private long accountId;
 
+    @NotNull(message = "Choose type of yacht")
     private Types type;
 
     private Creator creator;

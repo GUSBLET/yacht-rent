@@ -11,10 +11,9 @@ import com.yachtrent.main.yacht.dto.CreatingYachtDTO;
 import com.yachtrent.main.yacht.dto.RemoveYachtDTO;
 import com.yachtrent.main.yacht.facility.services.FacilityService;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
-import com.yachtrent.main.yacht.photo.service.YachtPhotoService;
+import com.yachtrent.main.yacht.photo.services.YachtPhotoService;
 import com.yachtrent.main.yacht.type.services.YachtTypeService;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class YachtService {
 
             yacht.setYachtType(yachtTypeService.getType(creatingYachtDTO.getType()));
             yacht.setAccount(accountService.getAccount(creatingYachtDTO.getAccountId()));
-            yacht.setCreator(creatorService.getCreatorBComapanyName(creatingYachtDTO.getCreator().getСompanyName()));
+            yacht.setCreator(creatorService.getByCreatorCompanyName(creatingYachtDTO.getCreator().getCompanyName()));
 
             for (YachtPhoto yachtPhoto : yacht.getPhotos()) {
                 yachtPhotoList.add(yachtPhoto);
@@ -59,14 +58,14 @@ public class YachtService {
         return ResponseEntity.badRequest().body("Yacht with next name has already existed");
     }
 
-    public ResponseEntity<String > removeYacht(RemoveYachtDTO removeYachtDTO){
-        yachtPhotoService.removeAllPhotosByYachtId(removeYachtDTO.getId());
-        facilityService.removeAllFacilitiesByYachtId(removeYachtDTO.getId());
+    public ResponseEntity<String> removeYacht(long id){
+        yachtPhotoService.removeAllPhotosByYachtId(id);
+        facilityService.removeAllFacilitiesByYachtId(id);
 
-        Optional<Yacht> yacht = yachtRepository.findById(removeYachtDTO.getId());
+        Optional<Yacht> yacht = yachtRepository.findYachtWithOrdersById(id);
         if(yacht.isPresent()){
             if (yacht.get().getOrders() == null || checkOrderIsNotActive(yacht.get().getOrders())){
-                yachtRepository.deleteById(removeYachtDTO.getId());
+                yachtRepository.deleteById(id);
                 return ResponseEntity.ok().body("Removed");    
             }
             return ResponseEntity.badRequest().body("You have active orders, remove them");
@@ -74,6 +73,17 @@ public class YachtService {
 
         return ResponseEntity.internalServerError().body("yacht does ot exist");
     }
+
+
+    public Optional<Yacht> findYachtById(long id){
+        return yachtRepository.findById(id);
+    }
+
+
+
+
+
+
 
     private boolean checkOrderIsNotActive(Set<Order> orders){
         for (Order order: orders) {

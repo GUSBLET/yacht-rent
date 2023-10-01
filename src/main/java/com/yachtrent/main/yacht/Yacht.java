@@ -4,7 +4,7 @@ package com.yachtrent.main.yacht;
 import com.yachtrent.main.account.Account;
 import com.yachtrent.main.harbor.Harbor;
 import com.yachtrent.main.order.Order;
-import com.yachtrent.main.yacht.review.Review;
+import com.yachtrent.main.review.Review;
 import com.yachtrent.main.yacht.creator.Creator;
 import com.yachtrent.main.yacht.facility.Facility;
 import com.yachtrent.main.yacht.photo.YachtPhoto;
@@ -53,31 +53,33 @@ public class Yacht {
     private short  capacity;
 
     @Column(name = "description", columnDefinition = "varchar(1000)")
-    private String  description;
+        private String  description;
 
-    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.REMOVE)
     private List<YachtPhoto> photos;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
+            schema = "main",
             name = "yacht_harbor_table",
             joinColumns = @JoinColumn(name = "yacht_id"),
             inverseJoinColumns = @JoinColumn(name = "harbor_id")
     )
     private Set<Harbor> harbors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
-            name = "order_yacht_table",
+            schema = "main",
+            name = "yacht_order_table",
             joinColumns = @JoinColumn(name = "yacht_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id")
     )
     private Set<Order> orders = new HashSet<>();
 
-    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.REMOVE)
     private Set<Facility> facilities = new HashSet<>();
 
-    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.REMOVE)
     private Set<Review> reviews = new HashSet<>();
 
     @ManyToOne
