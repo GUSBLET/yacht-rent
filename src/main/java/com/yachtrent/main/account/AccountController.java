@@ -5,19 +5,17 @@ import com.yachtrent.main.account.dto.SignUpViewModel;
 import com.yachtrent.main.account.token.Token;
 import com.yachtrent.main.account.token.TokenRepository;
 import com.yachtrent.main.account.token.TokenService;
-import com.yachtrent.main.mail.service.MailService;
-import com.yachtrent.main.mail.service.dto.MailMessage;
+import com.yachtrent.main.techniacal.mail.service.MailService;
+import com.yachtrent.main.techniacal.mail.service.dto.MailMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Slf4j
 @Controller

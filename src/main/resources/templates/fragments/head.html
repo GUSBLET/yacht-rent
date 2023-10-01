@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(content, title)">
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <script defer src="/js/count-price.js"></script>
+    <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script defer src="/js/modal.js"></script>
+    <script defer src="/js/yacht.js"></script>
+    <th:block th:switch="${content}">
+
+        <th:block th:case="'profile'">
+            <link rel="shortcut icon" href="/images/logo.ico" type="image/x-icon">
+            <link rel="stylesheet" href="/css/style.css">
+            <link rel="stylesheet" href="/css/modal.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+            <script src="/js/script.js" defer></script>
+            <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+            <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        </th:block>
+
+        <th:block th:case="'addingYacht'">
+
+        </th:block>
+        <th:block th:case="'creatingOrder'">
+
+        </th:block>
+        <th:block th:case="*">
+
+        </th:block>
+    </th:block>
+
+</head>
+<body>
+
+</body>
+</html>

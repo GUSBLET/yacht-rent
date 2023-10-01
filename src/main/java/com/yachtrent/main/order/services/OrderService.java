@@ -6,6 +6,7 @@ import com.yachtrent.main.account.IAccountService;
 import com.yachtrent.main.order.OrderStatus;
 import com.yachtrent.main.order.dto.ControllingOrderTable;
 import com.yachtrent.main.order.dto.CreateOrderDTO;
+import com.yachtrent.main.order.dto.EditingOrderStatusDTO;
 import com.yachtrent.main.order.dto.OrderResultDTO;
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.order.OrderRepository;
@@ -22,6 +23,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -70,26 +72,23 @@ public class OrderService {
                 new OrderResultDTO("This schedule is already taken", null));
     }
 
+    public ResponseEntity<String> editeOrderStatus(EditingOrderStatusDTO dto){
+        Optional<Order> order = orderRepository.findById(dto.getId());
+        if(order.isPresent()){
+            order.get().setStatus(dto.getOrderStatus().toString());
+            orderRepository.updateOrder(dto.getId(), order.get());
+            return ResponseEntity.ok().body("Updated");
+        }
+        return ResponseEntity.internalServerError().body("Order does not exist");
+    }
+
     // Pause.
     public ResponseEntity<String> confirmOrder(Order model) {
         model.setStatus(OrderStatus.CONFIRMED.toString());
         return null;
     }
 
-    // Pause.
-   /*
-   * не совсем понимаю что ты тут хочешь возвращать но вот корявий пример кода
-   *
-   *   return accountRepository.findById(id)
-               .map(account -> null)
-               .orElseGet(() -> new IllegalArgumentException("account not found"));
-   * */
-    public ResponseEntity<List<ControllingOrderTable>> createControllingOrderTable(long id) {
-
-//        Optional<Account> account = accountRepository.findById(id);
-//        if(account.isEmpty())
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
-        return null;
+    public Set<Order> find(long id){
+        return orderRepository.findOrdersByYachtId(id);
     }
 }

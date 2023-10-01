@@ -1,6 +1,6 @@
 package com.yachtrent.main.yacht.dto;
 
-import com.yachtrent.main.mapper.Mapper;
+import com.yachtrent.main.techniacal.mapper.Mapper;
 import com.yachtrent.main.yacht.Yacht;
 
 public class UpdatingYachtDTO implements Mapper<UpdatingYachtDTO, Yacht> {

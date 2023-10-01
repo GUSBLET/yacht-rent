@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import java.util.concurrent.CompletableFuture;
 
 public interface IAccountService {
-    public CompletableFuture<BindingResult> signUpAsync(SignUpViewModel model);
+    public CompletableFuture<BindingResult> signUp(SignUpViewModel model);
 
     public ResponseEntity<Account> signUpAnonymous(CreateOrderDTO model);
 

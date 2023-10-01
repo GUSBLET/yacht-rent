@@ -20,7 +20,7 @@ public class Facility {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", columnDefinition = "Varchar(100) not null unique")
+    @Column(name = "name", columnDefinition = "Varchar(100) not null")
     private String name;
 
     @Column(name = "count", columnDefinition = "smallint")

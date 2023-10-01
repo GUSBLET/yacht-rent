@@ -5,7 +5,7 @@ import com.yachtrent.main.account.token.Token;
 import com.yachtrent.main.order.Order;
 import com.yachtrent.main.role.Role;
 import com.yachtrent.main.yacht.Yacht;
-import com.yachtrent.main.yacht.review.Review;
+import com.yachtrent.main.review.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

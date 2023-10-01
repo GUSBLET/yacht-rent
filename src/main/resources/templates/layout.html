@@ -1,23 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${title}"></title>
-    <script defer src="/js/count-price.js"></script>
-    <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<head th:replace="fragments/head :: head(${content}, ${title})">
+    <title></title>
 </head>
 <body>
+    <!--
+    -->
     <th:block th:switch="${content}">
-        <div th:case="'account/login-page'" th:insert="~{${content}}"
-             th:with="signInViewModel = ${signInViewModel}, signUpViewModel =  ${signUpViewModel}"></div>
-        <div th:case="'order/create-order-page'" th:insert="~{${content}}"
-             th:with="createOrderDTO = ${createOrderDTO}"></div>
-        <div th:case="'yacht/adding-yacht-page'" th:insert="~{${content}}"
-             th:with="creatingYachtDTO = ${creatingYachtDTO}"></div>
-        <div th:case="'facility/updating-facility-page'" th:insert="~{${content}}"
-             th:with="updatingFacilityDTOList = ${updatingFacilityDTOList}"></div>
-        <div th:case="'account/registration-page'" th:insert="~{${content}}"
-             th:with="signUpViewModel =  ${signUpViewModel}"></div>
+
+        <th:block th:case="'profile'">
+            <main th:replace="account/profile/profile-page :: content(${profileContent})"></main>
+        </th:block>
+
+        <th:block th:case="'loginPage'">
+            <div th:replace="account/login-page :: content(${signInViewModel}, ${signUpViewModel})"></div>
+        </th:block>
+
+        <th:block th:case="'createOrder'">
+            <div th:replace="order/create-order-page :: content(${createOrderDTO})"></div>
+        </th:block >
+
+        <th:block th:case="'order/create-order-page'" >
+            <div th:replace="~{${content}}" th:with="createOrderDTO = ${createOrderDTO}">
+            </div>
+        </th:block>
+
+        <th:block th:case="'addingYacht'" >
+            <div th:replace="yacht/adding-yacht-modal-form :: content(${creatingYachtDTO})"></div>
+        </th:block>
+
+        <th:block th:case="'facility/updating-facility-page'" >
+            <div th:replace="~{${content}}"
+                 th:with="updatingFacilityDTOList = ${updatingFacilityDTOList}">
+                <span th:break=""></span></div>
+        </th:block>
+
+        <th:block th:case="'account/registration-page'">
+            <div  th:replace="~{${content}}"
+                 th:with="signUpViewModel =  ${signUpViewModel}"></div>
+        </th:block>
     </th:block>
+
+
+
+    <div id="modal-temp" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="main-content-modal">
+
+            </div>
+            <div style="padding-top: 10px" id="controller-panel">
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer th:replace="fragments/footer :: footer()"></footer>
 </body>
 </html>

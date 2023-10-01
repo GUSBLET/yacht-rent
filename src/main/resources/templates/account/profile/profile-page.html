@@ -1,0 +1,129 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title></title>
+</head>
+<body>
+
+<main th:fragment="content(profileContent)">
+
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <figure class="avatar-box">
+          <img src="/images/ma-avatar2.png" alt="user-photo" width="80px">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="user name">User</h1>
+
+          <p class="title">?????????</p>
+
+          <button class="info_more-btn" data-sidebar-btn>
+            <span>Show more</span>
+
+            <ion-icon name="chevron-down"></ion-icon>
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+
+              <a href="mailto:example@gmail.com" class="contact-link">example@gmail.com</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Phone
+              </p>
+
+              <a href="tel:+15618874398" class="contact-link">+1 (561) 887-4398</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="boat-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">company name
+              </p>
+
+              <a href="#" class="contact-link">link to company?</a>
+            </div>
+
+          </li>
+
+        </ul>
+
+      </div>
+
+    </aside>
+    <div class="main-content">
+
+      <!-- navbar -->
+
+      <nav class="profile-nav">
+
+        <ul class="nav-list">
+
+          <li class="nav-item">
+            <a href="/cabinet/profile-order" class="nav-link" data-nav-link>Order</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/cabinet/profile-review" class="nav-link" data-nav-link id="review">review</a>
+          </li>
+
+          <li class="nav-item">
+            <button class="nav-link" data-nav-link>???????</button>
+          </li>
+
+
+        </ul>
+
+      </nav>
+      <th:block th:switch="${profileContent}">
+        <th:block th:case="'order'" >
+          <div th:replace="account/profile/profile-order :: profileContent()"></div>
+        </th:block>
+        <th:block th:case="'review'" >
+          <div  th:replace="account/profile/profile-review :: profileContent()"></div>
+        </th:block>
+        <th:block th:case="'yacht'" >
+          <div  th:replace="account/profile/profile-yacht :: profileContent()"></div>
+        </th:block>
+
+      </th:block>
+
+
+    </div>
+  </main>
+
+
+</body>
+</html>

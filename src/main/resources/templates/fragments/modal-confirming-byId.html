@@ -1,0 +1,6 @@
+<p th:text="${message}"></p>
+<form th:action="@{${path}}" th:object="${yacht}" th:method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <button type="submit">remove</button>
+</form>

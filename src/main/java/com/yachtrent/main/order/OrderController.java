@@ -29,7 +29,7 @@ public class OrderController {
     @GetMapping("create-order-page")
     public String pageCreateOrder(Model model) {
         model.addAttribute("title", "New order");
-        model.addAttribute("content", "order/create-order-page");
+        model.addAttribute("content", "createOrder");
         CreateOrderDTO s = new CreateOrderDTO();
         s.getYacht().setId(1L);
         model.addAttribute("createOrderDTO", s);

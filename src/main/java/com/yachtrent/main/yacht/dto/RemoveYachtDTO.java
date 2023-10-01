@@ -1,7 +1,7 @@
 package com.yachtrent.main.yacht.dto;
 
 
-import com.yachtrent.main.mapper.Mapper;
+import com.yachtrent.main.techniacal.mapper.Mapper;
 import com.yachtrent.main.yacht.Yacht;
 import lombok.Builder;
 import lombok.Getter;

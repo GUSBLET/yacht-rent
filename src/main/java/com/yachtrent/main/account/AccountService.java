@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,8 +42,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    @Async
-    public CompletableFuture<BindingResult> signUpAsync(SignUpViewModel model) {
+    public CompletableFuture<BindingResult> signUp(SignUpViewModel model) {
         BindingResult result = new BeanPropertyBindingResult(model, "singUpViewModel");
         Optional<Account> response = accountRepository.findByEmail(model.getEmail());
         if (response.isEmpty()) {
@@ -76,7 +74,7 @@ public class AccountService implements IAccountService, UserDetailsService {
         } else {
             result.reject("500", "login or email have already existed");
         }
-        return CompletableFuture.completedFuture(result);
+        return (CompletableFuture<BindingResult>) result;
     }
 
     // Method create new account if user does not exist and anonymous creates new order.
