@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 @Entity
 @Getter
 @Setter
@@ -41,7 +40,7 @@ public class Yacht {
     private short  crew;
 
     @Column(name = "price_per_hour", columnDefinition = "real")
-    private float  price_per_hour;
+    private float pricePerHour;
 
     @Column(name = "length", columnDefinition = "real")
     private float  length;
@@ -58,7 +57,7 @@ public class Yacht {
     @OneToMany(mappedBy = "yacht", cascade = CascadeType.REMOVE)
     private List<YachtPhoto> photos;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             schema = "main",
             name = "yacht_harbor_table",
@@ -67,7 +66,7 @@ public class Yacht {
     )
     private Set<Harbor> harbors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             schema = "main",
             name = "yacht_order_table",

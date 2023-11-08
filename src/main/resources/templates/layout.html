@@ -4,8 +4,7 @@
     <title></title>
 </head>
 <body>
-    <!--
-    -->
+
     <th:block th:switch="${content}">
 
         <th:block th:case="'profile'">
@@ -13,7 +12,7 @@
         </th:block>
 
         <th:block th:case="'loginPage'">
-            <div th:replace="account/login-page :: content(${signInViewModel}, ${signUpViewModel})"></div>
+            <div th:replace="account/login-page :: content(${signInViewModel}, ${signUp})"></div>
         </th:block>
 
         <th:block th:case="'createOrder'">
@@ -26,7 +25,7 @@
         </th:block>
 
         <th:block th:case="'addingYacht'" >
-            <div th:replace="yacht/adding-yacht-modal-form :: content(${creatingYachtDTO})"></div>
+            <div th:replace="yacht/add-yacht :: content(${yacht})"></div>
         </th:block>
 
         <th:block th:case="'facility/updating-facility-page'" >
@@ -37,7 +36,7 @@
 
         <th:block th:case="'account/registration-page'">
             <div  th:replace="~{${content}}"
-                 th:with="signUpViewModel =  ${signUpViewModel}"></div>
+                 th:with="signUp =  ${signUp}"></div>
         </th:block>
     </th:block>
 

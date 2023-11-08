@@ -5,22 +5,37 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="content(signUpViewModel)">
+<div th:fragment="content(signUp)">
 
     <div th:if="${success}">
         <div style="color:green" class="alert alert-danger">To complete authorization, check your email</div>
     </div>
 
     <div th:if="${verify}">
-        <div style="color:green" class="alert alert-danger">The link is no longer valid</div>
+        <div style="color:red" class="alert alert-danger">The link is no longer valid</div>
     </div>
 
     <div th:if="${error}">
         <div style="color:red" class="alert alert-danger">This email already exists</div>
     </div>
 
-    <form th:action="@{/account/sign-up}" th:object="${signUpViewModel}" th:method="post" novalidate>
+    <form th:action="@{/account/sign-up}" th:object="${signUp}" th:method="post" novalidate>
 
+        <div>
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" id="sign-up_name"/>
+            <p style="color:red" th:each="error : ${#fields.errors('name')}" th:text="${error}">Name error</p>
+        </div>
+        <div>
+            <label>LastName:</label>
+            <input type="text" th:field="*{lastName}" id="sign-up_lastName"/>
+            <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">LastName error</p>
+        </div>
+        <div>
+            <label>Phone number:</label>
+            <input type="text" th:field="*{phoneNumber}" id="sign-up_phoneNumber"/>
+            <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Phone number error</p>
+        </div>
         <div>
             <label>Email:</label>
             <input type="text" th:field="*{email}" id="sign-up_email"/>
@@ -37,7 +52,7 @@
             <input type="password" th:field="*{passwordConfirm}" id="sign-up_passwordConfirm"/>
             <input type="checkbox" onclick="showPassword('sign-up_passwordConfirm')">Show Password
             <p style="color:red" th:each="error : ${#fields.errors('passwordConfirm')}" th:text="${error}">PasswordConfirm error</p>
-            <p style="color:red" th:each="error : ${#fields.errors('${signUpViewModel}')}" th:text="${error}">PasswordMatch error</p>
+            <p style="color:red" th:each="error : ${#fields.errors('${signUp}')}" th:text="${error}">PasswordMatch error</p>
         </div>
         <label>Choose an option:</label>
         <select th:field="*{role}" id="pet-select">

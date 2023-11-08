@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form th:action="@{/yacht/info}" th:object="${yacht}" th:method="get">
+    <!--    TODO написать код для выгрузки фотографий скорее всего это будет реализовано через js-->
+    <label for="photos">Yacht Photos:</label>
+    <input type="file" id="photos" name="photos" multiple readonly>
+    <br>
+
+    <label for="name">Yacht Name:</label>
+    <input type="text" id="name" name="name" th:field="*{name}" readonly>
+    <br>
+
+    <label for="age">Age of Yacht:</label>
+    <input type="text" id="age" name="age" th:field="*{age}" readonly>
+    <br>
+
+    <label for="crew">Crew Count:</label>
+    <input type="text" id="crew" name="crew" th:field="*{crew}" readonly>
+    <br>
+
+    <label for="capacity">Max Passenger Capacity:</label>
+    <input type="text" id="capacity" name="capacity" th:field="*{capacity}" readonly>
+    <br>
+
+    <label for="pricePerHour">Price Per Hour:</label>
+    <input type="text" id="pricePerHour" name="pricePerHour" th:field="*{pricePerHour}" readonly>
+    <br>
+
+    <label for="length">Yacht Length:</label>
+    <input type="text" id="length" name="length" th:field="*{length}" readonly>
+    <br>
+
+    <label for="width">Yacht Width:</label>
+    <input type="text" id="width" name="width" th:field="*{width}" readonly>
+    <br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" th:field="*{description}" readonly></textarea>
+    <br>
+
+<!--    TODO проблема кода в том что может быть нульевое значение и страница не загрузиться-->
+<!--    <label for="type">Yacht Type:</label>-->
+<!--    <input type="text" id="type" name="type" th:field="*{type}" readonly>-->
+<!--    <br>-->
+</form>
+
+<button class="pure-button pure-button-primary" onclick="window.location.href='/cabinet'">Cancel</button>
+
+</body>
+</html>

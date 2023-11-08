@@ -1,16 +1,13 @@
 package com.yachtrent.main.account;
 
-import com.yachtrent.main.account.dto.SignUpViewModel;
-import com.yachtrent.main.role.Authority;
+import com.yachtrent.main.account.dto.SignUp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
@@ -31,14 +28,8 @@ class TestLoginAndRegister {
     @Autowired
     private MockMvc mockMvc;
 
-    /*
-    * ��������� @MockBean ��������� ��������� ������� ��������
-    * */
     @MockBean
-    private IAccountService accountService;
-
-    @MockBean
-    private SignUpViewModel signUpViewModel;
+    private SignUp signUp;
 
     @Test
     void testLoginPage() throws Exception {
@@ -47,8 +38,8 @@ class TestLoginAndRegister {
                         status().isOk(),
                         model().attribute("title", "Login"),
                         model().attribute("content", "account/login-page"),
-                        model().attribute("signUpViewModel",
-                                new SignUpViewModel()),
+                        model().attribute("signUp",
+                                new SignUp()),
                         view().name("account/login-page"))
                 .andDo(log());
     }
@@ -60,14 +51,14 @@ class TestLoginAndRegister {
                         status().isOk(),
                         model().attribute("title", "Registration"),
                         model().attribute("content", "account/registration-page"),
-                        model().attribute("signUpViewModel", new SignUpViewModel()),
+                        model().attribute("signUp", new SignUp()),
                         view().name("layout"))
                 .andDo(log());
     }
 
 //    @Test
 //    void TestSignUp() throws Exception {
-//        when(accountService.signUpAsync(signUpViewModel)).getMock();
+//        when(accountService.signUpAsync(signUp)).getMock();
 //
 //        this.mockMvc.perform(post("/account/sign-up"))
 //                        .param("email", "test@gmail.com")

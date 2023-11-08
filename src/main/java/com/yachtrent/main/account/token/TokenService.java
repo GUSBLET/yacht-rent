@@ -19,7 +19,7 @@ public class TokenService {
         return tokenRepository.save(Token.builder()
                 .token(UUID.randomUUID().toString())
                 .timeOfCreation(LocalDateTime.now())
-                .lifetime(LocalDateTime.now().plusMinutes(5))
+                .lifetime(LocalDateTime.now().plusMinutes(1))
                 .account(account)
                 .build());
     }
@@ -34,5 +34,10 @@ public class TokenService {
             return false;
         }
         return true;
+    }
+
+    public Token findToken(String token) {
+      return tokenRepository.findByToken(token)
+              .orElseThrow(() -> new IllegalArgumentException(token + " not exist"));
     }
 }

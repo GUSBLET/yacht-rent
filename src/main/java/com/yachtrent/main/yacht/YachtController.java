@@ -1,82 +1,87 @@
 package com.yachtrent.main.yacht;
 
-import com.yachtrent.main.yacht.creator.Creator;
-import com.yachtrent.main.yacht.dto.CreatingYachtDTO;
-import com.yachtrent.main.yacht.dto.RemoveYachtDTO;
-import com.yachtrent.main.yacht.services.YachtService;
+import com.yachtrent.main.account.AccountService;
+import com.yachtrent.main.yacht.dto.YachtDTO;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.plaf.OptionPaneUI;
-import java.util.Objects;
-import java.util.Optional;
-
+@Slf4j
 @Controller
 @RequestMapping("/yacht")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class YachtController {
-
     private final YachtService yachtService;
+    private final AccountService accountService;
 
-    @PostMapping(value = "/add-yacht")
-    public String addYacht(@Valid @ModelAttribute("creatingYachtDTO")
-                               CreatingYachtDTO creatingYachtDTO,
-                           BindingResult bindingResult,
-                           Model model){
-        if(bindingResult.hasErrors()){
-            model.addAttribute("title", "New yacht");
-            model.addAttribute("creatingYachtDTO", creatingYachtDTO);
-            return "yacht/adding-yacht-modal-form";
+    @GetMapping("/add-yacht")
+    public String addYacht(@RequestParam long accountId, Model model) {
+        YachtDTO yachtDTO = new YachtDTO();
+        yachtDTO.setAccount(accountService.findAccountById(accountId));
+        model.addAttribute("title", "New yacht")
+                .addAttribute("yacht", yachtDTO);
+
+        return "yacht/add-yacht";
+    }
+
+    @PostMapping("/add-yacht")
+    public String addYacht(@Valid @ModelAttribute("yacht") YachtDTO yachtDTO,
+                           BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.error("YachtDTO not valid");
+            return "yacht/add-yacht";
         }
-        creatingYachtDTO.setCreator(new Creator());
-        ResponseEntity<String> response = yachtService.addYacht(creatingYachtDTO);
-        if(response.getStatusCode() == HttpStatusCode.valueOf(400)) {
-            model.addAttribute("title", "New yacht");
-            model.addAttribute("creatingYachtDTO", creatingYachtDTO);
-            bindingResult.addError(new FieldError("creatingYachtDTO", "name", Objects.requireNonNull(response.getBody())));
-            return "yacht/adding-yacht-modal-form";
+        if (yachtService.isYachtExists(yachtDTO.getName())) {
+            model.addAttribute("error", true);
+            log.warn("A yacht named \"{}\" already exists", yachtDTO.getName());
+            return "yacht/add-yacht";
         }
 
+        yachtService.addYacht(yachtDTO);
         model.addAttribute("title", "Success");
-        model.addAttribute("message", response.getBody());
-        return "fragments/modal-success";
+        return "redirect:/cabinet";
     }
 
-    @PostMapping("/remove-yacht")
-    public String removeYacht(@RequestParam long id, Model model){
-        yachtService.removeYacht(id);
-        model.addAttribute("title", "Profile");
-        model.addAttribute("content", "profile");
-        model.addAttribute("profileContent", "yacht");
-
-        return "layout";
+    @PostMapping("/delete-yacht")
+    public String deleteYacht(@RequestParam long id) {
+        yachtService.deleteYachtById(id);
+        return "redirect:/cabinet";
     }
 
-    @GetMapping("/adding-yacht-modal-form")
-    public String addingYachtForm(Model model){
-        model.addAttribute("creatingYachtDTO", CreatingYachtDTO.builder().accountId(1l).build());
-
-        return "/yacht/adding-yacht-modal-form";
+    @GetMapping("/info")
+    public String showModal(@RequestParam long id, Model model) {
+        Yacht yacht = yachtService.findYachtById(id);
+        model.addAttribute("yacht", yacht);
+        return "yacht/show_yacht";
     }
 
-    @GetMapping("/remove-yacht-modal-form")
-    public String removeYachtModal(@RequestParam long id ,Model model){
-        Optional<Yacht> yacht = yachtService.findYachtById(id);
-         if(yacht.isPresent()){
-            model.addAttribute("yacht", yacht.get());
-            model.addAttribute("path", "/yacht/remove-yacht");
-            model.addAttribute("message", "Do you want to remove yacht?");
-            return "/fragments/modal-confirming-byId";
+    @GetMapping("/update")
+    public String updateYacht(@RequestParam long id, Model model) {
+        Yacht yacht = yachtService.findYachtById(id);
+        YachtDTO yachtDTO = new YachtDTO().toDto(yacht);
+        model.addAttribute("yacht", yachtDTO);
+        return "yacht/update_yacht";
+    }
+
+    @PostMapping("/update")
+    public String updateYacht(@Valid @ModelAttribute("yacht") YachtDTO yachtDto, Model model,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            log.error("YachtDTO not valid");
+            return "yacht/update_yacht";
         }
-        model.addAttribute("title", "Error");
-        model.addAttribute("message", "Yacht does not exist");
-        return "fragments/modal-error";
+        if (yachtService.isYachtExists(yachtDto.getName())) {
+            model.addAttribute("error", true);
+            log.warn("A yacht named \"{}\" already exists", yachtDto.getName());
+            return "yacht/add-yacht";
+        }
+
+        Yacht yacht = yachtDto.toEntity(yachtDto);
+        yachtService.updateYacht(yacht);
+        return "redirect:/cabinet";
     }
 }

@@ -9,12 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class YachtTypeService {
+    private final YachtTypeRepository yachtTypeRepository;
 
-    private YachtTypeRepository yachtTypeRepository;
-
-    public YachtType getType(Types type){
-        return yachtTypeRepository.findByType(type.toString()).orElseGet(() -> {
-            return yachtTypeRepository.findByType("BOAT").get();
-        });
+    public YachtType findBYachtType(Types type) {
+        return yachtTypeRepository.findByType(type.toString()).orElseThrow();
     }
 }

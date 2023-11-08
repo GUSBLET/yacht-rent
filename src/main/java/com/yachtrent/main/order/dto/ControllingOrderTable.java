@@ -8,4 +8,5 @@ public record ControllingOrderTable (
         Date startTime,
         Date finishTime,
         float price,
-        boolean isConfirmed) { }
+        boolean isConfirmed
+) { }

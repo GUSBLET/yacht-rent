@@ -2,7 +2,6 @@ package com.yachtrent.main.order.services;
 
 import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.YachtRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -25,7 +24,7 @@ public class PriceCounterService {
         final int limitOfHours = 48;
 
         Optional<Yacht> yacht = Optional.of(yachtRepository.findById(yachtId).get());
-        float pricePerHour = yacht.isPresent() ? yacht.get().getPrice_per_hour() : -1;
+        float pricePerHour = yacht.isPresent() ? yacht.get().getPricePerHour() : -1;
         float time = countDifferentInTime(startOfRent, finishOfRent);
         if(time == -1)
             return -1;
