@@ -2,6 +2,7 @@ package com.yachtrent.main.order.dto;
 
 import com.yachtrent.main.order.Order;
 
-public record OrderResultDTO(
+public record OrderResultDTO (
         String message,
-        Order order) {}
+        Order order
+) { }

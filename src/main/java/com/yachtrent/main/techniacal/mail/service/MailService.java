@@ -20,7 +20,6 @@ import java.util.Properties;
 @Service
 public class MailService {
 
-
     @Value("${spring.mail.username}")
     private  String email;
 

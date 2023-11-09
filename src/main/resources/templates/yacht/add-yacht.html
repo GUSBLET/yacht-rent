@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<h1>Yacht Details</h1>
+<form id="addingYachtForm" th:action="@{/yacht/add-yacht}" th:object="${yacht}" enctype="multipart/form-data" th:method="post">
+    <label for="name">Yacht Name:</label>
+    <input type="text" id="name" name="name" th:field="*{name}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    <br>
+
+    <div th:if="${error}">
+        <span style="color:red">A yacht with this name exists</span>
+    </div>
+
+    <label for="age">Age of Yacht:</label>
+    <input type="number" id="age" name="age" th:field="*{age}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+    <br>
+
+    <label for="crew">Crew Count:</label>
+    <input type="number" id="crew" name="crew" th:field="*{crew}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('crew')}" th:errors="*{crew}"></span>
+    <br>
+
+    <label for="capacity">Max Passenger Capacity:</label>
+    <input type="number" id="capacity" name="capacity" th:field="*{capacity}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></span>
+    <br>
+
+    <label for="pricePerHour">Price Per Hour:</label>
+    <input type="number" step="0.01" id="pricePerHour" name="pricePerHour" th:field="*{pricePerHour}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('pricePerHour')}" th:errors="*{pricePerHour}"></span>
+    <br>
+
+    <label for="length">Yacht Length:</label>
+    <input type="number" step="0.01" id="length" name="length" th:field="*{length}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('length')}" th:errors="*{length}"></span>
+    <br>
+
+    <label for="width">Yacht Width:</label>
+    <input type="number" step="0.01" id="width" name="width" th:field="*{width}" required>
+    <span style="color:red" th:if="${#fields.hasErrors('width')}" th:errors="*{width}"></span>
+    <br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" th:field="*{description}" required></textarea>
+    <span style="color:red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+    <br>
+
+    <label for="type">Yacht Type:</label>
+    <select id="type" name="type" th:field="*{type}">
+        <option value="">Choose</option>
+        <option value="SHIP">Ship</option>
+        <option value="BOAT">Boat</option>
+        <option value="SMALL_BOAT">Small boat</option>
+    </select>
+    <span style="color:red" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></span>
+    <br>
+
+    <label for="photos">Yacht Photos:</label>
+    <input type="file" id="photos" name="photos" multiple >
+    <span style="color:red" th:if="${#fields.hasErrors('photos')}" th:errors="*{photos}"></span>
+    <br>
+
+    <input type="hidden" th:field="*{account}">
+
+    <button type="submit">Submit</button>
+</form>
+<button class="pure-button pure-button-primary" onclick="window.location.href='/cabinet'">Cancel</button>
+</body>
+</html>

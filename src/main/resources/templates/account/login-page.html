@@ -5,8 +5,13 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="content(signInViewModel, signUpViewModel)">
+<div th:fragment="content(signInViewModel, signUp)">
     <h2>Login</h2>
+
+    <div th:if="${success}">
+        <div style="color:green" class="alert alert-danger">You have successfully completed registration</div>
+    </div>
+
     <div th:if="${param.logout}">
         <div style="color:green" class="alert alert-info">You have been logged out</div>
     </div>

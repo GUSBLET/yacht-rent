@@ -7,7 +7,16 @@ import lombok.Data;
 
 @Data
 @PasswordMatch(password = "password", passwordConfirm = "passwordConfirm")
-public class SignUpViewModel {
+public class SignUp {
+
+    @NotBlank(message = "Enter your name")
+    private String name;
+
+    @NotBlank(message = "Enter your lastName")
+    private String lastName;
+
+    @NotBlank(message = "Enter your phone number")
+    private String phoneNumber;
 
     @NotBlank(message = "Enter your email")
     @Email(message = "Incorrect mail entry")

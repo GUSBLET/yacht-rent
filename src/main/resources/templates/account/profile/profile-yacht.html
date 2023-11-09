@@ -1,13 +1,97 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title></title>
 </head>
 <body>
-  <div th:fragment="profileContent()">
-      <button type="button"  onclick="getCallModalWindow('/yacht/adding-yacht-modal-form')">Add yacht</button>
-      <button type="button"  onclick="getCallModalWindowWithIdRequest('/yacht/remove-yacht-modal-form', 2)">Remove yacht</button>
-  </div>
+<div th:fragment="profileContent()">
+    <article class="about active" data-page="about">
+
+        <div th:if="${#lists.isEmpty(yachts)}">
+
+            <h3 class="h3 order-title article-title">Yacht</h3>
+            <h2>You don't have any yachts yet</h2>
+            <a class="btn btn-sm btn-outline-dark" th:href="@{/yacht/add-yacht(accountId=${accountId})}">Add yacht</a>
+
+        </div>
+
+        <div th:unless="${#lists.isEmpty(yachts)}">
+
+            <div th:fragment="profileContent()">
+                <h3 class="h3 order-title article-title">Yacht</h3>
+                <a class="btn btn-sm btn-outline-dark" th:href="@{/yacht/add-yacht(accountId=${accountId})}">
+                    Add yacht</a>
+            </div>
+
+            <div th:each="yacht : ${yachts}">
+
+                <section class="order">
+
+                    <ul class="order-list">
+
+                        <div>
+                            <li class="order-item">
+
+                                <div class="order-icon-box">
+                                    <img src="/images/boat-outline.svg" alt="icon" width="40">
+                                </div>
+
+                                <div class="order-content-box">
+                                    <h4 class="h4 order-item-title" th:text="${yacht.name}"></h4>
+
+                                    <p class="order-item-text" th:text="${yacht.description}"></p>
+                                </div>
+
+                            </li>
+
+                            <div>
+                                <a class="btn btn-sm btn-outline-dark" th:href="@{/yacht/info(id=${yacht.id})}">Show more</a>
+                                <a class="btn btn-sm btn-outline-dark" th:href="@{/yacht/update(id=${yacht.id})}">Update</a>
+
+                                <form th:action="@{/yacht/delete-yacht(id=${yacht.id})}" method="post">
+                                    <button class="btn btn-sm btn-outline-dark" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </ul>
+
+                </section>
+
+
+                <div class="modal-container-order" data-order-container>
+                    <div class="overlay" data-overlay>
+
+                        <section class="order-modal">
+
+                            <button class="order-close-btn" data-modal-close-btn>
+                                <ion-icon name="close-outline"></ion-icon>
+                            </button>
+
+                            <div class="modal-img-wrapper">
+                                <figure class="modal-icon-box">
+                                    <img src="/images/boat-outline.svg" alt="icon" width="80px" data-modal-img>
+                                </figure>
+                            </div>
+
+                            <div class="order-modal-content">
+                                <h4 class="h3 modal-title" th:text="${yacht.name}" data-modal-tite></h4>
+
+                                <!-- напиать время создание
+                                    <time datetime="2023-09-16">16 September, 2023</time>
+                                  -->
+
+                                <div data-modal-description>
+                                    <p th:text="${yacht.description}"></p>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
 </body>
 </html>

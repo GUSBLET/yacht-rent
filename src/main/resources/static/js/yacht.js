@@ -19,19 +19,9 @@ function sendFormWithObject(path, model, callback){
 function createNewYacht(){
     const form = document.getElementById("addingYachtForm");
 
-    var creatingYachtDTO = new FormData(form);
+    var yacht = new FormData(form);
 
-    // // Массив файлов будет доступен по имени поля 'photos'
-    // const selectedFiles = creatingYachtDTO.getAll('photos');
-    //
-    // // Вы можете перебрать все выбранные файлы
-    // for (let i = 0; i < selectedFiles.length; i++) {
-    //     const file = selectedFiles[i];
-    //     console.log(file.name); // Имя файла
-    //     // Здесь можно выполнить дополнительные действия с каждым файлом
-    // }
-
-    sendFormWithObject(form.action, creatingYachtDTO,function (response) {
+    sendFormWithObject(form.action, yacht, function (response) {
         if (response !== null) {
             while (modalContent.firstChild) {
                 modalContent.removeChild(modalContent.firstChild);
@@ -40,6 +30,12 @@ function createNewYacht(){
         }
     });
 }
+   /*   Массив файлов будет доступен по имени поля 'photos'
+     const selectedFiles = creatingYachtDTO.getAll('photos');
 
-
-
+      Вы можете перебрать все выбранные файлы
+     for (let i = 0; i < selectedFiles.length; i++) {
+         const file = selectedFiles[i];
+         console.log(file.name); // Имя файла
+          Здесь можно выполнить дополнительные действия с каждым файлом
+     }*/

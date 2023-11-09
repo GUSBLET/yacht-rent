@@ -4,7 +4,6 @@ import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Getter
 @Setter

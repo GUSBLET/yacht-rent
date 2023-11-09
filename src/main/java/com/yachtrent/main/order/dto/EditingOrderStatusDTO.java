@@ -6,7 +6,6 @@ import com.yachtrent.main.order.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Builder
 @Getter
 public class EditingOrderStatusDTO implements Mapper<EditingOrderStatusDTO, Order> {
