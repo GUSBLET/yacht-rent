@@ -10,6 +10,7 @@
 <body>
 <h1>Yacht Details</h1>
 <form id="addingYachtForm" th:action="@{/yacht/add-yacht}" th:object="${yacht}" enctype="multipart/form-data" th:method="post">
+
     <label for="name">Yacht Name:</label>
     <input type="text" id="name" name="name" th:field="*{name}" required>
     <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
@@ -56,7 +57,6 @@
 
     <label for="type">Yacht Type:</label>
     <select id="type" name="type" th:field="*{type}">
-        <option value="">Choose</option>
         <option value="SHIP">Ship</option>
         <option value="BOAT">Boat</option>
         <option value="SMALL_BOAT">Small boat</option>
@@ -64,10 +64,10 @@
     <span style="color:red" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></span>
     <br>
 
-    <label for="photos">Yacht Photos:</label>
-    <input type="file" id="photos" name="photos" multiple >
-    <span style="color:red" th:if="${#fields.hasErrors('photos')}" th:errors="*{photos}"></span>
-    <br>
+<!--    <label for="photos">Yacht Photos:</label>-->
+<!--    <input type="file" id="photos" name="photos" multiple >-->
+<!--    <span style="color:red" th:if="${#fields.hasErrors('photos')}" th:errors="*{photos}"></span>-->
+<!--    <br>-->
 
     <input type="hidden" th:field="*{account}">
 

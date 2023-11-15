@@ -1,6 +1,9 @@
 package com.yachtrent.main.account;
 
 
+import com.yachtrent.main.account.dto.EditAccount;
+import com.yachtrent.main.account.dto.EnterEmail;
+import com.yachtrent.main.account.dto.Password;
 import com.yachtrent.main.account.dto.SignUp;
 import com.yachtrent.main.account.token.Token;
 import com.yachtrent.main.account.token.TokenService;
@@ -78,5 +81,124 @@ public class AccountController {
         accountService.confirmAccount(confirmationToken);
         model.addAttribute("success", true);
         return "account/login-page";
+    }
+
+    @GetMapping("/edit-account")
+    public String getEditPage(@RequestParam long id,
+                              @RequestParam(name = "changeEmail", required = false, defaultValue = "false") boolean changeEmail,
+                              Model model) {
+        Account account = accountService.findAccountById(id);
+        EditAccount editAccount = new EditAccount().toDto(account);
+        editAccount.setChangeEmail(changeEmail);
+        model.addAttribute("profile", editAccount)
+                .addAttribute("changeEmail", changeEmail);
+        return "account/edit-account";
+    }
+
+    @PostMapping("/edit-account")
+    public String editAccount(@Valid @ModelAttribute("profile") EditAccount editAccount,
+                              BindingResult bindingResult,
+                              Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            log.error(bindingResult.getAllErrors().toString());
+            return "account/edit-account";
+        }
+        if (!accountService.isBelongsEmailProvideId(editAccount.getId(), editAccount.getEmail())) {
+            model.addAttribute("isEmailExists", true)
+                    .addAttribute("changeEmail", true);
+            log.warn("A email \"{}\" already exists", editAccount.getEmail());
+            return "account/edit-account";
+        }
+
+        Account account = editAccount.toEntity(editAccount);
+        accountService.updateAccount(account);
+        return "redirect:/cabinet";
+    }
+
+    @GetMapping("/change-password")
+    public String getChangePasswordPage(Model model) {
+        model.addAttribute("enterEmail", new EnterEmail());
+        return "account/enter-email";
+    }
+
+    @PostMapping("/change-password")
+    public String checkPassword(@Valid @ModelAttribute("enterEmail") EnterEmail email,
+                                BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.error(bindingResult.getAllErrors().toString());
+            return "account/enter-email";
+        }
+        if (!accountService.userExists(email.getEmail())) {
+            model.addAttribute("existsEmail", true);
+            log.error("Failed sign up");
+            return "account/enter-email";
+        }
+
+        accountService.sendEmail(email.getEmail(), "change-password");
+        model.addAttribute("success", true);
+        return "account/enter-email";
+    }
+
+    @GetMapping("/verify/{event}/{token}")
+    public String confirmMail(@PathVariable("event") String event,
+                              @PathVariable("token") String token,
+                              Model model) {
+        Token confirmationToken = tokenService.findToken(token);
+
+        if (!tokenService.verifyToken(confirmationToken)) {
+            String url = "account/" + event;
+            model.addAttribute("verify", true);
+            return url;
+        }
+
+        //TODO скорее всего надо вынести в отдельный метод
+        return "change-password".equals(event) ? "redirect:/account/password/" + confirmationToken.getAccount().getId()
+                : "account/login-page";
+    }
+
+    @GetMapping("/password/{id}")
+    public String changePassword(@PathVariable("id") long id, Model model) {
+        Password password = new Password();
+        password.setId(id);
+        model.addAttribute("password", password);
+        return "account/new-password";
+    }
+
+    @PostMapping("/password")
+    public String sendEmail(@Valid @ModelAttribute("password") Password password,
+                            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.error(bindingResult.getAllErrors().toString());
+            return "account/new-password";
+        }
+
+        accountService.updatePassword(password.getPassword(), password.getId());
+        model.addAttribute("success_change_password", true);
+        return "account/login-page";
+    }
+
+    @GetMapping("/change-email/{id}")
+    public String getChangeEmailPage(@PathVariable("id") long id, Model model) {
+        Password password = new Password();
+        password.setId(id);
+        model.addAttribute("password", password);
+        return "account/enter-password";
+    }
+
+    @PostMapping("/change-email")
+    public String checkPasswordForChangeEmail(@Valid @ModelAttribute("password") Password password,
+                                              BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.error(bindingResult.getAllErrors().toString());
+            return "account/enter-password";
+        }
+        if (!accountService.isPasswordCorrect(password.getPassword(), password.getId())) {
+            model.addAttribute("incorrectPassword", true);
+            log.error("Incorrect password");
+            return "account/enter-password";
+        }
+
+        return "redirect:/account/edit-account?id=" + password.getId() + "&changeEmail=" + true;
     }
 }

@@ -16,6 +16,7 @@ public class SignUp {
     private String lastName;
 
     @NotBlank(message = "Enter your phone number")
+    @Pattern(regexp = "^\\+380\\d{9}$", message = "Wrong phone number")
     private String phoneNumber;
 
     @NotBlank(message = "Enter your email")
@@ -23,7 +24,7 @@ public class SignUp {
     private String email;
 
     @NotBlank(message = "Enter your password")
-    @Size(min = 5, message = "Password must be at least 5 characters long.")
+    @Size(min = 5, message = "Password must be at least 5 characters long")
     private String password;
 
     @NotBlank(message = "Confirm password")

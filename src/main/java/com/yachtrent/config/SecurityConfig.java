@@ -22,7 +22,7 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .loginPage("/account/login-page")
                         .loginProcessingUrl("/authenticate")
-                        .defaultSuccessUrl("/cabinet")
+                        .defaultSuccessUrl("/home")
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/account/login-page?logout"))
                 .authorizeHttpRequests(authorize -> {

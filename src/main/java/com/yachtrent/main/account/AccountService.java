@@ -7,8 +7,14 @@ import com.yachtrent.main.order.dto.CreateOrderDTO;
 import com.yachtrent.main.role.RoleService;
 import com.yachtrent.main.techniacal.mail.service.MailService;
 import com.yachtrent.main.techniacal.mail.service.dto.MailMessage;
+import com.yachtrent.main.yacht.Yacht;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -65,6 +71,13 @@ public class AccountService implements UserDetailsService {
         mailService.sendMail(new MailMessage(signUp.getEmail(), url, "confirm your email"));
     }
 
+    public void sendEmail(String email, String event) {
+        Account account = accountRepository.findByEmail(email).orElseThrow();
+        Token token = tokenService.generateAndSaveToken(account);
+        String url = "http://localhost:8080/account/verify/" + event + "/" + token.getToken();
+        mailService.sendMail(new MailMessage(email, url, "confirm your email"));
+    }
+
     private Account signUpNewAccount(SignUp newUser) {
         return accountRepository.save(Account.builder()
                 .name(newUser.getName())
@@ -79,6 +92,16 @@ public class AccountService implements UserDetailsService {
         );
     }
 
+    public Account getAccount(Long accountId) {
+        return accountId != null ? accountRepository.findById(accountId).orElseThrow() : getAuthentication();
+    }
+
+    private Account getAuthentication() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (Account) auth.getPrincipal();
+    }
+
+
     public void confirmAccount(Token token) {
         token.setConfirmationAt(LocalDateTime.now());
         Account account = accountRepository.findById(token.getAccount().getId()).orElseThrow();
@@ -90,7 +113,8 @@ public class AccountService implements UserDetailsService {
         return accountRepository.findByEmail(email).isPresent();
     }
 
-    //TODO надо сделать два метода в будущем
+    @Modifying
+    @Transactional
     public void deleteAccount(String email) {
         try {
             if (userExists(email)) {
@@ -104,7 +128,36 @@ public class AccountService implements UserDetailsService {
         }
     }
 
-    private void changePassword(String oldPassword, String newPassword) {
+    public boolean isPasswordCorrect(String password, long id) {
+        Account account = accountRepository.findById(id).orElseThrow();
+        return isPasswordMatches(password, account.getPassword());
+    }
 
+    private boolean isPasswordMatches(String password, String passwordUser) {
+        return passwordEncoder.matches(password, passwordUser);
+    }
+
+    @Modifying
+    @Transactional
+    public void updateAccount(@NonNull Account account) {
+        accountRepository.save(account);
+        log.info("success update yacht");
+    }
+
+    public void updatePassword(String password, long id) {
+        Account account = accountRepository.findById(id).orElseThrow();
+        account.setPassword(passwordEncoder.encode(password));
+        accountRepository.updateAccount(account.getId(), account);
+    }
+
+    public void updateEmail(String email, long id) {
+        Account account = accountRepository.findById(id).orElseThrow();
+        account.setEmail(email);
+        accountRepository.updateAccount(account.getId(), account);
+    }
+
+    public boolean isBelongsEmailProvideId(Long id, String email) {
+        Account account = accountRepository.findByEmail(email).orElseThrow();
+        return account.getId().equals(id);
     }
 }

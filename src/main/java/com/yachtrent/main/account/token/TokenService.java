@@ -14,12 +14,11 @@ import java.util.UUID;
 public class TokenService {
     private final TokenRepository tokenRepository;
 
-    //TODO переделать время токена
     public Token generateAndSaveToken(Account account) {
         return tokenRepository.save(Token.builder()
                 .token(UUID.randomUUID().toString())
                 .timeOfCreation(LocalDateTime.now())
-                .lifetime(LocalDateTime.now().plusMinutes(1))
+                .lifetime(LocalDateTime.now().plusMinutes(5))
                 .account(account)
                 .build());
     }

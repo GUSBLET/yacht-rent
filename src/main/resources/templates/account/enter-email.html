@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter email</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div th:if="${existsEmail}">
+        <div style="color:red" class="alert alert-danger">This email already exists</div>
+    </div>
+
+    <div th:if="${success}">
+        <div style="color:green" class="alert alert-danger">To complete change your password, check your email</div>
+    </div>
+
+    <div th:if="${verify}">
+        <div style="color:red" class="alert alert-danger">The link is no longer valid</div>
+    </div>
+
+    <h1>Enter your email</h1>
+
+    <form th:action="@{/account/change-password}" th:object="${enterEmail}" th:method="post" novalidate>
+
+        <div>
+            <label>Email:</label>
+            <input type="text" th:field="*{email}" id="change-password_email"/>
+            <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
+        </div>
+
+        <div>
+            <button type="submit">Сontinue</button>
+        </div>
+
+    </form>
+
+    <button class="pure-button pure-button-primary" onclick="window.location.href='/account/login-page'">Cancel</button>
+
+</div>
+</body>
+</html>
