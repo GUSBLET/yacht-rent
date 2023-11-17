@@ -1,12 +1,11 @@
 package com.yachtrent.main.profile;
 
 import com.yachtrent.main.account.Account;
+import com.yachtrent.main.account.AccountService;
 import com.yachtrent.main.account.dto.Profile;
 import com.yachtrent.main.yacht.YachtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class ProfileController {
     private final YachtService yachtService;
-    private Profile profile;
+    private final AccountService accountService;
+    private Profile profile = new Profile();
 
     @GetMapping
-    public String viewAccount(@RequestParam(name = "rememberMe", required = false) boolean rememberMe, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Account account = (Account) auth.getPrincipal();
+    public String viewAccount(@RequestParam(name = "rememberMe", required = false) boolean rememberMe,
+                              Model model) {
+        Account account = accountService.getAccount(profile.getId());
         account.setAccountRegistered(rememberMe);
 
         profile = new Profile().toDto(account);

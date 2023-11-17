@@ -1,7 +1,7 @@
 package com.yachtrent.main.yacht;
 
 import com.yachtrent.main.account.AccountService;
-import com.yachtrent.main.yacht.dto.YachtDTO;
+import com.yachtrent.main.yacht.dto.YachtDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class YachtController {
 
     @GetMapping("/add-yacht")
     public String addYacht(@RequestParam long accountId, Model model) {
-        YachtDTO yachtDTO = new YachtDTO();
+        YachtDto yachtDTO = new YachtDto();
         yachtDTO.setAccount(accountService.findAccountById(accountId));
         model.addAttribute("title", "New yacht")
                 .addAttribute("yacht", yachtDTO);
@@ -29,7 +29,7 @@ public class YachtController {
     }
 
     @PostMapping("/add-yacht")
-    public String addYacht(@Valid @ModelAttribute("yacht") YachtDTO yachtDTO,
+    public String addYacht(@Valid @ModelAttribute("yacht") YachtDto yachtDTO,
                            BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             log.error("YachtDTO not valid");
@@ -62,26 +62,25 @@ public class YachtController {
     @GetMapping("/update")
     public String updateYacht(@RequestParam long id, Model model) {
         Yacht yacht = yachtService.findYachtById(id);
-        YachtDTO yachtDTO = new YachtDTO().toDto(yacht);
+        YachtDto yachtDTO = new YachtDto().toDto(yacht);
         model.addAttribute("yacht", yachtDTO);
         return "yacht/update_yacht";
     }
 
     @PostMapping("/update")
-    public String updateYacht(@Valid @ModelAttribute("yacht") YachtDTO yachtDto, Model model,
+    public String updateYacht(@Valid @ModelAttribute("yacht") YachtDto yachtDto, Model model,
                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.error("YachtDTO not valid");
             return "yacht/update_yacht";
         }
-        if (yachtService.isYachtExists(yachtDto.getName())) {
+        if (!yachtService.isBelongsYachtNameProvideId(yachtDto.getId(), yachtDto.getName())) {
             model.addAttribute("error", true);
             log.warn("A yacht named \"{}\" already exists", yachtDto.getName());
             return "yacht/add-yacht";
         }
 
-        Yacht yacht = yachtDto.toEntity(yachtDto);
-        yachtService.updateYacht(yacht);
+        yachtService.updateYacht(yachtDto);
         return "redirect:/cabinet";
     }
 }

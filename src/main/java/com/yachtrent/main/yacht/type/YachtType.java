@@ -1,13 +1,10 @@
 package com.yachtrent.main.yacht.type;
 
 import com.yachtrent.main.yacht.Yacht;
-import com.yachtrent.main.yacht.photo.YachtPhoto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -27,8 +24,4 @@ public class YachtType {
 
     @OneToMany(mappedBy = "yachtType", cascade = CascadeType.PERSIST)
     private List<Yacht> yachts;
-
-    public YachtType(String type) {
-        this.type = type;
-    }
 }

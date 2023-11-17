@@ -11,22 +11,25 @@
             height: 100vh;
             margin: 0;
         }
+
         h1 {
             text-align: center;
         }
     </style>
 </head>
 <body>
+
 <div>
     <h1>To complete the registration we have sent you a mail</h1>
-   <button  onclick="openGmailTab('${mail}');" class="fw-bold text-body">Go to email</button>
+    <button onclick="openGmailTab('${mail}');" class="fw-bold text-body">Go to email</button>
 </div>
 
 <script>
     function openGmailTab(emailAddress) {
-  var url = "https://mail.google.com/mail/u/0/?authuser=" + emailAddress;
-  window.open(url, "_blank");
-}
+        var url = "https://mail.google.com/mail/u/0/?authuser=" + emailAddress;
+        window.open(url, "_blank");
+    }
 </script>
+
 </body>
 </html>

@@ -8,6 +8,10 @@
 <div th:fragment="content(signInViewModel, signUp)">
     <h2>Login</h2>
 
+    <div th:if="${success_change_password}">
+        <div style="color:green" class="alert alert-danger">Password changed successfully</div>
+    </div>
+
     <div th:if="${success}">
         <div style="color:green" class="alert alert-danger">You have successfully completed registration</div>
     </div>
@@ -20,12 +24,12 @@
     </div>
     <form th:action="@{/authenticate}" method="post">
         <div>
-            <label>Email:</label>
+            <label for="login_email">Email:</label>
             <input type="text" name="email" id="login_email"/>
             <span id="emailError" style="color: red;"></span>
         </div>
         <div>
-            <label>Password:</label>
+            <label for="login_password">Password:</label>
             <input type="password" name="password" id="login_password"/>
             <span id="passwordError" style="color: red;"></span>
             <input type="checkbox" onclick="showPassword('login_password')">Show Password
@@ -37,9 +41,9 @@
         <button type="submit">Login</button>
     </form>
 
-    <div class="ui message">
-        New to us? <a th:href="@{/account/registration-page}">Sign Up</a>
-    </div>
+    <div class="ui message">New to us? <a th:href="@{/account/registration-page}">Sign Up</a></div>
+
+    <div th:if="${param.error}" class="ui message"><a th:href="@{/account/change-password}">Forgot your password?</a></div>
 
     <script defer src="/js/showPassword.js"></script>
     <script defer src="/js/loginCheck.js"></script>

@@ -5,7 +5,6 @@ import com.yachtrent.main.account.validator.PasswordMatch;
 import com.yachtrent.main.role.Role;
 import com.yachtrent.main.techniacal.mapper.Mapper;
 import com.yachtrent.main.yacht.Yacht;
-import com.yachtrent.main.yacht.dto.YachtDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -39,6 +38,8 @@ public class Profile implements Mapper<Profile, Account> {
     private boolean registered;
     private boolean confirmed;
 
+    private String bio;
+
     @NotNull
     private Set<Role> roles;
 
@@ -51,9 +52,11 @@ public class Profile implements Mapper<Profile, Account> {
                 .name(entity.getName())
                 .lastName(entity.getLastName())
                 .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
                 .registered(entity.isAccountRegistered())
                 .confirmed(entity.isAccountConfirmed())
                 .roles(entity.getRoles())
+                .bio(entity.getBio())
                 .build();
     }
 
@@ -64,10 +67,12 @@ public class Profile implements Mapper<Profile, Account> {
                 .name(dto.name)
                 .lastName(dto.lastName)
                 .email(dto.email)
+                .phoneNumber(dto.phoneNumber)
                 .accountRegistered(dto.registered)
                 .accountConfirmed(dto.confirmed)
                 .roles(dto.roles)
                 .yachts(dto.yachts)
+                .bio(dto.bio)
                 .build();
     }
 }

@@ -16,8 +16,7 @@
                 </figure>
 
                 <div class="info-content">
-                    <h1 class="name" title="user name" th:text="${account.name}"></h1>
-                    <h1 class="name" th:text="${account.lastName}"></h1>
+                    <h1 class="name" title="user name" th:text="${account.name} + ' ' + ${account.lastName}"></h1>
 
                     <button class="info_more-btn" data-sidebar-btn>
                         <span>Show more</span>
@@ -38,7 +37,7 @@
                         </div>
 
                         <div class="contact-info">
-                            <p class="contact-title" th:text="${account.email}"></p>
+                            <p class="contact-title" th:href="'mailto:' + ${account.email}" th:text="${account.email}"></p>
                         </div>
 
                     </li>
@@ -50,24 +49,31 @@
                         </div>
 
                         <div class="contact-info">
-                            <p class="contact-title">Phone</p>
+                            <p class="contact-title" th:href="'tel:' + ${account.phoneNumber}" th:text="${account.phoneNumber}"></p>
                         </div>
+
+                    </li>
+
+                    <li class="contact-item" th:if="${account.bio != null and account.bio != ''}">
+
+                        <div class="contact-info">
+                            <p class="contact-title" th:text="${account.bio}"></p>
+                        </div>
+
+                    </li>
+
+
+                    <li class="contact-item">
+
+                        <a class="btn btn-sm btn-outline-dark" th:href="@{/account/edit-account(id=${account.id})}">Update</a>
 
                     </li>
 
                     <li class="contact-item">
 
-                        <div class="icon-box">
-                            <ion-icon name="boat-outline"></ion-icon>
-                        </div>
-
-                        <div class="contact-info">
-                            <p class="contact-title">company name</p>
-                            <a href="#" class="contact-link">link to company?</a>
-                        </div>
+                        <a class="btn btn-sm btn-outline-dark" th:href="@{/account/login-page(logout=${account.id})}">Logout</a>
 
                     </li>
-
                 </ul>
 
             </div>
