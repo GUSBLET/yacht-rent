@@ -15,61 +15,50 @@ import static com.yachtrent.main.role.Authority.*;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-    public Set<Role> getAnonymousRights() {
-        if (roleExists(ANONYMOUS.name())) {
-            Set<Role> anonymous = new HashSet<>();
-            anonymous.add(getRole(ANONYMOUS.name()));
-            return anonymous;
+    public Set<Role> getChooseRole(String role) {
+        switch (role.toUpperCase()) {
+            case "USER" -> {
+                return getUserRights();
+            }
+            case "YACHT OWNER" -> {
+                return getYachtOwnerRights();
+            }
+            case "MANAGER" -> {
+                return getManagerRights();
+            }
+            case "ADMIN" -> {
+                return getAdminRights();
+            }
+            case "MODERATOR" -> {
+                return getModeratorRights();
+            }
+            default -> {
+                return new HashSet<>();
+            }
         }
-        return null;
     }
 
-    public Set<Role> getUserRights() {
-        if (roleExists(USER.name())) {
-            Set<Role> userRights = new HashSet<>();
-            userRights.add(getRole(USER.name()));
-            return userRights;
-        }
-        return null;
+    private Set<Role> getUserRights() {
+        return Set.of(getRole(USER.name()));
     }
 
-    public Set<Role> getAdminRights() {
-        if (roleExists(ADMIN.name())) {
-            Set<Role> adminRights = new HashSet<>();
-            adminRights.add(getRole(USER.name()));
-            adminRights.add(getRole(ADMIN.name()));
-            return adminRights;
-        }
-        return null;
+    private Set<Role> getYachtOwnerRights() {
+        return Set.of(getRole(USER.name()), getRole(YACHT_OWNER.name()));
     }
 
-    public Set<Role> getYachtOwnerRights() {
-        if (roleExists(YACHT_OWNER.name())) {
-            Set<Role> yachtOwnerRights = new HashSet<>();
-            yachtOwnerRights.add(getRole(USER.name()));
-            yachtOwnerRights.add(getRole(YACHT_OWNER.name()));
-            return yachtOwnerRights;
-        }
-        return null;
+    private Set<Role> getManagerRights() {
+        return Set.of(getRole(USER.name()), getRole(MANAGER.name()));
     }
 
-    public Set<Role> getModeratorRights() {
-        if (roleExists(MODERATOR.name())) {
-            Set<Role> moderatorRights = new HashSet<>();
-            moderatorRights.add(getRole(USER.name()));
-            moderatorRights.add(getRole(ADMIN.name()));
-            moderatorRights.add(getRole(MODERATOR.name()));
-            return moderatorRights;
-        }
-        return null;
+    private Set<Role> getAdminRights() {
+        return Set.of(getRole(USER.name()), getRole(MANAGER.name()), getRole(ADMIN.name()));
     }
 
-    private boolean roleExists(String role) {
-        return roleRepository.findByRole(role).isPresent();
+    private Set<Role> getModeratorRights() {
+        return Set.of(getRole(USER.name()), getRole(MANAGER.name()), getRole(ADMIN.name()), getRole(MODERATOR.name()));
     }
 
     private Role getRole(String role) {
-        return roleRepository.findByRole(role)
-                .orElseThrow(() -> new IllegalArgumentException("no such role exists"));
+        return roleRepository.findByRole(role).orElse(null);
     }
 }

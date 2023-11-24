@@ -5,5 +5,6 @@ public enum Authority {
     USER,
     YACHT_OWNER,
     ADMIN,
-    MODERATOR
+    MODERATOR,
+    MANAGER
 }

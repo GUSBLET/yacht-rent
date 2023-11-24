@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="content(signUp)">
+
+<div>
 
     <div th:if="${success}">
         <div style="color:green" class="alert alert-danger">To complete authorization, check your email</div>
@@ -26,27 +27,32 @@
             <input type="text" th:field="*{name}" id="sign-up_name"/>
             <p style="color:red" th:each="error : ${#fields.errors('name')}" th:text="${error}">Name error</p>
         </div>
+
         <div>
             <label>LastName:</label>
             <input type="text" th:field="*{lastName}" id="sign-up_lastName"/>
             <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">LastName error</p>
         </div>
+
         <div>
             <label>Phone number:</label>
             <input type="text" th:field="*{phoneNumber}" id="sign-up_phoneNumber"/>
-            <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Phone number error</p>
+            <p style="color:red" th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Phone number error</p>
         </div>
+
         <div>
             <label>Email:</label>
             <input type="text" th:field="*{email}" id="sign-up_email"/>
             <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
         </div>
+
         <div>
             <label for="sign-up_password">Password:</label>
             <input type="password" th:field="*{password}" id="sign-up_password"/>
             <input type="checkbox" id="show-password-checkbox" onclick="showPassword('sign-up_password')">Show Password
             <p style="color:red" th:each="error : ${#fields.errors('password')}" th:text="${error}">Password error</p>
         </div>
+
         <div>
             <label>Confirm password:</label>
             <input type="password" th:field="*{passwordConfirm}" id="sign-up_passwordConfirm"/>
@@ -54,10 +60,11 @@
             <p style="color:red" th:each="error : ${#fields.errors('passwordConfirm')}" th:text="${error}">PasswordConfirm error</p>
             <p style="color:red" th:each="error : ${#fields.errors('${signUp}')}" th:text="${error}">PasswordMatch error</p>
         </div>
+
         <label>Choose an option:</label>
         <select th:field="*{role}" id="pet-select">
             <option value="USER">User</option>
-            <option value="YACHT_OWNER">Yacht owner</option>
+            <option value="YACHT OWNER">Yacht owner</option>
         </select>
 
         <div>
@@ -67,9 +74,12 @@
         <div th:if="${error}">
             <a th:href="@{/account/login-page}" class="fw-bold text-body"><u>Login here</u></a>
         </div>
+
     </form>
 
-    <script defer src="/js/showPassword.js"></script>
 </div>
+
+<script defer src="/js/showPassword.js"></script>
+
 </body>
 </html>

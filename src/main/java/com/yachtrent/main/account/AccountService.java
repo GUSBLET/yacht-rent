@@ -1,16 +1,18 @@
 package com.yachtrent.main.account;
 
+import com.yachtrent.main.account.dto.Profile;
 import com.yachtrent.main.account.dto.SignUp;
 import com.yachtrent.main.account.token.Token;
 import com.yachtrent.main.account.token.TokenService;
-import com.yachtrent.main.order.dto.CreateOrderDTO;
 import com.yachtrent.main.role.RoleService;
 import com.yachtrent.main.techniacal.mail.service.MailService;
 import com.yachtrent.main.techniacal.mail.service.dto.MailMessage;
-import com.yachtrent.main.yacht.Yacht;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,33 +39,12 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(email)
+        return accountRepository.findByEmail(email).filter(account -> !account.isBlocked())
                 .orElseThrow(() -> new UsernameNotFoundException("No such email exists"));
     }
 
     public Account findAccountById(long id) {
         return accountRepository.findById(id).orElseThrow();
-    }
-
-    public Account signUpAnonymous(CreateOrderDTO orderDTO) {
-        Account anonymous = createAnonymous(orderDTO);
-        if (!userExists(anonymous.getEmail())) {
-            return accountRepository.save(anonymous);
-        }
-        accountRepository.updateAccount(anonymous.getId(), anonymous);
-        return anonymous;
-    }
-
-    private Account createAnonymous(CreateOrderDTO createOrder) {
-        return Account.builder()
-                .email(createOrder.getCustomerEmail())
-                .roles(roleService.getAnonymousRights())
-                .name(createOrder.getCustomerName())
-                .lastName(createOrder.getCustomerLastName())
-                .phoneNumber(createOrder.getCustomerPhoneNumber())
-                .accountConfirmed(false)
-                .accountRegistered(false)
-                .build();
     }
 
     public void signUpNewAccountAndSendEmail(SignUp signUp) {
@@ -85,7 +68,7 @@ public class AccountService implements UserDetailsService {
                 .phoneNumber(newUser.getPhoneNumber())
                 .email(newUser.getEmail())
                 .password(passwordEncoder.encode(newUser.getPassword()))
-                .roles(roleService.getUserRights())
+                .roles(roleService.getChooseRole(newUser.getRole()))
                 .accountConfirmed(false)
                 .accountRegistered(true)
                 .build()
@@ -96,11 +79,10 @@ public class AccountService implements UserDetailsService {
         return accountId != null ? accountRepository.findById(accountId).orElseThrow() : getAuthentication();
     }
 
-    private Account getAuthentication() {
+    public Account getAuthentication() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (Account) auth.getPrincipal();
+        return !auth.getPrincipal().equals("anonymousUser") ? (Account) auth.getPrincipal() : null;
     }
-
 
     public void confirmAccount(Token token) {
         token.setConfirmationAt(LocalDateTime.now());
@@ -150,14 +132,55 @@ public class AccountService implements UserDetailsService {
         accountRepository.updateAccount(account.getId(), account);
     }
 
-    public void updateEmail(String email, long id) {
+    public boolean isBelongsEmailProvideId(Long id, String email) {
+        Account account = accountRepository.findByEmail(email).orElse(null);
+
+        if (account != null) {
+            return account.getId().equals(id);
+        }
+        return true;
+    }
+
+    public Slice<Profile> getPageProfile(List<Profile> profiles, Pageable pageable) {
+        List<Profile> pageList = profiles.stream()
+                .skip(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(pageList, pageable, profiles.size());
+    }
+
+    public List<Profile> findAllProfile() {
+        return new Profile().toDtoList(accountRepository.findUsersByRoles());
+    }
+
+    public List<Profile> findAccountByName(String name) {
+        return new Profile().toDtoList(accountRepository.findAccountsByName(name));
+    }
+
+    public boolean isAccountBlocked(long id) {
         Account account = accountRepository.findById(id).orElseThrow();
-        account.setEmail(email);
+        return account.isBlocked();
+    }
+
+    public String redirectAfterConfirmMail(String event, Token token) {
+        return "change-password".equals(event) ? "redirect:/account/password/" + token.getAccount().getId()
+                : "account/login-page";
+    }
+
+    @Modifying
+    @Transactional
+    public void changeStatusAccountBlocked(long id, boolean isBlocked) {
+        Account account = accountRepository.findById(id).orElseThrow();
+        account.setBlocked(isBlocked);
         accountRepository.updateAccount(account.getId(), account);
     }
 
-    public boolean isBelongsEmailProvideId(Long id, String email) {
-        Account account = accountRepository.findByEmail(email).orElseThrow();
-        return account.getId().equals(id);
+    @Modifying
+    @Transactional
+    public void updateRoleAccount(long id, String role) {
+        Account account = accountRepository.findById(id).orElseThrow();
+        account.setRoles(roleService.getChooseRole(role));
+        accountRepository.updateAccount(account.getId(), account);
     }
 }

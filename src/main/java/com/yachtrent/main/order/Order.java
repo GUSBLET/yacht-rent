@@ -6,9 +6,8 @@ import com.yachtrent.main.yacht.Yacht;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -27,16 +26,28 @@ public class Order {
     private Float price;
 
     @Column(name = "status", columnDefinition = "varchar(20) not nll")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
-    @Column(name = "start_of_rent", columnDefinition = "timestamp")
-    private Instant startOfRent;
+    @Column(name = "start_of_rent")
+    private LocalTime startOfRent;
 
-    @Column(name = "finish_of_rent", columnDefinition = "timestamp")
-    private Instant finishOfRent;
+    @Column(name = "finish_of_rent")
+    private LocalTime finishOfRent;
 
-    @ManyToMany(mappedBy = "orders", cascade = CascadeType.PERSIST)
-    private Set<Yacht> yachts = new HashSet<>();
+    @Column(name = "number_of_persons")
+    private int numberOfPersons;
+
+    @Column(name = "payment_method")
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
+    @Column(name = "date")
+    private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "yacht_id")
+    private Yacht yacht;
 
     @ManyToOne
     @JoinColumn(name = "account_id")

@@ -46,6 +46,9 @@ public class Account implements UserDetails {
     private boolean accountRegistered;
     private boolean accountConfirmed;
 
+    @Column(name = "account_blocked")
+    private boolean isBlocked;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             schema = "main",

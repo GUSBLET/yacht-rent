@@ -10,7 +10,7 @@ import lombok.ToString;
 @PasswordMatch(password = "password", passwordConfirm = "passwordConfirm")
 @ToString
 public class Password {
-    private long id;
+    private long accountId;
 
     @NotBlank(message = "Enter your password")
     @Size(min = 5, message = "Password must be at least 5 characters long")

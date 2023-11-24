@@ -54,8 +54,11 @@ public class YachtService {
     }
 
     public boolean isBelongsYachtNameProvideId(Long id, String name) {
-        Yacht yacht = yachtRepository.findByName(name).orElseThrow();
-        return yacht.getId().equals(id);
+        Yacht yacht = yachtRepository.findByName(name).orElse(null);
+        if (yacht != null) {
+            return yacht.getId().equals(id);
+        }
+        return true;
     }
 
     public Set<Yacht> getYachts(Account account) {
@@ -72,8 +75,8 @@ public class YachtService {
 
     public List<YachtDto> findAllYachtBySpecification(FilterDto filterDto) {
         Specification<Yacht> filter = yachtSpecification.setPriceRange(filterDto.getMin(), filterDto.getMax())
-                .and(yachtSpecification.setNumberOfPeople(filterDto.getCapacity()))
-                .and(yachtSpecification.setTypeYacht(filterDto.getYachtTypes()));
+                .and(yachtSpecification.setTypeYacht(filterDto.getYachtTypes()))
+                .and(yachtSpecification.setNumberOfPeople(filterDto.getCapacity()));
         return new YachtDto().toDtoList(yachtRepository.findAll(filter));
     }
 }

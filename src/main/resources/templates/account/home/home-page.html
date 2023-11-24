@@ -199,14 +199,24 @@
 
 <body>
 
-<div th:if="${#lists.isEmpty(yachts)}">
+<div th:if="${yachts.totalElements < 1}">
+
+    <form th:action="@{/home/search}" th:method="post">
+        <div>
+            <input type="text" placeholder="Search by name" class="adv-option-button" name="searchName"/>
+            <button type="submit">Search</button>
+        </div>
+    </form>
+    <br>
+
     <h2>Sorry, but currently there are no yachts on the website (</h2>
+
 </div>
 
-<div th:unless="${#lists.isEmpty(yachts)}">
+<div th:unless="${yachts.totalElements < 1}">
 
 
-    <form method="post" th:action="@{/home/search}" th:method="post">
+    <form th:action="@{/home/search}" th:method="post">
         <div>
             <input type="text" placeholder="Search by name" class="adv-option-button" name="searchName"/>
             <button type="submit">Search</button>
@@ -261,18 +271,38 @@
 
     <form method="post" th:action="@{/home/filter}" th:object="${filter}" th:method="post">
 
-        <label>Count capacity:</label><br>
+        <div class="capacity-checkbox">
+            <label>Count capacity:</label><br>
 
-        <label>
-            <input name="range" type="checkbox" th:field="*{firstCheckboxForCapacity}" data-start="1" data-end="8"> 1-8
-        </label><br>
-        <label>
-            <input name="range" type="checkbox" th:field="*{secondCheckboxForCapacity}" data-start="8" data-end="15"> 8-15
-        </label><br>
-        <label>
-            <input name="range" type="checkbox" th:field="*{thirdCheckboxForCapacity}" data-start="15" data-end="20"> 15-20
-        </label><br>
-        <input type="hidden" name="capacity" id="capacity" th:field="*{capacity}">
+            <label>
+                <input id="1 8" type="checkbox" th:field="*{firstCheckboxForCapacity}"> 1-8
+            </label><br>
+            <label>
+                <input id="8 15" type="checkbox" th:field="*{secondCheckboxForCapacity}"> 8-15
+            </label><br>
+            <label>
+                <input id="15 20" type="checkbox" th:field="*{thirdCheckboxForCapacity}"> 15-20
+            </label><br>
+            <input type="hidden" name="capacity" id="capacity" th:field="*{capacity}">
+        </div>
+
+        <div class="yacht-type-checkbox">
+            <label>Type yacht:</label><br>
+
+            <label>
+                <input id="SMALL_BOAT" type="checkbox" th:field="*{smallBoatSelect}"> Small boat
+            </label><br>
+
+            <label>
+                <input id="BOAT" type="checkbox" th:field="*{boatSelect}"> Boat
+            </label><br>
+
+            <label>
+                <input id="SHIP" type="checkbox" th:field="*{shipSelect}"> Ship
+            </label><br>
+
+            <input type="hidden" name="yachtTypes" id="yachtType" th:field="*{yachtTypes}">
+        </div>
 
         <div class="range-slider container">
             <span class="output outputOne" contenteditable="true" oninput="validateNumber(this)"></span>
@@ -283,23 +313,8 @@
             <input id="rangeTwo" name="rangeTwo" th:field="*{max}" min="700" max="5000" step="1" type="range">
         </div>
 
-        <label>Type yacht:</label><br>
-
-        <label>
-            <input id="SMALL_BOAT" type="checkbox" th:field="*{smallBoatSelect}"> Small boat
-        </label><br>
-
-        <label>
-            <input id="BOAT" type="checkbox" th:field="*{boatSelect}"> Boat
-        </label><br>
-
-        <label>
-            <input id="SHIP" type="checkbox" th:field="*{shipSelect}"> Ship
-        </label><br>
-
-        <input type="hidden" name="yachtTypes" id="yachtType" th:field="*{yachtTypes}">
-
-        <button type="submit">Save</button><br>
+        <button type="submit">Save</button>
+        <br>
 
     </form>
 
@@ -362,52 +377,38 @@
     });
 
 
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const selectedRangesInput = document.getElementById('capacity');
-    const selectedRanges = [];
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('.capacity-checkbox').addEventListener('change', function (event) {
+            const checkbox = event.target;
+            const checkboxId = checkbox.id;
 
-    function handleCheckboxChange() {
-        selectedRanges.length = 0;
+            if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
+                let capacityInput = document.getElementById("capacity");
 
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                const labelText = checkbox.parentElement.textContent;
-                const numbers = labelText.split('-');
-                if (numbers.length === 2) {
-                    const start = parseInt(numbers[0]);
-                    const end = parseInt(numbers[1]);
-                    if (!isNaN(start) && !isNaN(end)) {
-                        selectedRanges.push(start, end);
-                    }
+                if (checkbox.checked) {
+                    capacityInput.value += checkboxId + ' ';
+                } else {
+                    capacityInput.value = capacityInput.value.replace(checkboxId + ' ', '');
                 }
             }
         });
-        selectedRangesInput.value = selectedRanges.join(' ');
-    }
 
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', handleCheckboxChange);
-    });
+        document.querySelector('.yacht-type-checkbox').addEventListener('change', function (event) {
+            const checkbox = event.target;
+            const checkboxId = checkbox.id;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        var hiddenField = document.getElementById("yachtType");
+            if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
+                let yachtTypeInput = document.getElementById("yachtType");
 
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                var checkboxId = checkbox.id;
-
-                // Check if the checkbox is checked
                 if (checkbox.checked) {
-                    // If checked, add the checkbox id to the hidden field with a space separator
-                    hiddenField.value += " " + checkboxId;
+                    yachtTypeInput.value += checkboxId + ' ';
                 } else {
-                    // If unchecked, remove the checkbox id from the hidden field
-                    hiddenField.value = hiddenField.value.replace(" " + checkboxId, "");
+                    yachtTypeInput.value = yachtTypeInput.value.replace(checkboxId + ' ', '');
                 }
-            });
+            }
         });
     });
+
 
 </script>
 

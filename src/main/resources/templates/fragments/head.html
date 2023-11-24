@@ -15,10 +15,42 @@
             <link rel="stylesheet" href="/css/modal.css">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+                  rel="stylesheet">
             <script src="/js/script.js" defer></script>
             <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
             <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+            <link rel="stylesheet" type="text/css"
+                  href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+            <script type="text/javascript"
+                    src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('form').submit(function (ev, picker) {
+                        [startDate, endDate] = $('.date_range').val().split(' - ');
+                        $(this).find('input[name="datemin"]').val(startDate);
+                        $(this).find('input[name="datemax"]').val(endDate);
+                    });
+
+                    $('input.date_range').daterangepicker({
+                        autoApply: true,
+                        ranges: {
+                            'Today': [moment(), moment()],
+                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        },
+                        locale: {
+                            format: 'MM/DD/YYYY'
+                        }
+                    });
+                });
+            </script>
         </th:block>
 
         <th:block th:case="'addingYacht'">

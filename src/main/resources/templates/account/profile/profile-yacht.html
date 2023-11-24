@@ -29,6 +29,7 @@
                     <ul class="order-list">
 
                         <div>
+
                             <li class="order-item">
 
                                 <div class="order-icon-box">
@@ -44,18 +45,19 @@
                             </li>
 
                             <div>
+
                                 <a class="btn btn-sm btn-outline-dark" th:href="@{/yacht/info(id=${yacht.id})}">Show more</a>
+
                                 <a class="btn btn-sm btn-outline-dark" th:href="@{/yacht/update(id=${yacht.id})}">Update</a>
 
                                 <form th:action="@{/yacht/delete-yacht(id=${yacht.id})}" method="post">
                                     <button class="btn btn-sm btn-outline-dark" type="submit">Delete</button>
                                 </form>
+
                             </div>
                         </div>
                     </ul>
-
                 </section>
-
 
                 <div class="modal-container-order" data-order-container>
                     <div class="overlay" data-overlay>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <title></title>
+
+</head>
+<body>
+
+<div th:fragment="profileContent()">
+
+    <article class="about active" data-page="about">
+
+        <div th:if="${orders.totalElements < 1}">
+
+            <h3 class="h3 order-title article-title">Orders</h3>
+
+            <div>
+                <form th:action="@{/cabinet/dateRange}" th:method="post">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <input type="hidden" name="datemin">
+                            <input type="hidden" name="datemax">
+                            <input type="text" class="form-control mb-2 date_range" size="30">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+
+                <form th:action="@{/cabinet/show-all-orders}" th:method="post">
+                    <div>
+                        <button type="submit">Show all orders</button>
+                    </div>
+                </form>
+            </div>
+            <br>
+
+            <h2>There are no orders on the site yet</h2>
+
+        </div>
+
+        <div th:unless="${orders.totalElements < 1}">
+
+            <div th:fragment="profileContent()">
+
+                <h3 class="h3 order-title article-title">Orders</h3>
+
+                <div>
+                    <form th:action="@{/cabinet/dateRange}" th:method="post">
+                        <div class="form-row align-items-center">
+                            <div class="col-auto">
+                                <input type="hidden" name="datemin">
+                                <input type="hidden" name="datemax">
+                                <input type="text" class="form-control mb-2 date_range" id="inlineFormInput" size="30">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/cabinet/show-all-orders}" th:method="post">
+                        <div>
+                            <button type="submit">Show all orders</button>
+                        </div>
+                    </form>
+                </div>
+                <br>
+
+            </div>
+
+            <div th:each="order : ${orders}">
+
+                <section class="order">
+
+                    <ul class="order-list">
+
+                        <li class="order-item">
+
+                            <div class="order-content-box">
+
+                                <h4 class="h4 order-item-title" th:text="${order.date}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.account.name}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.account.lastName}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.account.email}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.account.phoneNumber}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.yacht.name}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.yacht.type}"></h4>
+
+                                <h4 class="h4 order-item-title" th:text="${order.numberOfPeople}"></h4>
+
+                                <h4 class="h4 order-item-title"
+                                    th:text="${order.startOfRent} + ' ' + ${order.finishOfRent}"></h4>
+
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+
+            <nav aria-label="Page navigation example">
+
+                <ul class="pagination justify-content-center">
+                    <li th:if="${orders.number > 0}" class="page-item">
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/cabinet/all_orders(page=${orders.number - 1}, size=${orders.size})}"
+                           tabindex="-1">Previous</a>
+                    </li>
+
+                    <li th:each="pageNumber : ${#numbers.sequence(0, orders.totalPages - 1)}"
+                        th:class="${pageNumber == orders.number ? 'page-item active' : 'page-item'}">
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/cabinet/all_orders(page=${pageNumber}, size=${orders.size})}"
+                           th:text="${pageNumber + 1}"></a>
+                    </li>
+
+                    <li th:if="${orders.number < orders.totalPages - 1}" class="page-item">
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/cabinet/all_orders(page=${orders.number + 1}, size=${orders.size})}">Next</a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+    </article>
+</div>
+</body>
+</html>
