@@ -66,13 +66,7 @@ public class Yacht {
     )
     private Set<Harbor> harbors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinTable(
-            schema = "main",
-            name = "yacht_order_table",
-            joinColumns = @JoinColumn(name = "yacht_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
+    @OneToMany(mappedBy = "yacht", cascade = CascadeType.PERSIST)
     private Set<Order> orders = new HashSet<>();
 
     @OneToMany(mappedBy = "yacht", cascade = CascadeType.REMOVE)

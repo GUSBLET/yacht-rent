@@ -1,0 +1,1 @@
+INSERT INTO main.role_table(role) VALUES ('MANAGER');

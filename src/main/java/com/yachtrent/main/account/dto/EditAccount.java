@@ -1,11 +1,12 @@
 package com.yachtrent.main.account.dto;
 
 import com.yachtrent.main.account.Account;
+import com.yachtrent.main.role.Role;
 import com.yachtrent.main.techniacal.mapper.Mapper;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Data
 @Builder
@@ -30,10 +31,14 @@ public class EditAccount implements Mapper<EditAccount, Account> {
     @Size(max = 14, message = "Phone number must be at 10 characters long")
     private String phoneNumber;
 
+    @NotBlank(message = "Enter your email")
+    @Email(message = "Incorrect mail entry", regexp = "")
     private String email;
 
     @Size(min = 5, message = "Password must be at least 5 characters long")
     private String password;
+
+    private Set<Role> roles;
 
     private boolean changeEmail;
 
@@ -47,6 +52,7 @@ public class EditAccount implements Mapper<EditAccount, Account> {
                 .email(entity.getEmail())
                 .bio(entity.getBio())
                 .phoneNumber(entity.getPhoneNumber())
+                .roles(entity.getRoles())
                 .build();
     }
 
@@ -60,6 +66,7 @@ public class EditAccount implements Mapper<EditAccount, Account> {
                 .email(dto.email)
                 .bio(dto.bio)
                 .phoneNumber(dto.phoneNumber)
+                .roles(dto.roles)
                 .build();
     }
 }

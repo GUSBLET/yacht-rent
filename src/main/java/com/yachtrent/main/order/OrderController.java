@@ -1,81 +1,79 @@
 package com.yachtrent.main.order;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yachtrent.main.order.dto.CreateOrderDTO;
-import com.yachtrent.main.order.services.OrderService;
-import com.yachtrent.main.order.services.PriceCounterService;
+import com.yachtrent.main.order.dto.OrderDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.util.Objects;
-
+@Slf4j
 @Controller
-@RequestMapping("/order/")
+@RequestMapping("/order")
 @RequiredArgsConstructor
+@ToString
 public class OrderController {
     private final OrderService orderService;
-    private final PriceCounterService priceCounterService;
+    private OrderDto order;
 
-
-    @GetMapping("create-order-page")
-    public String pageCreateOrder(Model model) {
-        model.addAttribute("title", "New order");
-        model.addAttribute("content", "createOrder");
-        CreateOrderDTO s = new CreateOrderDTO();
-        s.getYacht().setId(1L);
-        model.addAttribute("createOrderDTO", s);
-        return "layout";
+    @GetMapping("/{yachtId}")
+    public String getPageOrder(@PathVariable("yachtId") long yachtId,
+                               Model model
+    ) {
+        order = orderService.createOrderDto(yachtId);
+        model.addAttribute("order", order);
+        return "order/create-order-page";
     }
 
-    @PostMapping("create-order")
-    public String createOrder(@Valid @ModelAttribute("createOrderViewModel")
-                              CreateOrderDTO createOrderDTO,
-                              BindingResult result,
-                              Model model) {
-
-        if (result.hasErrors()) {
-            model.addAttribute("title", "New order");
-            model.addAttribute("content", "order/create-order-page");
-            model.addAttribute("createOrderViewModel", new CreateOrderDTO());
-            return "layout";
+    @PostMapping("/create-order")
+    public String decorOrder(@Valid @ModelAttribute("order") OrderDto orderDto,
+                             BindingResult bindingResult,
+                             Model model
+    ) {
+        orderDto.setYacht(order.getYacht());
+        if (bindingResult.hasErrors()) {
+            log.error(bindingResult.getAllErrors().toString());
+            return "order/create-order-page";
         }
-        try {
-            orderService.createNewOrder(createOrderDTO);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        if (orderService.isYachtAccommodateNumberOfPeople(orderDto)) {
+            String message = "The number of people should not be less than zero or exceed "
+                    + orderDto.getYacht().getCapacity() +
+                    " people on this vessel";
+            model.addAttribute("numberOfPeopleError", true)
+                    .addAttribute("message_numberOfPeopleError", message);
+            log.error("Incorrect numberOfPeopleError");
+            return "order/create-order-page";
+        }
+        if (orderService.isTotalTimeMinusNumber(orderDto.getStartOfRent(), orderDto.getFinishOfRent())) {
+            String message = "Rental time must exceed at least an hour";
+            model.addAttribute("message_incorrect_time", message);
+            log.error("Incorrect time");
+            return "order/create-order-page";
+        }
+        if (orderDto.getDate() == null) {
+            model.addAttribute("message_date", "Choose date");
+            log.error("Incorrect date");
+            return "order/create-order-page";
         }
 
-        model.addAttribute("title", "Success");
-        model.addAttribute("text", "Success, confirm mail");
-        return "account/success";
+        order.setNumberOfPeople(orderDto.getNumberOfPeople());
+        order.setStartOfRent(orderDto.getStartOfRent());
+        order.setFinishOfRent(orderDto.getFinishOfRent());
+        order.setDate(orderDto.getDate());
+        order.setSubtotal(orderService.getSubtotal(orderDto));
+        model.addAttribute("viewing_order", order);
+        return "order/client_order";
     }
 
-    @GetMapping("count-price")
-    public ResponseEntity<Object> countPrice(String dateOfStart, String dateOfFinish,
-                                             String hourOfStart, String hourOfFinish,
-                                             long yachtId)
-            throws ParseException, JsonProcessingException {
-        if (Objects.equals(dateOfFinish, "") || Objects.equals(dateOfStart, "") ||
-                Objects.equals(hourOfStart, "") || Objects.equals(hourOfFinish, ""))
-            return ResponseEntity.ofNullable("Enter all parameters of rent");
+    @PostMapping("/your_order")
+    public String createOrder(@ModelAttribute("viewing_order") OrderDto orderDto) {
+        order.setPaymentMethod(orderDto.getPaymentMethod());
+        order.setStatus(OrderStatus.CONFIRMED);
 
-        float result = priceCounterService.countFullPrice(
-                priceCounterService.convertToParametersToDate(
-                        dateOfStart, hourOfStart),
-                priceCounterService.convertToParametersToDate(dateOfFinish,
-                        hourOfFinish), yachtId);
-
-        if (result == -1.0)
-            return ResponseEntity.ofNullable("Order cannot be more than 48 hours.");
-        return ResponseEntity.ok(result);
+        orderService.saveOrder(order);
+        return "redirect:/home";
     }
 }

@@ -4,7 +4,6 @@ import com.yachtrent.main.account.Account;
 import com.yachtrent.main.techniacal.mapper.Mapper;
 import com.yachtrent.main.yacht.Yacht;
 import com.yachtrent.main.yacht.creator.Creator;
-import com.yachtrent.main.yacht.type.YachtType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -65,7 +64,7 @@ public class YachtDto implements Mapper<YachtDto, Yacht> {
                 .pricePerHour(entity.getPricePerHour())
                 .creator(entity.getCreator())
                 .account(entity.getAccount())
-                .type(isYachtTypeNull(entity.getYachtType()).getType())
+                .type(entity.getYachtType().getType())
                 .build();
     }
 
@@ -84,9 +83,5 @@ public class YachtDto implements Mapper<YachtDto, Yacht> {
                 .account(dto.account)
                 .creator(dto.creator)
                 .build();
-    }
-
-    private YachtType isYachtTypeNull(YachtType type) {
-        return type != null ? type : YachtType.builder().id(1L).type("SMALL_BOAT").build();
     }
 }

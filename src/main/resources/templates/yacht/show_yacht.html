@@ -50,9 +50,9 @@
 <!--    <label for="type">Yacht Type:</label>-->
 <!--    <input type="text" id="type" name="type" th:field="*{type}" readonly>-->
 <!--    <br>-->
+
+    <a class="btn btn-sm btn-outline-dark" th:href="@{/order/{yachtId}(yachtId=${yacht.id})}"> Order </a>
+
 </form>
-
-<button class="pure-button pure-button-primary" onclick="window.location.href='/cabinet'">Cancel</button>
-
 </body>
 </html>

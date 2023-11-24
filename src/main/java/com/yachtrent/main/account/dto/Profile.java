@@ -2,6 +2,7 @@ package com.yachtrent.main.account.dto;
 
 import com.yachtrent.main.account.Account;
 import com.yachtrent.main.account.validator.PasswordMatch;
+import com.yachtrent.main.order.Order;
 import com.yachtrent.main.role.Role;
 import com.yachtrent.main.techniacal.mapper.Mapper;
 import com.yachtrent.main.yacht.Yacht;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -37,6 +39,7 @@ public class Profile implements Mapper<Profile, Account> {
 
     private boolean registered;
     private boolean confirmed;
+    private boolean isBlocked;
 
     private String bio;
 
@@ -44,6 +47,8 @@ public class Profile implements Mapper<Profile, Account> {
     private Set<Role> roles;
 
     private Set<Yacht> yachts;
+
+    private List<Order> orders;
 
     @Override
     public Profile toDto(Account entity) {
@@ -57,6 +62,7 @@ public class Profile implements Mapper<Profile, Account> {
                 .confirmed(entity.isAccountConfirmed())
                 .roles(entity.getRoles())
                 .bio(entity.getBio())
+                .isBlocked(entity.isBlocked())
                 .build();
     }
 
@@ -73,6 +79,7 @@ public class Profile implements Mapper<Profile, Account> {
                 .roles(dto.roles)
                 .yachts(dto.yachts)
                 .bio(dto.bio)
+                .orders(dto.orders)
                 .build();
     }
 }

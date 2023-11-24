@@ -3,9 +3,11 @@ package com.yachtrent.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,26 +17,64 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(0)
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/images/**", "/**.css", "/**.js", "/js/**", "/css/**")
+                .authorizeHttpRequests(c -> c.anyRequest().permitAll())
+                .securityContext(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .requestCache(RequestCacheConfigurer::disable)
+                .build();
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .formLogin(formLogin -> formLogin
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .loginPage("/account/login-page")
                         .loginProcessingUrl("/authenticate")
-                        .defaultSuccessUrl("/home")
+                        .defaultSuccessUrl("/cabinet")
+                        .permitAll()
                 )
-                .logout(logout -> logout.logoutSuccessUrl("/account/login-page?logout"))
+                .logout(logout -> logout.logoutSuccessUrl("/account/login-page**"))
                 .authorizeHttpRequests(authorize -> {
-                    authorize.anyRequest().permitAll();
+                    authorize.requestMatchers(
+                            "/home**",
+                            "/home/search",
+                            "/home/filter",
+                            "/yacht/info",
+                            "/account/registration-page",
+                            "/account/sign-up",
+                            "/account/change-password",
+                            "/account/password/**",
+                            "/account/verify/**",
+                            "/account/login-page**"
+                    ).permitAll();
+                    authorize
+                            .requestMatchers(
+                                    "/cabinet/**",
+                                    "/order/**",
+                                    "/account/edit-account**",
+                                    "/order**",
+                                    "/account/change-email/**"
+                            ).authenticated()
+                            .requestMatchers(
+                                    "/cabinet/profile-yacht/**",
+                                    "/yacht/add-yacht**",
+                                    "/yacht/update",
+                                    "/yacht/delete-yacht"
+                            ).hasAnyAuthority("YACHT_OWNER")
+                            .requestMatchers("/cabinet/all_user/**").hasAnyAuthority("ADMIN")
+                            .requestMatchers("/cabinet/all_orders/**").hasAnyAuthority("MANAGER", "MODERATOR", "ADMIN");
                 })
-                .csrf(AbstractHttpConfigurer::disable).build();
+                .build();
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
-

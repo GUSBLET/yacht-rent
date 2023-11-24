@@ -18,8 +18,8 @@
         <div>
             <label for="edit-account_email_readonly">Email:</label>
             <input type="text" th:field="*{email}" id="edit-account_email_readonly" readonly/>
-            <a class="btn btn-sm btn-outline-dark" th:href="@{/account/change-email/{id}(id=${profile.id})} ">Change
-                email</a>
+            <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
+            <a class="btn btn-sm btn-outline-dark" th:href="@{/account/change-email/{id}(id=${profile.id})}">Change email</a>
         </div>
     </div>
     <div th:unless="${!changeEmail}">
@@ -46,8 +46,7 @@
     <div>
         <label for="edit-account_phoneNumber">Phone number:</label>
         <input type="text" th:field="*{phoneNumber}" id="edit-account_phoneNumber"/>
-        <p style="color:red" th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Phone number
-            error</p>
+        <p style="color:red" th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Phone number error</p>
     </div>
 
     <div>

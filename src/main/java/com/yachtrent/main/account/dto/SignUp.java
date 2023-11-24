@@ -16,7 +16,7 @@ public class SignUp {
     private String lastName;
 
     @NotBlank(message = "Enter your phone number")
-    @Pattern(regexp = "^\\+380\\d{9}$", message = "Wrong phone number")
+    @Pattern(regexp = "^\\+380\\d{10}$", message = "Wrong phone number")
     private String phoneNumber;
 
     @NotBlank(message = "Enter your email")
@@ -31,5 +31,5 @@ public class SignUp {
     private String passwordConfirm;
 
     @NotNull
-    private Authority role;
+    private String role;
 }

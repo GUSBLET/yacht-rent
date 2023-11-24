@@ -1,12 +1,8 @@
 package com.yachtrent.main.yacht.services;
 
 
-import com.yachtrent.main.account.Account;
 import com.yachtrent.main.account.AccountService;
-import com.yachtrent.main.order.Order;
-import com.yachtrent.main.order.OrderStatus;
-import com.yachtrent.main.order.services.OrderService;
-import com.yachtrent.main.yacht.Yacht;
+import com.yachtrent.main.order.OrderService;
 import com.yachtrent.main.yacht.YachtRepository;
 import com.yachtrent.main.yacht.YachtService;
 import com.yachtrent.main.yacht.creator.services.CreatorService;
@@ -14,20 +10,13 @@ import com.yachtrent.main.yacht.facility.services.FacilityService;
 import com.yachtrent.main.yacht.photo.services.YachtPhotoService;
 import com.yachtrent.main.yacht.type.services.YachtTypeService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.time.Instant;
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)

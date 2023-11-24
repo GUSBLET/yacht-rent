@@ -1,4 +1,4 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
 </head>
@@ -16,12 +16,14 @@
                 </figure>
 
                 <div class="info-content">
+
                     <h1 class="name" title="user name" th:text="${account.name} + ' ' + ${account.lastName}"></h1>
 
                     <button class="info_more-btn" data-sidebar-btn>
                         <span>Show more</span>
                         <ion-icon name="chevron-down"></ion-icon>
                     </button>
+
                 </div>
             </div>
 
@@ -79,9 +81,8 @@
             </div>
         </aside>
     </form>
-    <div class="main-content">
 
-        <!-- navbar -->
+    <div class="main-content">
 
         <nav class="profile-nav">
 
@@ -90,29 +91,34 @@
                     <a href="/cabinet/profile-order" class="nav-link" data-nav-link>Order</a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="/cabinet/profile-review" class="nav-link" data-nav-link id="review">Review</a>
-                </li>
-
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('YACHT_OWNER')">
                     <a href="/cabinet/profile-yacht" class="nav-link" data-nav-link>Yachts</a>
                 </li>
-            </ul>
 
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a href="/cabinet/all_user" class="nav-link" data-nav-link>All users</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAnyAuthority('MANAGER','MODERATOR', 'ADMIN')">
+                    <a href="/cabinet/all_orders" class="nav-link" data-nav-link>All orders</a>
+                </li>
+            </ul>
         </nav>
 
         <th:block th:switch="${profileContent}">
             <th:block th:case="'order'">
                 <div th:replace="account/profile/profile-order :: profileContent()"></div>
             </th:block>
-            <th:block th:case="'review'">
-                <div th:replace="account/profile/profile-review :: profileContent()"></div>
-            </th:block>
             <th:block th:case="'yacht'">
                 <div th:replace="account/profile/profile-yacht :: profileContent()"></div>
             </th:block>
+            <th:block th:case="'all users'">
+                <div th:replace="account/profile/all_user :: profileContent()"></div>
+            </th:block>
+            <th:block th:case="'all orders'">
+                <div th:replace="account/profile/all_orders :: profileContent()"></div>
+            </th:block>
         </th:block>
-
     </div>
 </main>
 </body>
