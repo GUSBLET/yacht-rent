@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
 
+<head>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <title></title>
-
 </head>
+
 <body>
 
 <div th:fragment="profileContent()">
@@ -29,13 +29,13 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <button type="submit">Submit</button>
+                        <button class="add_yacht_button" type="submit">Submit</button>
                     </div>
                 </form>
 
                 <form th:action="@{/cabinet/show-all-orders}" th:method="post">
                     <div>
-                        <button type="submit">Show all orders</button>
+                        <button class="add_yacht_button" type="submit">Show all orders</button>
                     </div>
                 </form>
             </div>
@@ -61,13 +61,13 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <button type="submit">Submit</button>
+                            <button class="add_yacht_button" type="submit">Submit</button>
                         </div>
                     </form>
 
                     <form th:action="@{/cabinet/show-all-orders}" th:method="post">
                         <div>
-                            <button type="submit">Show all orders</button>
+                            <button class="add_yacht_button" type="submit">Show all orders</button>
                         </div>
                     </form>
                 </div>

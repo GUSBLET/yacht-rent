@@ -1,85 +1,152 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Registration</title>
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/alert.css">
 </head>
+
 <body>
+<div class="content" th:fragment="content(signUp)">
+    <div class="sub-content">
+        <h1 class="title">Registration</h1>
+        <div th:if="${verify}">
+            <div class="error-msg">
+                <i class="fa fa-times-circle"></i>
+                The link is no longer valid
+            </div>
+        </div>
+        <form class="form_of_register" th:action="@{/account/sign-up}" th:object="${signUp}" th:method="post"
+              novalidate>
 
-<div>
+            <div class="name_and_lastName_part">
+                <div class="name_part">
+                    <input type="text" th:field="*{name}" id="sign-up_name" placeholder="Name"/>
+                    <div th:each="error : ${#fields.errors('name')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="last_name_part">
+                    <input type="text" th:field="*{lastName}" id="sign-up_lastName" placeholder="LastName"/>
+                    <div th:each="error : ${#fields.errors('lastName')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div th:if="${success}">
-        <div style="color:green" class="alert alert-danger">To complete authorization, check your email</div>
+            <div class="phoneNumber_and_emilPart">
+                <div class="phonenumber_part">
+                    <input type="text" th:field="*{phoneNumber}" id="sign-up_phoneNumber" placeholder="Phone number"/>
+                    <div th:each="error : ${#fields.errors('phoneNumber')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="email_part">
+                    <input type="text" th:field="*{email}" id="sign-up_email" placeholder="Email"/>
+                    <div th:each="error : ${#fields.errors('email')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                    <div th:if="${error}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            This email already exists
+                        </div>
+                        <a th:href="@{/account/login-page}" class="fw-bold text-body"><u >Login
+                            here</u></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="password_and_ConfirmPassword">
+                <div class="password_part">
+                    <div class="password_part_first">
+                        <div class="password_text_and_input_checkbox">
+                            <div class="input_and_p">
+                                <div id="inputPreview_second">
+                                    <input name="cssCheckbox" id="show-password-checkbox" type="checkbox"
+                                           onclick="showPassword('sign-up_password')" class="css-checkbox">
+                                    <label for="show-password-checkbox">
+                                        <p>Show Password</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="password" th:field="*{password}" id="sign-up_password" placeholder="Password"/>
+                        <div th:each="error : ${#fields.errors('password')}">
+                            <div class="error-msg">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
+                        <div th:each="error : ${#fields.errors('${signUp}')}">
+                            <div class="error-msg">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="password_part_second">
+                        <div class="password_text_and_input_checkbox">
+                            <div class="input_and_p">
+                                <div id="inputPreview_second">
+                                    <input name="cssCheckbox" id="demo_opt_1" type="checkbox"
+                                           onclick="showPassword('sign-up_passwordConfirm')" class="css-checkbox">
+                                    <label for="demo_opt_1">
+                                        <p>Show Password</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="password" th:field="*{passwordConfirm}" id="sign-up_passwordConfirm"
+                               placeholder="Confirm password"/>
+                        <div th:each="error : ${#fields.errors('passwordConfirm')}">
+                            <div class="error-msg">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text_and_selection">
+                <div>
+                    <div class="selection" th:field="*{role}" id="pet-select">
+                        <div class="role" id="user-container">
+                            <input type="radio" id="user" class="option" value="USER" name="role" checked>
+                            <label for="user" class="user_text">User</label>
+                        </div>
+                        <div class="role" id="yacht-owner-container">
+                            <input type="radio" id="yacht_owner" class="option" value="YACHT OWNER" name="role">
+                            <label for="yacht_owner" class="yacht_owner_text">Yacht owner</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="signup_and_login">
+                <div>
+                    <button class="register_button" type="submit">Sing-up</button>
+                </div>
+            </div>
+        </form>
     </div>
-
-    <div th:if="${verify}">
-        <div style="color:red" class="alert alert-danger">The link is no longer valid</div>
-    </div>
-
-    <div th:if="${error}">
-        <div style="color:red" class="alert alert-danger">This email already exists</div>
-    </div>
-
-    <form th:action="@{/account/sign-up}" th:object="${signUp}" th:method="post" novalidate>
-
-        <div>
-            <label>Name:</label>
-            <input type="text" th:field="*{name}" id="sign-up_name"/>
-            <p style="color:red" th:each="error : ${#fields.errors('name')}" th:text="${error}">Name error</p>
-        </div>
-
-        <div>
-            <label>LastName:</label>
-            <input type="text" th:field="*{lastName}" id="sign-up_lastName"/>
-            <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">LastName error</p>
-        </div>
-
-        <div>
-            <label>Phone number:</label>
-            <input type="text" th:field="*{phoneNumber}" id="sign-up_phoneNumber"/>
-            <p style="color:red" th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Phone number error</p>
-        </div>
-
-        <div>
-            <label>Email:</label>
-            <input type="text" th:field="*{email}" id="sign-up_email"/>
-            <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
-        </div>
-
-        <div>
-            <label for="sign-up_password">Password:</label>
-            <input type="password" th:field="*{password}" id="sign-up_password"/>
-            <input type="checkbox" id="show-password-checkbox" onclick="showPassword('sign-up_password')">Show Password
-            <p style="color:red" th:each="error : ${#fields.errors('password')}" th:text="${error}">Password error</p>
-        </div>
-
-        <div>
-            <label>Confirm password:</label>
-            <input type="password" th:field="*{passwordConfirm}" id="sign-up_passwordConfirm"/>
-            <input type="checkbox" onclick="showPassword('sign-up_passwordConfirm')">Show Password
-            <p style="color:red" th:each="error : ${#fields.errors('passwordConfirm')}" th:text="${error}">PasswordConfirm error</p>
-            <p style="color:red" th:each="error : ${#fields.errors('${signUp}')}" th:text="${error}">PasswordMatch error</p>
-        </div>
-
-        <label>Choose an option:</label>
-        <select th:field="*{role}" id="pet-select">
-            <option value="USER">User</option>
-            <option value="YACHT OWNER">Yacht owner</option>
-        </select>
-
-        <div>
-            <button type="submit">Sing-up</button>
-        </div>
-
-        <div th:if="${error}">
-            <a th:href="@{/account/login-page}" class="fw-bold text-body"><u>Login here</u></a>
-        </div>
-
-    </form>
-
+    <script defer src="/js/showPassword.js"></script>
 </div>
-
-<script defer src="/js/showPassword.js"></script>
-
 </body>
+
 </html>

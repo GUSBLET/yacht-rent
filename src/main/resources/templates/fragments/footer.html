@@ -5,8 +5,47 @@
     <title>Title</title>
 </head>
 <body>
-    <footer th:fragment="footer()">
+    <footer th:fragment="footer()"  id="site-footer">
+            <section class="horizontal-footer-section" id="footer-middle-section">
+                <div id="footer-about" class="footer-columns footer-columns-large">
+                    <h1>Our Address</h1>
+                    <address>
+                        <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/marker.png">Дніпровська набережна, 12-А, Київ, 02081</p>
+                        <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/phone.png">0504420361</p>
+                        <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/mail.png">h2oAdventureStudio@gmail.com</p>
+                        <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/clock.png">07:00 – 20:00</p>
+                    </address>
+                </div>
+                <div class="footer-columns">
+                    <h1>Information</h1>
+                    <ul class="footer-column-menu" role="menu">
+                        <li class="footer-column-menu-item" role="menuitem">
+                            <a href="#" class="footer-column-menu-item-link">About Us</a>
+                        </li>
+                        <li class="footer-column-menu-item" role="menuitem">
+                            <a href="#" class="footer-column-menu-item-link">Terms of Use</a>
+                        </li>
+                        <li class="footer-column-menu-item" role="menuitem">
+                            <a href="#" class="footer-column-menu-item-link">Message Us</a>
+                        </li>
+                        <li class="footer-column-menu-item" role="menuitem">
+                            <a href="#" class="footer-column-menu-item-link">Leave a Feedback</a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
 
+            <section class="horizontal-footer-section" id="footer-bottom-section">
+                <div id="footer-copyright-info">
+                    &copy; 2023 H2O Adventure Studio Inc.
+                </div>
+                <div id="footer-social-buttons">
+                    <img src="https://img.icons8.com/ios-filled/25/999999/facebook--v1.png"/>
+                    <img src="https://img.icons8.com/ios-filled/25/999999/telegram-app.png"/>
+                    <img src="https://img.icons8.com/ios-filled/25/999999/pinterest--v1.png"/>
+                    <img src="https://img.icons8.com/ios-filled/25/999999/instagram--v1.png"/>
+                </div>
+            </section>
     </footer>
 </body>
 </html>

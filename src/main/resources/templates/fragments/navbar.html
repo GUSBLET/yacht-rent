@@ -2,9 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title></title>
 </head>
 <body>
-
+<nav th:fragment="nav()" class="navbar">
+    <a th:href="@{/home}">
+        <img src="/images/logo.ico"/>
+    </a>
+    <ul class="flex items-center gap-3">
+        <li>
+            <a th:href="@{/cabinet}">
+                <img src="/images/ma-avatar2.png" alt="avatar" class="w-10 h-10 rounded-full"/>
+            </a>
+        </li>
+    </ul>
+</nav>
 </body>
 </html>

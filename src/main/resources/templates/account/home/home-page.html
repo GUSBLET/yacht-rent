@@ -1,324 +1,205 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <meta charset="UTF-8">
     <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="/css/nav_footer.css" rel="stylesheet">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2% 0;
-            text-align: center;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 100px;
-        }
-
-        .range-slider {
-            width: 200px;
-            height: 35px;
-            text-align: center;
-        }
-
-        .range-slider input {
-            pointer-events: none;
-            position: absolute;
-            overflow: hidden;
-            left: 0;
-            top: 15px;
-            width: 200px;
-            outline: none;
-            height: 18px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .range-slider input::-webkit-slider-thumb {
-            pointer-events: all;
-            position: relative;
-            z-index: 1;
-            outline: 0;
-        }
-
-        .range-slider input::-moz-range-thumb {
-            pointer-events: all;
-            position: relative;
-            z-index: 10;
-            -moz-appearance: none;
-            width: 9px;
-        }
-
-        .range-slider input::-moz-range-track {
-            position: relative;
-            z-index: -1;
-            background-color: rgba(0, 0, 0, 1);
-            border: 0;
-        }
-
-        .range-slider input:last-of-type::-moz-range-track {
-            -moz-appearance: none;
-            background: none transparent;
-            border: 0;
-        }
-
-        .range-slider input[type=range]::-moz-focus-outer {
-            border: 0;
-        }
-
-        .rangeValue {
-            width: 30px;
-        }
-
-        .output {
-            position: absolute;
-            border: 1px solid #999;
-            width: 40px;
-            height: 30px;
-            text-align: center;
-            color: #999;
-            border-radius: 4px;
-            display: inline-block;
-            font: bold 15px/30px Helvetica, Arial;
-            bottom: calc(100% + 5px);
-            left: 0;
-            transform: translateX(-50%);
-        }
-
-        .output.outputTwo {
-            left: 100%;
-            bottom: calc(100% + 5px);
-            transform: translateX(50%);
-        }
-
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        }
-
-        input[type=range] {
-            -webkit-appearance: none;
-            background: none;
-        }
-
-        input[type=range]::-webkit-slider-runnable-track {
-            height: 5px;
-            border: none;
-            border-radius: 3px;
-            background: transparent;
-        }
-
-        input[type=range]::-ms-track {
-            height: 5px;
-            background: transparent;
-            border: none;
-            border-radius: 3px;
-        }
-
-        input[type=range]::-moz-range-track {
-            height: 5px;
-            background: transparent;
-            border: none;
-            border-radius: 3px;
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            border: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #555;
-            margin-top: -5px;
-            position: relative;
-            z-index: 10000;
-        }
-
-        input[type=range]::-ms-thumb {
-            -webkit-appearance: none;
-            border: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #555;
-            margin-top: -5px;
-            position: relative;
-            z-index: 10000;
-        }
-
-        input[type=range]::-moz-range-thumb {
-            -webkit-appearance: none;
-            border: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #555;
-            margin-top: -5px;
-            position: relative;
-            z-index: 10000;
-        }
-
-        input[type=range]:focus {
-            outline: none;
-        }
-
-        .full-range,
-        .incl-range {
-            width: 100%;
-            height: 5px;
-            left: 0;
-            top: 21px;
-            position: absolute;
-            background: #DDD;
-        }
-
-        .incl-range {
-            background: #0077ff;
-        }
-
-    </style>
-
 </head>
 
 <body>
+<nav class="navbar">
+    <a th:href="@{/home}">
+        <img src="/images/logo.ico" />
+    </a>
+    <ul class="flex items-center gap-3">
+        <li>
+            <a th:href="@{/cabinet}">
+                <img src="/images/ma-avatar2.png" alt="avatar" class="w-10 h-10 rounded-full" />
+            </a>
+        </li>
+    </ul>
+</nav>
 
-<div th:if="${yachts.totalElements < 1}">
-
-    <form th:action="@{/home/search}" th:method="post">
-        <div>
-            <input type="text" placeholder="Search by name" class="adv-option-button" name="searchName"/>
-            <button type="submit">Search</button>
-        </div>
-    </form>
-    <br>
-
-    <h2>Sorry, but currently there are no yachts on the website (</h2>
-
-</div>
-
-<div th:unless="${yachts.totalElements < 1}">
-
-
-    <form th:action="@{/home/search}" th:method="post">
-        <div>
-            <input type="text" placeholder="Search by name" class="adv-option-button" name="searchName"/>
-            <button type="submit">Search</button>
-        </div>
-    </form>
-
-    <table class="table mt-5">
-
-        <thead class="table-light">
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Type</th>
-            <th>capacity</th>
-            <th class="action-column" colspan="4">Action</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="yacht : ${yachts}">
-            <td th:text="${yacht.name}"></td>
-            <td th:text="${yacht.pricePerHour}"></td>
-            <td th:text="${yacht.getType()}"></td>
-            <td th:text="${yacht.capacity}"></td>
-            <td>
-                <a th:href="@{/yacht/info(id=${yacht.id})}" class="btn btn-sm btn-outline-dark">Show more</a>
-            </td>
-        </tr>
-        </tbody>
-
-    </table>
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li th:if="${yachts.number > 0}" class="page-item">
-                <a class="btn btn-sm btn-outline-dark"
-                   th:href="@{/home(page=${yachts.number - 1}, size=${yachts.size})}" tabindex="-1">Previous</a>
-            </li>
-
-            <li th:each="pageNumber : ${#numbers.sequence(0, yachts.totalPages - 1)}"
-                th:class="${pageNumber == yachts.number ? 'page-item active' : 'page-item'}">
-                <a class="btn btn-sm btn-outline-dark" th:href="@{/home(page=${pageNumber}, size=${yachts.size})}"
-                   th:text="${pageNumber + 1}"></a>
-            </li>
-
-            <li th:if="${yachts.number < yachts.totalPages - 1}" class="page-item">
-                <a class="btn btn-sm btn-outline-dark"
-                   th:href="@{/home(page=${yachts.number + 1}, size=${yachts.size})}">Next</a>
-            </li>
-        </ul>
-    </nav>
-
-    <form method="post" th:action="@{/home/filter}" th:object="${filter}" th:method="post">
-
+<div class="content">
+    <form class="content_catalog" th:action="@{/home/filter}" th:object="${filter}" th:method="post">
         <div class="capacity-checkbox">
-            <label>Count capacity:</label><br>
-
-            <label>
-                <input id="1 8" type="checkbox" th:field="*{firstCheckboxForCapacity}"> 1-8
-            </label><br>
-            <label>
-                <input id="8 15" type="checkbox" th:field="*{secondCheckboxForCapacity}"> 8-15
-            </label><br>
-            <label>
-                <input id="15 20" type="checkbox" th:field="*{thirdCheckboxForCapacity}"> 15-20
-            </label><br>
-            <input type="hidden" name="capacity" id="capacity" th:field="*{capacity}">
+            <label class="count_text">Count capacity</label><br>
+            <div class="catalog_list">
+                <label class="label_list" >
+                    <input name="cssCheckbox"   th:field="*{firstCheckboxForCapacity}" type="checkbox"  id="1 8">
+                    <label for="1 8">1-8</label>
+                </label><br>
+                <label class="label_list" >
+                    <input name="cssCheckbox"  th:field="*{secondCheckboxForCapacity}"  type="checkbox"  id="8 15">
+                    <label for="8 15"  >8-15</label>
+                </label><br>
+                <label class="label_list" >
+                    <input name="cssCheckbox"  th:field="*{thirdCheckboxForCapacity}" type="checkbox"  id="15 20">
+                    <label for="15 20" >15-20</label>
+                </label><br>
+                <input type="hidden" name="capacity" id="capacity" th:field="*{capacity}">
+            </div>
         </div>
 
         <div class="yacht-type-checkbox">
-            <label>Type yacht:</label><br>
+            <label class="type_text">Type yacht</label><br>
+            <div class="catalog_list">
+                <label class="label_list">
+                    <input name="cssCheckbox" type="checkbox"  th:field="*{smallBoatSelect}" id="SMALL_BOAT">
+                    <label for="SMALL_BOAT">Small boat</label>
+                </label><br>
 
-            <label>
-                <input id="SMALL_BOAT" type="checkbox" th:field="*{smallBoatSelect}"> Small boat
-            </label><br>
+                <label class="label_list">
+                    <input name="cssCheckbox" type="checkbox" th:field="*{boatSelect}" id="BOAT">
+                    <label for="BOAT" >Boat</label>
+                </label><br>
 
-            <label>
-                <input id="BOAT" type="checkbox" th:field="*{boatSelect}"> Boat
-            </label><br>
+                <label class="label_list">
+                    <input name="cssCheckbox" type="checkbox" th:field="*{shipSelect}" id="SHIP">
+                    <label for="SHIP">Ship</label>
+                </label><br>
 
-            <label>
-                <input id="SHIP" type="checkbox" th:field="*{shipSelect}"> Ship
-            </label><br>
-
-            <input type="hidden" name="yachtTypes" id="yachtType" th:field="*{yachtTypes}">
+                <input type="hidden" name="yachtTypes" id="yachtType" th:field="*{yachtTypes}">
+            </div>
         </div>
 
+        <label class="type_text">Price</label><br>
         <div class="range-slider container">
             <span class="output outputOne" contenteditable="true" oninput="validateNumber(this)"></span>
             <span class="output outputTwo" contenteditable="true" oninput="validateNumber(this)"></span>
             <span class="full-range"></span>
             <span class="incl-range"></span>
-            <input id="rangeOne" name="rangeOne" th:field="*{min}" min="700" max="5000" step="1" type="range">
-            <input id="rangeTwo" name="rangeTwo" th:field="*{max}" min="700" max="5000" step="1" type="range">
+            <input id="rangeOne" name="rangeOne" th:field="*{min}" th:min="*{mainMin}" th:max="*{mainMax}" step="1" type="range">
+            <input id="rangeTwo" name="rangeTwo" th:field="*{max}" th:min="*{mainMin}" th:max="*{mainMax}" step="1" type="range"><br>
+            <button class="save_button" type="submit">Save</button>
         </div>
-
-        <button type="submit">Save</button>
         <br>
+        <input type="hidden" th:field="*{mainMin}">
+        <input type="hidden" th:field="*{mainMax}">
 
     </form>
 
+    <div class="wrapper">
+        <div th:if="${yachts.totalElements < 1}">
+
+            <form th:action="@{/home/search}" th:method="post">
+                <div class="search-box">
+                    <button class="btn-search"><i class="fa fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Type to Search..." name="searchName">
+                </div>
+            </form>
+            <br>
+            <h2>Sorry, but currently there are no yachts on the website (</h2>
+        </div>
+
+        <div th:unless="${yachts.totalElements < 1}">
+
+            <form th:action="@{/home/search}" th:method="post">
+                <div class="search-box">
+                    <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search by name..." name="searchName">
+                </div>
+            </form>
+
+            <div class="product-cards">
+                <ul class="product-cards_list">
+                    <li class="product-card" th:each="yacht : ${yachts}">
+                        <div class="product-card_top">
+                            <div class="product-card_image">
+                                <img src="/images/boat-outline.svg"
+                                     alt="Produkt Name"/>
+                            </div>
+                        </div>
+                        <div class="product-card_body">
+                            <span class="product-card_name" th:text="${yacht.name}"></span>
+                            <div class="product-card_block">
+                                <p class="product-card_text" th:text="'Type: '+${yacht.type}"></p>
+                                <p class="product-card_text" th:text="'Max capacity: ' + ${yacht.capacity}"></p>
+                            </div>
+                        </div>
+                        <div class="product-card_footer">
+                            <span class="product-card_price" th:text="'₴'+${yacht.pricePerHour}"></span>
+                            <a th:href="@{/yacht/info(id=${yacht.id})}" class="show_more_button">Show more</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li th:if="${yachts.number > 0}" class="page-item">
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/home(page=${yachts.number - 1}, size=${yachts.size})}" tabindex="-1">Previous</a>
+                    </li>
+
+                    <li th:each="pageNumber : ${#numbers.sequence(0, yachts.totalPages - 1)}"
+                        th:class="${pageNumber == yachts.number ? 'page-item active' : 'page-item'}">
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/home(page=${pageNumber}, size=${yachts.size})}"
+                           th:text="${pageNumber + 1}"></a>
+                    </li>
+
+                    <li th:if="${yachts.number < yachts.totalPages - 1}" class="page-item">
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/home(page=${yachts.number + 1}, size=${yachts.size})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </div>
+
+<footer th:fragment="footer()"  id="site-footer">
+    <section class="horizontal-footer-section" id="footer-middle-section">
+        <div id="footer-about" class="footer-columns footer-columns-large">
+            <h1>Our Address</h1>
+            <address>
+                <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/marker.png">Дніпровська набережна, 12-А, Київ, 02081</p>
+                <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/phone.png">0504420361</p>
+                <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/mail.png">h2oAdventureStudio@gmail.com</p>
+                <p><img src="https://img.icons8.com/ios-filled/14/eeeeee/clock.png">07:00 – 20:00</p>
+            </address>
+        </div>
+        <div class="footer-columns">
+            <h1>Information</h1>
+            <ul class="footer-column-menu" role="menu">
+                <li class="footer-column-menu-item" role="menuitem">
+                    <a href="#" class="footer-column-menu-item-link">About Us</a>
+                </li>
+                <li class="footer-column-menu-item" role="menuitem">
+                    <a href="#" class="footer-column-menu-item-link">Terms of Use</a>
+                </li>
+                <li class="footer-column-menu-item" role="menuitem">
+                    <a href="#" class="footer-column-menu-item-link">Message Us</a>
+                </li>
+                <li class="footer-column-menu-item" role="menuitem">
+                    <a href="#" class="footer-column-menu-item-link">Leave a Feedback</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="horizontal-footer-section" id="footer-bottom-section">
+        <div id="footer-copyright-info">
+            &copy; 2023 H2O Adventure Studio Inc.
+        </div>
+        <div id="footer-social-buttons">
+            <img src="https://img.icons8.com/ios-filled/25/999999/facebook--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/25/999999/telegram-app.png"/>
+            <img src="https://img.icons8.com/ios-filled/25/999999/pinterest--v1.png"/>
+            <img src="https://img.icons8.com/ios-filled/25/999999/instagram--v1.png"/>
+        </div>
+    </section>
+</footer>
 
 <script>
     function validateNumber(element) {
@@ -331,6 +212,8 @@
         let outputOne = document.querySelector('.outputOne');
         let outputTwo = document.querySelector('.outputTwo');
         let inclRange = document.querySelector('.incl-range');
+        let minValue = parseInt(rangeOne.getAttribute('th:min'));
+        let maxValue = parseInt(rangeTwo.getAttribute('th:max'));
 
         let updateView = function () {
             let valueOne = parseInt(rangeOne.value);
@@ -344,8 +227,8 @@
                 valueOne = valueTwo;
             }
 
-            inclRange.style.left = (valueOne - 700) / (5000 - 700) * 100 + '%';
-            inclRange.style.width = (valueTwo - valueOne) / (5000 - 700) * 100 + '%';
+            inclRange.style.left = (valueOne - minValue) / (maxValue - minValue) * 100 + '%';
+            inclRange.style.width = (valueTwo - valueOne) / (maxValue - minValue) * 100 + '%';
         };
 
         updateView();
@@ -375,7 +258,6 @@
             }
         });
     });
-
 
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.capacity-checkbox').addEventListener('change', function (event) {
@@ -409,8 +291,6 @@
         });
     });
 
-
 </script>
-
 </body>
 </html>

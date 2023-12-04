@@ -7,9 +7,13 @@ import com.yachtrent.main.order.OrderService;
 import com.yachtrent.main.order.dto.DateRange;
 import com.yachtrent.main.order.dto.OrderDto;
 import com.yachtrent.main.yacht.YachtService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +33,8 @@ public class ProfileController {
     private List<OrderDto> orders;
 
     @GetMapping
-    public String viewAccount(@RequestParam(name = "rememberMe", required = false) boolean rememberMe,
-                              Model model) {
-        Account account = accountService.getAccount(profile.getId());
+    String viewAccount(@RequestParam(name = "rememberMe", required = false) boolean rememberMe, Model model) {
+        Account account = accountService.getAuthentication();
         account.setAccountRegistered(rememberMe);
         profile = new Profile().toDto(account);
         profile.setYachts(yachtService.getYachts(account));
@@ -41,36 +44,33 @@ public class ProfileController {
                 .addAttribute("content", "profile")
                 .addAttribute("profileContent", "order")
                 .addAttribute("account", profile);
-
         return "layout";
     }
 
     @GetMapping("/profile-order")
-    public String profileOrderPage(Model model) {
+    String profileOrderPage(Model model) {
         model.addAttribute("title", "Profile")
                 .addAttribute("content", "profile")
                 .addAttribute("profileContent", "order")
                 .addAttribute("account", profile)
                 .addAttribute("accountId", profile.getId())
                 .addAttribute("orders", profile.getOrders());
-
         return "layout";
     }
 
     @GetMapping("/profile-yacht")
-    public String profileYachtPage(Model model) {
+    String profileYachtPage(Model model) {
         model.addAttribute("title", "Profile")
                 .addAttribute("content", "profile")
                 .addAttribute("profileContent", "yacht")
                 .addAttribute("account", profile)
                 .addAttribute("accountId", profile.getId())
                 .addAttribute("yachts", profile.getYachts());
-
         return "layout";
     }
 
     @GetMapping("/all_user")
-    public String adminProfile(@RequestParam(defaultValue = "0") int page,
+    String adminProfile(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "5") int size,
                                Model model
     ) {
@@ -86,12 +86,11 @@ public class ProfileController {
                 .addAttribute("users", accountService.getPageProfile(
                         profiles, PageRequest.of(page, size))
                 );
-
         return "layout";
     }
 
     @PostMapping("/search_user")
-    public String findProfilesByName(@RequestParam("searchName") String searchName) {
+    String findProfilesByName(@RequestParam("searchName") String searchName) {
         if (searchName.isBlank()) {
             log.warn("Did not specify a name to search for yachts");
             profiles = null;
@@ -102,28 +101,28 @@ public class ProfileController {
     }
 
     @PostMapping("/blocked/{id}")
-    public String changeStatusBlocked(@PathVariable long id, @RequestParam(value = "isBlocked") boolean isBlocked) {
+    String changeStatusBlocked(@PathVariable long id, @RequestParam(value = "isBlocked") boolean isBlocked) {
         accountService.changeStatusAccountBlocked(id, !isBlocked);
         profiles = accountService.findAllProfile();
         return "redirect:/cabinet/all_user";
     }
 
     @PostMapping("/role_distribution/{id}")
-    public String roleDistribution(@PathVariable long id) {
+    String roleDistribution(@PathVariable long id) {
         accountService.updateRoleAccount(id, "YACHT OWNER");
         profiles = accountService.findAllProfile();
         return "redirect:/cabinet/all_user";
     }
 
     @PostMapping("/update_role")
-    public String updateRoleAccount(@RequestParam long id, @RequestParam String role) {
+    String updateRoleAccount(@RequestParam long id, @RequestParam String role) {
         accountService.updateRoleAccount(id, role);
 
         return "redirect:/cabinet/all_user";
     }
 
     @GetMapping("/all_orders")
-    public String getAllOrders(@RequestParam(defaultValue = "0") int page,
+    String getAllOrders(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "5") int size,
                                Model model
     ) {
@@ -140,18 +139,17 @@ public class ProfileController {
                 .addAttribute("orders", orderService.getPageOrders(
                         orders, PageRequest.of(page, size))
                 );
-
         return "layout";
     }
 
     @PostMapping("/dateRange")
-    public String getDateRange(@RequestParam("datemin") String datemin, @RequestParam("datemax") String datemax) {
+    String getDateRange(@RequestParam("datemin") String datemin, @RequestParam("datemax") String datemax) {
         orders = orderService.findOrdersByDateRange(datemin, datemax);
         return "redirect:/cabinet/all_orders";
     }
 
     @PostMapping("/show-all-orders")
-    public String getDateRange() {
+    String getDateRange() {
         log.warn("Show all orders");
         orders = null;
         return "redirect:/cabinet/all_orders";

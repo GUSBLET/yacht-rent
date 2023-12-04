@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +47,8 @@ public class Profile implements Mapper<Profile, Account> {
     @NotNull
     private Set<Role> roles;
 
+    private String role;
+
     private Set<Yacht> yachts;
 
     private List<Order> orders;
@@ -61,6 +64,10 @@ public class Profile implements Mapper<Profile, Account> {
                 .registered(entity.isAccountRegistered())
                 .confirmed(entity.isAccountConfirmed())
                 .roles(entity.getRoles())
+                .role(entity.getRoles().stream()
+                        .max(Comparator.comparingLong(Role::getId))
+                        .map(Role::getRole)
+                        .orElse(""))
                 .bio(entity.getBio())
                 .isBlocked(entity.isBlocked())
                 .build();

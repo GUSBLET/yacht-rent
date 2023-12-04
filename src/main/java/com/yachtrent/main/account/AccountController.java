@@ -123,6 +123,7 @@ public class AccountController {
         edit.setRoles(editAccount.getRoles());
         Account account = edit.toEntity(edit);
         accountService.updateAccount(account);
+        editAccount = null;
         return "redirect:/cabinet";
     }
 
@@ -144,9 +145,8 @@ public class AccountController {
             log.error("Failed sign up");
             return "account/enter-email";
         }
-
-        accountService.sendEmail(email.getEmail(), "change-password");
         model.addAttribute("success", true);
+        accountService.sendEmail(email.getEmail(), "change-password");
         return "account/enter-email";
     }
 

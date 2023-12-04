@@ -1,18 +1,19 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-    <title>Document</title>
-
+    <link rel="stylesheet" href="/css/alert.css">
+    <title>Order</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
 
         body {
-            background: url('http://all4desktop.com/data_images/original/4236532-background-images.jpg');
+            background: url("/images/background.jpg");
             font-family: 'Roboto Condensed', sans-serif;
             color: #262626;
             margin: 5% 0;
@@ -249,71 +250,111 @@
     </style>
 
 </head>
-<body>
 
+<body>
 <div class="container">
     <div class="d-flex">
-
         <form th:action="@{/order/create-order}" th:object="${order}" th:method="post">
-
             <label>
                 <span class="first_name">First Name </span>
                 <input type="text" th:field="*{firstName}" id="order_first_name"/>
-                <p style="color:red" th:each="error : ${#fields.errors('firstName')}" th:text="${error}">First name
-                    error</p>
+                <div th:each="error : ${#fields.errors('firstName')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
             <label>
                 <span class="last_name">Last Name</span>
                 <input type="text" th:field="*{lastName}" id="order_last_name"/>
-                <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Last name
-                    error</p>
+                <div th:each="error : ${#fields.errors('lastName')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
             <label>
                 <span class="phone">Phone</span>
                 <input type="text" th:field="*{phoneNumber}" id="order_phone_number"/>
-                <p style="color:red" th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Phone number
-                    error</p>
+                <div th:each="error : ${#fields.errors('phoneNumber')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
             <label>
                 <span class="email">Email</span>
                 <input type="text" th:field="*{email}" id="order_email"/>
-                <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
+                <div th:each="error : ${#fields.errors('email')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
             <label>
                 <span>Planned number of people</span>
                 <input type="text" th:field="*{numberOfPeople}"/>
-                <p style="color:red" th:each="error : ${#fields.errors('numberOfPeople')}" th:text="${error}">Number Of People error</p>
+                <div th:each="error : ${#fields.errors('numberOfPeople')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
             <div th:if="${numberOfPeopleError}">
-                <span style="color: red" th:text="${message_numberOfPeopleError}"></span>
+                <div class="error-msg">
+                    <i class="fa fa-times-circle"></i>
+                    <span style="color: red" th:text="${message_numberOfPeopleError}"></span>
+                </div>
             </div>
 
             <label>
                 <span class="email">Select a time</span>
                 <input type="text" id="timeInput" name="time" th:field="*{startOfRent}"/>
-                <p style="color:red" th:each="error : ${#fields.errors('startOfRent')}" th:text="${error}">Start of rent error</p>
+                <div th:each="error : ${#fields.errors('startOfRent')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
             <label>
                 <span class="email">Until what time do you plan to rent?</span>
                 <input type="text" id="planTimeInput" name="time" th:field="*{finishOfRent}"/>
-                <p style="color:red" th:each="error : ${#fields.errors('finishOfRent')}" th:text="${error}">Finish of rent error</p>
+                <div th:each="error : ${#fields.errors('finishOfRent')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
             </label>
 
-
-            <div>
-                <span style="color: red" th:text="${message_incorrect_time}"></span>
+            <div th:if="${not #strings.isEmpty(message_incorrect_time)}">
+                <div class="error-msg">
+                    <i class="fa fa-times-circle"></i>
+                    <span th:text="${message_incorrect_time}"></span>
+                </div>
             </div>
 
             <label>
                 <span>Select a Date</span>
                 <input type="text" id="dateInput" placeholder="Select a date" th:field="*{date}"/>
-                <p style="color:red" th:each="error : ${#fields.errors('date')}" th:text="${error}">Date error</p>
+                <div  th:each="error : ${#fields.errors('date')}">
+                    <div class="error-msg">
+                        <i class="fa fa-times-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
 
                 <div class="calendar" id="calendar">
                     <div class="header">
@@ -323,18 +364,14 @@
                     </div>
                     <div class="days" id="daysContainer"></div>
                 </div>
-
             </label>
 
             <button type="submit">Next</button>
-
         </form>
-
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
 <script>
     flatpickr("#timeInput", {
         enableTime: true,
@@ -348,7 +385,6 @@
         dateFormat: "H:i",
     });
 </script>
-
 <script>
     const daysContainer = document.getElementById("daysContainer");
     const prevBtn = document.getElementById("prevBtn");
@@ -478,8 +514,6 @@
         dayElement.textContent = day;
         daysContainer.appendChild(dayElement);
     }
-
-
 </script>
 
 </body>

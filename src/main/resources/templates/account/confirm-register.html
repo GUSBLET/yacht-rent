@@ -1,35 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirm-register</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&family=Vina+Sans&display=swap');
+        :root {
+            --fontFamily: 'Ubuntu', sans-serif;
+            --fontSize: 1em;
+            --lightBlue: #4f6aa0;
+            --rowGap_input_and_text: 0.3125em;
+            --borderRadius: 10px;
+        }
+        * {
+            padding: 0px;
+            margin: 0px;
+            border: 0px;
+        }
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+        html,
         body {
+            height: 100%;
+            min-width: 320 +px;
+        }
+        body {
+            line-height: 1;
+            font-family: var(--fontFamily);
+            font-size: var(--fontSize);
+            background: url("/images/background.jpg");
+            color: #fff;
+            -ms-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        input,
+        button,
+        textarea {
+            font-family: var(--fontFamily);
+            font-size: inherit;
+        }
+        button {
+            cursor: pointer;
+            color: inherit;
+            background-color: inherit;
+        }
+        a {
+            color: #87CEEB;
+            text-decoration: underline;
+        }
+        a:link,
+        a:visited {
+            color: #87CEEB;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: #4682B4;
+            text-decoration: underline;
+        }
+        a:active {
+            color: #4682B4;
+            text-decoration: underline;
+        }
+        ul li {
+            list-style: none;
+            font-family: var(--fontFamily);
+        }
+        img {
+            vertical-align: top;
+        }
+        h1 {
+            font-family: var(--fontFamily);
+            font-weight: inherit;
+            font-size: inherit;
+        }
+        .content {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            height: 100%;
         }
-
-        h1 {
+        .title {
+            font-size: 3em;
+            cursor: default;
+            margin-bottom: 1em;
+        }
+        .sub_content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            row-gap: 2.5em;
+            min-height: 2em;
+            width: 80em;
+            border-radius: 20px;
+            border: 1px solid #000;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            padding-bottom: 1em;
+            padding-top: 1em;
             text-align: center;
+        }
+        .continue_button {
+            padding: 10px 25px;
+            background-color: #183878;
+            border-radius: var(--borderRadius);
+            font-size: 1.5em;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1em;
+        }
+        .continue_button:hover {
+            background-color: #114cc4;
+        }
+        .continue_button:active {
+            opacity: 0.7;
         }
     </style>
 </head>
+
 <body>
-
-<div>
-    <h1>To complete the registration we have sent you a mail</h1>
-    <button onclick="openGmailTab('${mail}');" class="fw-bold text-body">Go to email</button>
+<div class="content">
+    <div class="sub_content">
+        <div>
+            <h1 class="title">To complete the registration we have sent you a mail</h1>
+            <button class="continue_button" onclick="openGmailTab('${mail}');"> Go to email</button>
+        </div>
+        <script defer src="/js/openGmail.js"></script>
+    </div>
 </div>
-
-<script>
-    function openGmailTab(emailAddress) {
-        var url = "https://mail.google.com/mail/u/0/?authuser=" + emailAddress;
-        window.open(url, "_blank");
-    }
-</script>
-
 </body>
 </html>

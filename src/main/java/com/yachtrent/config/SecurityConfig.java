@@ -1,6 +1,7 @@
 package com.yachtrent.config;
 
 
+import com.yachtrent.main.profile.ProfileController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -20,7 +21,7 @@ public class SecurityConfig {
     @Order(0)
     SecurityFilterChain resources(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/images/**", "/**.css", "/**.js", "/js/**", "/css/**")
+                .securityMatcher("/images/**", "/js/**", "/css/**", "/**.css", "/**.js")
                 .authorizeHttpRequests(c -> c.anyRequest().permitAll())
                 .securityContext(AbstractHttpConfigurer::disable)
                 .sessionManagement(AbstractHttpConfigurer::disable)
@@ -39,7 +40,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/cabinet")
                         .permitAll()
                 )
-                .logout(logout -> logout.logoutSuccessUrl("/account/login-page**"))
+                .logout(logout -> logout.logoutSuccessUrl("/account/login-page"))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(
                             "/home**",
@@ -55,11 +56,13 @@ public class SecurityConfig {
                     ).permitAll();
                     authorize
                             .requestMatchers(
+                                    "/cabinet",
                                     "/cabinet/**",
                                     "/order/**",
                                     "/account/edit-account**",
                                     "/order**",
-                                    "/account/change-email/**"
+                                    "/account/change-email/**",
+                                    "/cabinet/clear_profile"
                             ).authenticated()
                             .requestMatchers(
                                     "/cabinet/profile-yacht/**",

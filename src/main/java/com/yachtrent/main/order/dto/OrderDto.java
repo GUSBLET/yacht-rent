@@ -53,7 +53,7 @@ public class OrderDto implements Mapper<OrderDto, Order> {
     @NotBlank(message = "Choose a date")
     private String date;
 
-    private PaymentMethod paymentMethod;
+    private String paymentMethod;
 
     private float subtotal;
 
@@ -84,7 +84,7 @@ public class OrderDto implements Mapper<OrderDto, Order> {
                 .date(LocalDate.parse(dto.date, DateTimeFormatter.ofPattern("MM/dd/yyyy")))
                 .yacht(dto.getYacht().toEntity(dto.getYacht()))
                 .account(dto.account)
-                .paymentMethod(dto.paymentMethod)
+                .paymentMethod(PaymentMethod.valueOf(dto.paymentMethod))
                 .build();
     }
 }

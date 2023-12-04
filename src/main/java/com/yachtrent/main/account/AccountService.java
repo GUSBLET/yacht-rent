@@ -75,10 +75,6 @@ public class AccountService implements UserDetailsService {
         );
     }
 
-    public Account getAccount(Long accountId) {
-        return accountId != null ? accountRepository.findById(accountId).orElseThrow() : getAuthentication();
-    }
-
     public Account getAuthentication() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return !auth.getPrincipal().equals("anonymousUser") ? (Account) auth.getPrincipal() : null;
