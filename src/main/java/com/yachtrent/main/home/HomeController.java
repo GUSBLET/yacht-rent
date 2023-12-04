@@ -3,6 +3,7 @@ package com.yachtrent.main.home;
 import com.yachtrent.main.home.dto.FilterDto;
 import com.yachtrent.main.yacht.YachtService;
 import com.yachtrent.main.yacht.dto.YachtDto;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +26,11 @@ public class HomeController {
     @GetMapping
     public String getListNotes(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size,
-            Model model
+            @RequestParam(defaultValue = "5") int size,
+            HttpSession session, Model model
     ) {
-        if (yachts == null ) {
-            yachts =  yachtService.findAllYachtDto();
-        }
-        if (filter == null) {
-            filter  = FilterDto.builder().min(700).max(5000).build();
-        }
-
+        yachts = homeService.createNewYachts(yachts, session);
+        filter = homeService.createNewFilter(filter, yachts,session);
         model.addAttribute("filter", filter)
                 .addAttribute("yachts",
                         homeService.getPageNoteDto(yachts, PageRequest.of(page, size)));

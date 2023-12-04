@@ -32,7 +32,7 @@ public class EditAccount implements Mapper<EditAccount, Account> {
     private String phoneNumber;
 
     @NotBlank(message = "Enter your email")
-    @Email(message = "Incorrect mail entry", regexp = "")
+    @Email(message = "Incorrect mail entry")
     private String email;
 
     @Size(min = 5, message = "Password must be at least 5 characters long")

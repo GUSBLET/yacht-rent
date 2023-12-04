@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class FilterDto {
+    private int mainMax;
+    private int mainMin;
     private int max;
     private int min;
     private boolean firstCheckboxForCapacity;

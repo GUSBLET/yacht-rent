@@ -52,7 +52,7 @@ public class OrderService {
         YachtDto yacht = dto.getYacht();
         if(yacht != null) {
             int NumberOfPeople = Integer.parseInt(dto.getNumberOfPeople());
-            return NumberOfPeople > yacht.getCapacity() || NumberOfPeople < yacht.getCapacity();
+            return NumberOfPeople > yacht.getCapacity() || NumberOfPeople <= 0;
         }
         return false;
     }

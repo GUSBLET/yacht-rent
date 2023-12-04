@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static com.yachtrent.main.role.Authority.*;
@@ -33,7 +32,7 @@ public class RoleService {
                 return getModeratorRights();
             }
             default -> {
-                return new HashSet<>();
+                return Set.of(getRole(ANONYMOUS.name()));
             }
         }
     }

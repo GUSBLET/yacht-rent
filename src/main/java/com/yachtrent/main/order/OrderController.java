@@ -69,10 +69,9 @@ public class OrderController {
     }
 
     @PostMapping("/your_order")
-    public String createOrder(@ModelAttribute("viewing_order") OrderDto orderDto) {
-        order.setPaymentMethod(orderDto.getPaymentMethod());
+    public String createOrder(@ModelAttribute("paymentMethod") String paymentMethod) {
+        order.setPaymentMethod(paymentMethod);
         order.setStatus(OrderStatus.CONFIRMED);
-
         orderService.saveOrder(order);
         return "redirect:/home";
     }

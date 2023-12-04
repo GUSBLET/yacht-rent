@@ -4,6 +4,7 @@
     <title></title>
 </head>
 <body>
+    <nav th:replace="fragments/navbar :: nav()"></nav>
 
     <th:block th:switch="${content}">
 
@@ -54,9 +55,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <footer th:replace="fragments/footer :: footer()"></footer>
 </body>

@@ -1,18 +1,17 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-    <title>Document</title>
-
+    <title>Your order</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
 
         body {
-            background: url('http://all4desktop.com/data_images/original/4236532-background-images.jpg');
+            background: url("/images/background.jpg");
             font-family: 'Roboto Condensed', sans-serif;
             color: #262626;
             margin: 5% 0;
@@ -20,10 +19,18 @@
 
         .container {
             width: 95%;
-            padding-right: 15px;
-            padding-left: 15px;
+            padding-right: 8px;
+            padding-left: 8px;
             margin-right: auto;
             margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-text {
+            text-align: center;
         }
 
         @media (min-width: 1200px) {
@@ -48,6 +55,8 @@
 
         .Yorder {
             flex: 2;
+            display: flex;
+            flex-direction: column;
         }
 
         h2 {
@@ -55,19 +64,23 @@
             padding-left: 15px;
         }
 
-        label, table {
+        label,
+        table {
             display: block;
-            margin: 15px;
+            margin: 1px;
         }
 
-        label > span {
+        label>span {
             float: left;
             width: 25%;
             margin-top: 12px;
             padding-right: 10px;
         }
 
-        input[type="text"], input[type="tel"], input[type="email"], select {
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        select {
             width: 70%;
             height: 30px;
             padding: 5px 10px;
@@ -84,35 +97,47 @@
         }
 
         .Yorder {
-            margin-top: 15px;
+            margin-top: 5px;
             height: 600px;
-            padding: 20px;
-            border: 1px solid #dadada;
+            padding: 5px;
+            border: 1px solid #0c0a0a;
         }
 
         table {
             margin: 0;
             padding: 0;
+            width: 100%;
+            text-align: center;
         }
 
         th {
             border-bottom: 1px solid #dadada;
-            padding: 10px 0;
+            padding: 20px 0;
         }
 
-        tr > td:nth-child(1) {
+        tr>td:nth-child(1) {
             text-align: left;
             color: #2d2d2a;
         }
 
-        tr > td:nth-child(2) {
-            text-align: right;
+        tr>td:nth-child(2) {
+            text-align: center;
             color: #52ad9c;
         }
 
         td {
             border-bottom: 1px solid #dadada;
-            padding: 25px 25px 25px 0;
+            padding: 25px 100px 25px 0;
+            text-align: right;
+        }
+
+        td:last-child {
+            text-align: left;
+        }
+
+        table.center-table td {
+            text-align: center;
+            color: #2d2d2a;
         }
 
         p {
@@ -122,7 +147,7 @@
             padding-left: 25px;
         }
 
-        .Yorder > div {
+        .Yorder>div {
             padding: 15px 0;
         }
 
@@ -143,59 +168,58 @@
             background: #428a7d;
         }
 
+        .text-right {
+            text-align: right;
+        }
+
     </style>
-
 </head>
+
 <body>
-
 <div class="container">
-    <div class="d-flex">
-
+    <div class="d-flex сenter-text">
         <form th:action="@{/order/your_order}" th:object="${viewing_order}" th:method="post">
+            <div class="Yorder center-text">
 
-            <div class="Yorder">
-
-                <table>
+                <table class="center-table">
                     <tr>
                         <th colspan="2">Your order</th>
                     </tr>
                     <tr>
-                        <td>Yacht Name:</td>
-                        <td th:text="*{yacht.getName()}"></td>
+                        <td>Yacht Name</td>
+                        <td class="text-right" th:text="*{yacht.getName()}"></td>
                     </tr>
                     <tr>
                         <td>Price per hour</td>
-                        <td th:text="*{yacht.getPricePerHour()}"></td>
+                        <td class="text-right" th:text="*{yacht.getPricePerHour()}"></td>
                     </tr>
                     <tr>
                         <td>Subtotal</td>
-                        <td th:text="*{subtotal}"></td>
+                        <td class="text-right" th:text="*{subtotal}"></td>
                     </tr>
                     <tr>
                         <td>Date</td>
-                        <td th:text="*{date}"></td>
+                        <td class="text-right" th:text="*{date}"></td>
                     </tr>
                     <tr>
                         <td>Rental time</td>
-                        <td th:text="*{startOfRent + ' ' + finishOfRent}"></td>
+                        <td class="text-right" th:text="*{startOfRent + ' ' + finishOfRent}"></td>
                     </tr>
                 </table>
                 <br>
 
                 <div>
-                    <input type="radio" name="dbt" value="DBT" th:field="*{paymentMethod}" checked> Direct Bank Transfer
+                    <input type="radio" class="option" name="paymentMethod" value="DBT" checked> Direct Bank Transfer
                 </div>
-                <div>
-                    <input type="radio" name="dbt" value="CD" th:field="*{paymentMethod}"> Cash
+                <div class="role" id="yacht-owner-container">
+                    <input type="radio" class="option" name="paymentMethod" value="CD"> Cash
                 </div>
+
 
                 <button type="submit">Order</button>
             </div>
-
         </form>
-
     </div>
 </div>
-
 </body>
 </html>

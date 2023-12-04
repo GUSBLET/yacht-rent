@@ -1,51 +1,218 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Enter email</title>
+    <link rel="stylesheet" href="/css/alert.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&family=Vina+Sans&display=swap');
+
+        :root {
+            --fontFamily: 'Ubuntu', sans-serif;
+            --fontSize: 1em;
+            --lightBlue: #4f6aa0;
+            --rowGap_input_and_text: 0.3125em;
+            --borderRadius: 10px;
+        }
+
+        * {
+            padding: 0px;
+            margin: 0px;
+            border: 0px;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
         body {
+            height: 100%;
+            min-width: 320 +px;
+        }
+
+        body {
+            line-height: 1;
+            font-family: var(--fontFamily);
+            font-size: var(--fontSize);
+            background: url("/images/background.jpg");
+            color: #fff;
+            -ms-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        input,
+        button,
+        textarea {
+            font-family: var(--fontFamily);
+            font-size: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            color: inherit;
+            background-color: inherit;
+        }
+
+        a {
+            color: #87CEEB;
+            text-decoration: underline;
+        }
+
+        a:link,
+        a:visited {
+            color: #87CEEB;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: #4682B4;
+            text-decoration: underline;
+        }
+
+        a:active {
+            color: #4682B4;
+            text-decoration: underline;
+        }
+
+        ul li {
+            list-style: none;
+            font-family: var(--fontFamily);
+        }
+
+        img {
+            vertical-align: top;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--fontFamily);
+            font-weight: inherit;
+            font-size: inherit;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .title {
+            font-size: 3em;
+            cursor: default;
+            margin-bottom: 1em;
+        }
+
+        .sub_content {
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            row-gap: 2.5em;
+            min-height: 2em;
+            width: 30em;
+            border-radius: 20px;
+            border: 1px solid #000;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            padding-bottom: 1em;
+            padding-top: 1em;
+            text-align: center;
+        }
+
+        .email_content {
+            display: flex;
+            flex-direction: column;
+            row-gap: var(--rowGap_input_and_text);
+        }
+
+        .input_email {
+            border-radius: var(--borderRadius);
+            font-size: 1.7em;
+            padding-left: var(--rowGap_input_and_text);
+            padding-right: var(--rowGap_input_and_text);
+        }
+
+        .continue_button {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            padding: 10px 25px;
+            background-color: #183878;
+            text-align: center;
+            border-radius: var(--borderRadius);
+            color: #fff;
+            font-size: 1.5em;
+            margin-top: 1em;
+            text-decoration: none;
+            width: 100%;
         }
 
-        h1 {
-            text-align: center;
+        .continue_button:hover {
+            background-color: #114cc4;
+        }
+
+        .continue_button:active {
+            opacity: 0.7;
         }
     </style>
 </head>
+
 <body>
-<div>
-    <div th:if="${existsEmail}">
-        <div style="color:red" class="alert alert-danger">This email not exists</div>
+<div class="content">
+    <div class="sub_content">
+
+        <form th:action="@{/account/change-password}" th:object="${enterEmail}" th:method="post" novalidate>
+            <h1 class="title">Enter your email</h1>
+            <div th:if="${existsEmail}">
+                <div class="error-msg">
+                    <i class="fa fa-times-circle"></i>
+                    This email not exists
+                </div>
+            </div>
+            <div th:if="${success}">
+                <div class="info-msg">
+                    <i class="fa fa-info-circle"></i>
+                    To complete change your password, check your email
+                </div>
+            </div>
+            <div th:if="${verify}">
+                <div class="error-msg">
+                    <i class="fa fa-times-circle"></i>
+                    The link is no longer valid
+                </div>
+            </div>
+            <br>
+            <div class="email_content">
+                <div>
+                    <input class="input_email" type="text" name="email" id="login_email"/>
+                    <div th:each="error : ${#fields.errors('email')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button class="continue_button" type="submit">Сontinue</button>
+            </div>
+        </form>
     </div>
-
-    <div th:if="${success}">
-        <div style="color:green" class="alert alert-danger">To complete change your password, check your email</div>
-    </div>
-
-    <div th:if="${verify}">
-        <div style="color:red" class="alert alert-danger">The link is no longer valid</div>
-    </div>
-
-    <h1>Enter your email</h1>
-
-    <form th:action="@{/account/change-password}" th:object="${enterEmail}" th:method="post" novalidate>
-
-        <div>
-            <input type="text" th:field="*{email}" id="change-password_email"/>
-            <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
-        </div>
-
-        <div>
-            <button type="submit">Сontinue</button>
-        </div>
-
-    </form>
-
 </div>
 </body>
 </html>

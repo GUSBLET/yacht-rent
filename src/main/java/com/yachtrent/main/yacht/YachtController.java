@@ -2,6 +2,7 @@ package com.yachtrent.main.yacht;
 
 import com.yachtrent.main.account.AccountService;
 import com.yachtrent.main.yacht.dto.YachtDto;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +25,12 @@ public class YachtController {
         yachtDTO.setAccount(accountService.findAccountById(accountId));
         model.addAttribute("title", "New yacht")
                 .addAttribute("yacht", yachtDTO);
-
         return "yacht/add-yacht";
     }
 
     @PostMapping("/add-yacht")
     public String addYacht(@Valid @ModelAttribute("yacht") YachtDto yachtDTO,
-                           BindingResult bindingResult, Model model) {
+                           BindingResult bindingResult, Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {
             log.error("YachtDTO not valid");
             return "yacht/add-yacht";
@@ -43,12 +43,16 @@ public class YachtController {
 
         yachtService.addYacht(yachtDTO);
         model.addAttribute("title", "Success");
+        session.setAttribute("isNewYachts", true);
+        session.setAttribute("isNewFilter", true);
         return "redirect:/cabinet";
     }
 
     @PostMapping("/delete-yacht")
-    public String deleteYacht(@RequestParam long id) {
+    public String deleteYacht(@RequestParam long id, HttpSession session) {
         yachtService.deleteYachtById(id);
+        session.setAttribute("isNewYachts", true);
+        session.setAttribute("isNewFilter", true);
         return "redirect:/cabinet";
     }
 
@@ -69,7 +73,7 @@ public class YachtController {
 
     @PostMapping("/update")
     public String updateYacht(@Valid @ModelAttribute("yacht") YachtDto yachtDto, Model model,
-                              BindingResult bindingResult) {
+                              BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             log.error("YachtDTO not valid");
             return "yacht/update_yacht";
@@ -79,7 +83,8 @@ public class YachtController {
             log.warn("A yacht named \"{}\" already exists", yachtDto.getName());
             return "yacht/add-yacht";
         }
-
+        session.setAttribute("isNewYachts", true);
+        session.setAttribute("isNewFilter", true);
         yachtService.updateYacht(yachtDto);
         return "redirect:/cabinet";
     }

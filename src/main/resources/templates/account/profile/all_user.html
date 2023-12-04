@@ -5,82 +5,84 @@
 <body>
 
 <div th:fragment="profileContent()">
-
     <article class="about active" data-page="about">
-
         <div th:if="${users.totalElements < 1}">
-
             <h3 class="h3 order-title article-title">Users</h3>
 
             <form th:action="@{/cabinet/search_user}" th:method="post">
 
-                <div>
-                    <input type="text" placeholder="Search by name" class="adv-option-button" name="searchName"/>
-                    <button type="submit">Search</button>
+                <div class="search-box">
+                    <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search by name..." name="searchName">
                 </div>
             </form>
             <br>
 
             <h2>There are no registered accounts on the site yet</h2>
-
         </div>
 
         <div th:unless="${users.totalElements  < 1}">
-
             <h3 class="h3 order-title article-title">Users</h3>
 
             <form th:action="@{/cabinet/search_user}" th:method="post">
-
-                <div>
-                    <input type="text" placeholder="Search by name" class="adv-option-button" name="searchName"/>
-                    <button type="submit">Search</button>
+                <div class="search-box">
+                    <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search by name..." name="searchName">
                 </div>
+                <br>
             </form>
 
 
             <div th:each="user : ${users}">
 
-                <section class="order">
+                <div th:if="${user.role} != 'MODERATOR'">
 
-                    <ul class="order-list">
+                    <section class="order" >
 
-                        <li class="order-item">
+                        <ul class="order-list">
 
-                            <div class="order-icon-box"><img src="/images/boat-outline.svg" alt="icon" width="40"></div>
+                            <li class="order-item">
 
-                            <div class="order-content-box">
+                                <div class="order-icon-box"><img src="/images/boat-outline.svg" alt="icon" width="40">
+                                </div>
 
-                                <h4 class="h4 order-item-title" th:text="${user.name}"></h4>
+                                <div class="order-content-box">
 
-                                <h4 class="h4 order-item-title" th:text="${user.lastName}"></h4>
+                                    <h4 class="h4 order-item-title" th:text="${user.name}"></h4>
 
-                                <h4 class="h4 order-item-title"
-                                    th:text="${user.roles.toArray()[user.roles.size() - 1].role}"></h4>
+                                    <h4 class="h4 order-item-title" th:text="${user.lastName}"></h4>
 
-                                <h4 class="h4 order-item-title" th:text="${user.email}"></h4>
+                                    <h4 class="h4 order-item-title" th:text="${user.role}"></h4>
 
-                                <h4 class="h4 order-item-title" th:text="${user.phoneNumber}"></h4>
+                                    <h4 class="h4 order-item-title" th:text="${user.email}"></h4>
 
-                            </div>
-                        </li>
-                    </ul>
+                                    <h4 class="h4 order-item-title" th:text="${user.phoneNumber}"></h4>
 
-                    <div>
+                                </div>
+                            </li>
+                        </ul>
 
-                        <form th:action="@{/cabinet/blocked/{id}(id=${user.id})}" method="post">
-                            <button id="toggleButton" class="btn btn-sm btn-outline-dark">
-                                <span th:text="${user.isBlocked ? 'Unblock user' : 'Block user'}"></span>
-                            </button>
-                            <input type="hidden" id="isBlockedInput" name="isBlocked" th:value="${user.isBlocked}"/>
-                        </form>
+                        <div>
 
-                        <div th:if="${user.roles.toArray()[user.roles.size() - 1].role} == 'USER'">
-                            <form th:action="@{/cabinet/role_distribution/{id}(id=${user.id})}" method="post">
-                                <button type="submit">Promote role to yacht owner</button>
+                            <form th:action="@{/cabinet/blocked/{id}(id=${user.id})}" method="post">
+
+                                <div th:if="${user.isBlocked}">
+                                    <button id="toggleButton" class="unblock_button">Unblock user</button>
+                                </div>
+                                <div th:unless="${user.isBlocked}">
+                                    <button id="toggleButton" class="delete_button">Block user</button>
+                                </div>
+                                <input type="hidden" id="isBlockedInput" name="isBlocked" th:value="${user.isBlocked}"/>
                             </form>
+
+                            <div th:if="${user.role} == 'USER'">
+                                <form th:action="@{/cabinet/role_distribution/{id}(id=${user.id})}" method="post">
+                                    <button class="show_more_button" type="submit">Promote role to yacht owner</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
 
             <nav aria-label="Page navigation example">

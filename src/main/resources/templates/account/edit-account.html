@@ -1,70 +1,346 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit</title>
+    <link rel="stylesheet" href="/css/alert.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&family=Vina+Sans&display=swap');
+        /* variables */
+        :root {
+            --fontFamily: 'Ubuntu', sans-serif;
+            --fontSize: 1em;
+            --rowGap_input_and_text: 0.3125em;
+            --lightBlue: #4f6aa0;
+            --borderRadius: 10px;
+            --borderRadiusSmall: 8px;
+        }
+
+        /* nullation */
+        * {
+            padding: 0px;
+            margin: 0px;
+            border: 0px;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            min-width: 320 +px;
+        }
+
+        body {
+            line-height: 1;
+            font-family: var(--fontFamily);
+            font-size: var(--fontSize);
+            background: url("/images/background.jpg");
+            color: #fff;
+            -ms-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        input,
+        button,
+        textarea {
+            font-family: var(--fontFamily);
+            font-size: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            color: inherit;
+            background-color: inherit;
+        }
+
+        a {
+            color: #87CEEB;
+            text-decoration: underline;
+        }
+
+        a:link,
+        a:visited {
+            color: #87CEEB;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: #4682B4;
+            text-decoration: underline;
+        }
+
+        a:active {
+            color: #4682B4;
+            text-decoration: underline;
+        }
+
+        ul li {
+            list-style: none;
+            font-family: var(--fontFamily);
+        }
+
+        img {
+            vertical-align: top;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--fontFamily);
+            font-weight: inherit;
+            font-size: inherit;
+        }
+
+        input {
+            font-size: 1.5em;
+            padding-left: var(--rowGap_input_and_text);
+            padding-right: var(--rowGap_input_and_text);
+            border-radius: var(--borderRadius);
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .sub-content {
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            row-gap: 2.5em;
+            min-height: 28em;
+            width: 30em;
+            border-radius: 20px;
+            border: 1px solid #000;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            padding-bottom: 2em;
+            padding-top: 1em;
+        }
+
+        .validity {
+            margin-top: auto;
+            margin-bottom: auto;
+            font-size: 2.5em;
+        }
+
+        .validity h2 {
+            color: rgb(0 191 255 / 97%);
+            text-decoration: underline;
+            cursor: default;
+        }
+
+        .title {
+            font-size: 4em;
+            cursor: default;
+        }
+
+        label {
+            font-size: 1.5em;
+            cursor: default;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .edit_button, .continue_button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 25px;
+            border-radius: var(--borderRadius);
+        }
+
+        .edit_button {
+            background-color: #187878;
+        }
+
+        .edit_button:hover {
+            background-color: #22b7b1;
+        }
+
+        .edit_button:active {
+            opacity: 0.7;
+        }
+
+        .continue_button {
+            background-color: #183878;
+        }
+
+        .continue_button:hover {
+            background-color: #114cc4;
+        }
+
+        .continue_button:active {
+            opacity: 0.7;
+        }
+
+        .new_password_button {
+            display: flex;
+            justify-content: center;
+            padding: 10px 25px;
+            background-color: #349a5d;
+            text-align: center;
+            border-radius: var(--borderRadius);
+        }
+
+        new_password:hover {
+            background-color: #4ae186;
+        }
+
+        .new_password:active {
+            opacity: 0.7;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<form th:action="@{/account/edit-account}" th:object="${profile}" th:method="post" novalidate>
+<div class="content">
+    <div class="sub-content">
+        <h1 class="title">Edit account</h1>
+        <form th:action="@{/account/edit-account}" th:object="${profile}" th:method="post" novalidate>
+            <input type="hidden" th:field="*{id}">
+            <div th:if="${isEmailExists}">
+                <div class="error-msg">
+                    <i class="fa fa-times-circle"></i>
+                    Email is already exists
+                </div>
+            </div>
+            <div th:if="${!changeEmail}">
+                <div>
+                    <label for="edit-account_email_readonly">Email:</label>
+                    <div>
+                        <input type="text" th:field="*{email}" id="edit-account_email_readonly" readonly/>
+                        <div th:each="error : ${#fields.errors('email')}">
+                            <div class="error-msg">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/account/change-email/{id}(id=${profile.id})}">Change email
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <br>
 
-    <input type="hidden" th:field="*{id}">
+            <div th:unless="${!changeEmail}">
+                <div th:if="${changeEmail}">
+                    <label for="edit-account_email">Email:</label>
+                    <div>
+                        <input type="text" th:field="*{email}" id="edit-account_email"/>
+                        <div th:each="error : ${#fields.errors('email')}">
+                            <div class="error-msg">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-sm btn-outline-dark"
+                           th:href="@{/account/change-email/{id}(id=${profile.id})} ">Change
+                            email</a>
+                    </div>
+                </div>
+            </div>
+            <br>
 
-    <div th:if="${isEmailExists}">
-        <span style="color:red">Email is already exists</span>
+            <div>
+                <label for="edit-account_name">Name:</label>
+                <div>
+                    <input type="text" th:field="*{name}" id="edit-account_name"/>
+                    <div th:each="error : ${#fields.errors('name')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div>
+                <label for="edit-account_lastName">Last Name:</label>
+                <div>
+                    <input type="text" th:field="*{lastName}" id="edit-account_lastName"/>
+                    <div th:each="error : ${#fields.errors('lastName')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div>
+                <label for="edit-account_phoneNumber">Phone number:</label>
+                <div>
+                    <input type="text" th:field="*{phoneNumber}" id="edit-account_phoneNumber"/>
+                    <div th:each="error : ${#fields.errors('phoneNumber')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div>
+                <label for="edit-account_bio">Bio:</label>
+                <div>
+                    <input type="text" th:field="*{bio}" id="edit-account_bio"/>
+                    <div th:each="error : ${#fields.errors('bio')}">
+                        <div class="error-msg">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <input type="hidden" th:field="*{password}">
+
+            <div class="button-container">
+                <form th:action="@{/cabinet}" method="get">
+                    <button class="continue_button" type="submit">Cancel</button>
+                </form>
+                <button class="edit_button" type="submit">Edit</button>
+            </div>
+            <br>
+
+        </form>
+
+        <form th:action="@{/account/change-password}" method="get">
+            <button class="new_password_button" type="submit">Change password</button>
+        </form>
     </div>
-
-    <div th:if="${!changeEmail}">
-        <div>
-            <label for="edit-account_email_readonly">Email:</label>
-            <input type="text" th:field="*{email}" id="edit-account_email_readonly" readonly/>
-            <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
-            <a class="btn btn-sm btn-outline-dark" th:href="@{/account/change-email/{id}(id=${profile.id})}">Change email</a>
-        </div>
-    </div>
-    <div th:unless="${!changeEmail}">
-        <div th:if="${changeEmail}">
-            <label for="edit-account_email">Email:</label>
-            <input type="text" th:field="*{email}" id="edit-account_email"/>
-            <p style="color:red" th:each="error : ${#fields.errors('email')}" th:text="${error}">Email error</p>
-            <a class="btn btn-sm btn-outline-dark" th:href="@{/account/change-email/{id}(id=${profile.id})} ">Change email</a>
-        </div>
-    </div>
-
-    <div>
-        <label for="edit-account_name">Name:</label>
-        <input type="text" th:field="*{name}" id="edit-account_name"/>
-        <p style="color:red" th:each="error : ${#fields.errors('name')}" th:text="${error}">Name error</p>
-    </div>
-
-    <div>
-        <label for="edit-account_lastName">Last Name:</label>
-        <input type="text" th:field="*{lastName}" id="edit-account_lastName"/>
-        <p style="color:red" th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Last Name error</p>
-    </div>
-
-    <div>
-        <label for="edit-account_phoneNumber">Phone number:</label>
-        <input type="text" th:field="*{phoneNumber}" id="edit-account_phoneNumber"/>
-        <p style="color:red" th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Phone number error</p>
-    </div>
-
-    <div>
-        <label for="edit-account_bio">Bio:</label>
-        <input type="text" th:field="*{bio}" id="edit-account_bio"/>
-        <p style="color:red" th:each="error : ${#fields.errors('bio')}" th:text="${error}">Bio error</p>
-    </div>
-
-    <input type="hidden" th:field="*{password}">
-
-    <button type="submit">Save</button>
-</form>
-
-<form th:action="@{/account/change-password}" method="get">
-    <button class="btn btn-sm btn-outline-dark" type="submit">Change password</button>
-</form>
-
-<button class="pure-button pure-button-primary" onclick="window.location.href='/cabinet'">Cancel</button>
-
+</div>
 </body>
 </html>
